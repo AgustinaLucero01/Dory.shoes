@@ -1,0 +1,40 @@
+
+.Registro-box{
+    border: solid 1px rgb(157, 157, 157);
+    height: 700px;
+    width: 600px;
+    text-align: center;
+    margin-left: 87%;
+    background-color: #fff;
+}
+
+.Registro-box form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 50px;
+}
+
+.Registro-box input{
+    height: 40px;
+    width: 350px;
+    cursor: pointer;
+}
+
+.Registro-box Button{
+    background-color: black;
+    color: #fff;
+    height: 40px;
+    width: 300px;
+}
+
+.Registro-box Button:hover{
+    border: solid 1px black;
+}
+
+.error-text {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
