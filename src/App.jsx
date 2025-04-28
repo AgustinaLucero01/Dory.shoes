@@ -3,10 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css'
 import CustomNavbar from './components/customNavbar/CustomNavbar'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Home from './components/home/Home'; // Asegúrate de crear estos componentes
+import Home from './components/home/Home'; 
 import About from './components/about/About';
 import Contact from './components/contact/Contact';
-import Productos from './components/products/Products';
+import Products from './components/products/Products';
+
+
 
 const App = () => {
   return (
@@ -16,7 +18,8 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/productos/:categoria" element={<Productos />} />
+        <Route path="/products/:categoria" element={<Products />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
       </Routes>
     </Router>
   );
