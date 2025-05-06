@@ -1,64 +1,72 @@
-import React from 'react';
-import { useState } from 'react';
-import Navbar from '../navbar/Navbar';
-import Footer from '../footer/Footer';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { FaUser, FaShoppingCart, FaBars } from 'react-icons/fa';
-import { Link } from 'react-router-dom';  // Link para la navegación
+import { Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./home.css";
 
-function Home() {
+const Home = () => {
+  const categorias = [
+    { nombre: "Zapatillas", imagen: "/images/Zapatillas/zapatilla4.jpg" },
+    { nombre: "Botas", imagen: "/images/Botas/bota2.jpg" },
+    { nombre: "Zapatos", imagen: "/images/Zapatos/zapato3.jpg" },
+    { nombre: "Pantuflas", imagen: "/images/Pantuflas/pantu2.jpg" }
+  ];
+
   return (
-    <div className="container mt-5">
-      <h2 className="text-center mb-4">Selecciona una categoría</h2>
-      <div className="row text-center">
-        <div className="col-md-3 position-relative">
-          <Link to="/productos/botas" style={{ textDecoration: 'none' }}>
-            <img
-              src="/imagenes/botas.jpg"  // Asegúrate de tener una imagen para cada categoría
-              alt="Botas"
-              className="img-fluid"
-              style={{ width: '100%', cursor: 'pointer' }}
-            />
-            <div className="category-text">Botas</div>
-          </Link>
+    <div>
+      
+
+      {/* Carrusel Bootstrap */}
+      <div 
+        id="carouselExample" 
+        className="carousel slide" 
+        data-bs-ride="carousel"
+        data-bs-interval="3000"
+      >
+        <div className="carousel-inner">
+          {[...Array(9)].map((_, i) => (
+            <div key={i} className={`carousel-item ${i === 0 ? "active" : ""}`}>
+              <img
+                src={`/images/Carrusel/foto${i + 1}.jpg`}
+                className="d-block w-100 imagen-carrusel"
+                alt={`Producto ${i + 1}`}
+              />
+            </div>
+          ))}
         </div>
-        <div className="col-md-3 position-relative">
-          <Link to="/productos/zapatos" style={{ textDecoration: 'none' }}>
-            <img
-              src="/imagenes/zapatos.jpg"  // Asegúrate de tener la imagen de zapatos
-              alt="Zapatos"
-              className="img-fluid"
-              style={{ width: '100%', cursor: 'pointer' }}
-            />
-            <div className="category-text">Zapatos</div>
+        <button 
+          className="carousel-control-prev" 
+          type="button" 
+          data-bs-target="#carouselExample" 
+          data-bs-slide="prev"
+        >
+          <span className="carousel-control-prev-icon"></span>
+        </button>
+        <button 
+          className="carousel-control-next" 
+          type="button" 
+          data-bs-target="#carouselExample" 
+          data-bs-slide="next"
+        >
+          <span className="carousel-control-next-icon"></span>
+        </button>
+      </div>
+      <div className="barra-envios">Envíos gratis a todo el país</div>
+      {/* Categorías con cuadrícula */}
+      <div className="categorias-grid">
+        {categorias.map((cat, i) => (
+          <Link to={`/categoria/${cat.nombre.toLowerCase()}`} key={i}>
+            <div className="categoria-contenedor">
+              <img
+                src={cat.imagen}
+                alt={cat.nombre}
+                className="imagen-categoria"
+              />
+              <h2 className="titulo-categoria">{cat.nombre}</h2>
+            </div>
           </Link>
-        </div>
-        <div className="col-md-3 position-relative">
-          <Link to="/productos/zapatillas" style={{ textDecoration: 'none' }}>
-            <img
-              src="/imagenes/zapatillas.jpg"  // Asegúrate de tener la imagen de zapatillas
-              alt="Zapatillas"
-              className="img-fluid"
-              style={{ width: '100%', cursor: 'pointer' }}
-            />
-            <div className="category-text">Zapatillas</div>
-          </Link>
-        </div>
-        <div className="col-md-3 position-relative">
-          <Link to="/productos/pantuflas" style={{ textDecoration: 'none' }}>
-            <img
-              src="/imagenes/pantuflas.jpg"  // Asegúrate de tener la imagen de pantuflas
-              alt="Pantuflas"
-              className="img-fluid"
-              style={{ width: '100%', cursor: 'pointer' }}
-            />
-            <div className="category-text">Pantuflas</div>
-          </Link>
-        </div>
+        ))}
       </div>
     </div>
   );
-}
+};
 
 export default Home;
-
