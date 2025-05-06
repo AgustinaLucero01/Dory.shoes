@@ -1,0 +1,28 @@
+/* footer.css */
+.footer {
+    background-color: #F0DFC8;  /* Color de fondo */
+    width: 100%;                /* Asegura que el footer ocupe todo el ancho */
+       /* position: absolute; */
+    bottom: 0;                /* Lo ancla al final de la página */
+    padding: 1rem 0;            /* Espaciado superior e inferior */
+    margin-top: auto;     
+    left: 0;     /* Asegura que el footer no se superponga con el contenido */
+  }
+  
+
+  
+  .footer .social-links {
+    margin-bottom: 0.5rem;      /* Espaciado entre los íconos */
+  }
+  
+  .footer .social-links a {
+    margin: 0 0.5rem;           /* Espaciado entre los íconos */
+    color: #000;                /* Color oscuro para los íconos */
+  }
+  
+  .footer .social-links a:hover {
+    color: #007bff;             /* Color al pasar el ratón sobre los íconos */
+  }
+  .footer div {
+    text-align: center;         /* Centra el contenido */
+  }
