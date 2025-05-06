@@ -4,7 +4,7 @@
       "nombre": "Borcego negro caña baja",
       "precio": 15.000,
       "categoria": "Botas",
-      "imagen": "/images/bota1.jpg",
+      "imagen": "/images/Botas/bota1.jpg",
       "stock": {
         "35": 2,
         "36": 5,
@@ -20,7 +20,7 @@
       "nombre": "Borcego caña media",
       "precio": 18.500,
       "categoria": "Botas",
-      "imagen": "/images/bota2.jpg",
+      "imagen": "/images/Botas/bota2.jpg",
      
       "stock": {
         "35": 1,
@@ -37,7 +37,7 @@
         "nombre": "Bota alta camel",
         "precio": 18.500,
         "categoria": "Botas",
-        "imagen": "/images/bota3.jpg",
+        "imagen": "/images/Botas/bota3.jpg",
        
         "stock": {
           "35": 1,
@@ -54,7 +54,7 @@
         "nombre": "Bota alta negra",
         "precio": 19.500,
         "categoria": "Botas",
-        "imagen": "/images/bota4.jpg",
+        "imagen": "/images/Botas/bota4.jpg",
        
         "stock": {
           "35": 1,
@@ -71,7 +71,7 @@
         "nombre": "Zapatilla Gazelle negra",
         "precio": 15.500,
         "categoria": "Zapatillas",
-        "imagen": "/images/zapatilla1.jpg",
+        "imagen": "/images/Zapatillas/zapatilla1.jpg",
        
         "stock": {
           "35": 1,
@@ -88,7 +88,7 @@
         "nombre": "Zapatilla Gazelle chocolate",
         "precio": 15.500,
         "categoria": "Zapatillas",
-        "imagen": "/images/zapatilla2.jpg",
+        "imagen": "/images/Zapatillas/zapatilla2.jpg",
        
         "stock": {
           "35": 1,
@@ -105,7 +105,7 @@
         "nombre": "New Balance off white",
         "precio": 20.500,
         "categoria": "Zapatillas",
-        "imagen": "/images/zapatilla3.jpg",
+        "imagen": "/images/Zapatillas/zapatilla3.jpg",
        
         "stock": {
           "35": 1,
@@ -122,7 +122,7 @@
         "nombre": "New Balance black",
         "precio": 20.500,
         "categoria": "Zapatillas",
-        "imagen": "/images/zapatilla4.jpg",
+        "imagen": "/images/Zapatillas/zapatilla4.jpg",
        
         "stock": {
           "35": 1,
@@ -139,7 +139,7 @@
         "nombre": "Pantufla beige",
         "precio": 12.500,
         "categoria": "Pantuflas",
-        "imagen": "/images/pantu1.jpg",
+        "imagen": "/images/Pantuflas/pantu1.jpg",
        
         "stock": {
           "35": 1,
@@ -156,7 +156,7 @@
         "nombre": "Pantufla bold black",
         "precio": 15.500,
         "categoria": "Pantuflas",
-        "imagen": "/images/pantu2.jpg",
+        "imagen": "/images/Pantuflas/pantu2.jpg",
        
         "stock": {
           "35": 3,
@@ -173,7 +173,7 @@
         "nombre": "Pantufla bold camel",
         "precio": 15.500,
         "categoria": "Pantuflas",
-        "imagen": "/images/pantu3.jpg",
+        "imagen": "/images/Pantuflas/pantu3.jpg",
        
         "stock": {
           "35": 1,
@@ -190,7 +190,7 @@
         "nombre": "Pantufla gris",
         "precio": 12.500,
         "categoria": "Pantuflas",
-        "imagen": "/images/pantu4.jpg",
+        "imagen": "/images/Pantuflas/pantu4.jpg",
        
         "stock": {
           "35": 1,
@@ -207,7 +207,7 @@
         "nombre": "Zapato flat chocolate",
         "precio": 15.000,
         "categoria": "Zapatos",
-        "imagen": "/images/zapato1.jpg",
+        "imagen": "/images/Zapatos/zapato1.jpg",
        
         "stock": {
           "35": 1,
@@ -224,7 +224,7 @@
         "nombre": "zapato flat negro",
         "precio": 16.000,
         "categoria":"Zapatos",
-        "imagen":"/images/zapato2.jpg",
+        "imagen":"/images/Zapatos/zapato2.jpg",
 
          "stock": {
                   "35": 1,
@@ -241,7 +241,7 @@
         "nombre": "Zapato cerrado",
         "precio": 16.000,
         "categoria": "Zapatos",
-        "imagen": "/images/zapato3.jpg",
+        "imagen": "/images/Zapatos/zapato3.jpg",
        
         "stock": {
             "35": 1,
@@ -258,7 +258,7 @@
         "nombre": "Zapato guillermina",
         "precio": 16.000,
         "categoria": "Zapatos",
-        "imagen": "/images/zapato4.jpg",
+        "imagen": "/images/Zapatos/zapato4.jpg",
        
         "stock": {
           "35": 1,
