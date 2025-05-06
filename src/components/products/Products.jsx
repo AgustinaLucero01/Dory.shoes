@@ -1,12 +1,12 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';  // useParams para obtener el filtro de la URL
-import productsData from '../data/products.json';
+import { useParams, Link } from 'react-router-dom';  
+import ProductData from '../../data/products.json'; 
 
 function Products() {
-  const { categoria } = useParams();  // Obtenemos el parámetro de la URL (categoria)
+  const { categoria } = useParams();  
   
   // Filtrar los productos por la categoría
-  const productosFiltrados = productsData.filter((producto) =>
+  const productosFiltrados = ProductData.filter((producto) =>
     producto.categoria.toLowerCase() === categoria.toLowerCase()
   );
 
@@ -18,6 +18,7 @@ function Products() {
           productosFiltrados.map((producto) => (
             <div key={producto.id} className="col-md-3 mb-4">
               <div className="card">
+              console.log(producto.imagen);
                 <img
                   src={producto.imagen}
                   alt={producto.nombre}
@@ -28,7 +29,7 @@ function Products() {
                   <h5 className="card-title">{producto.nombre}</h5>
                   <p className="card-text">${producto.precio.toLocaleString('es-AR')}</p>
                   {/* Enlace al detalle del producto */}
-                  <Link to={`/producto/${producto.id}`} className="btn btn-primary">
+                  <Link to={`/product/${producto.id}`} className="btn btn-primary">
                     Ver detalle
                   </Link>
                 </div>
