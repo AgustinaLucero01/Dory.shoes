@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
 
 nav {
-  background-color: #F0DFC8 !important;
+  background-color: #F5EBDE !important;
   padding: 0 4vh !important;
 }
 
@@ -24,7 +24,7 @@ nav {
   left: -250px;
   width: 250px;
   height: 100%;
-  background-color: #F0DFC8;
+  background-color: #F5EBDE;
   padding-top: 70px;
   transition: left 0.5s ease;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
@@ -56,7 +56,7 @@ nav {
 }
 
 .dropdown-menu {
-  background-color: #F0DFC8 !important;
+  background-color: #F5EBDE !important;
   border: none !important;
 }
 
