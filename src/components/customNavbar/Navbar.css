@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+nav {
+  background-color: #F0DFC8 !important;
+  padding: 0 4vh !important;
+}
+
+/* Quitamos el borde del botón de tres líneas */
+/* Agregamos !important para sobrescribir a Bootstrap */
+.navbar-toggler {
+  border: none !important;
+  outline: none !important; /* Quitar contorno al hacer click */
+  box-shadow: none !important;
+}
+
+.navbar-toggler-icon {
+  width: 40px !important;
+}
+
+/* Sidebar estilo */
+.custom-navbar-collapse {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background-color: #F0DFC8;
+  padding-top: 70px;
+  transition: left 0.5s ease;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  z-index: 1050; /* para que siempre vaya arriba de todo los demás elementos */
+}
+
+/* Hace aparecer el navbar cuando se aprieta el botón */
+/* La clase show la agrega bootstrap cuando creás el componente */
+.custom-navbar-collapse.show {
+  left: 0;
+}
+
+/* Links estilo sidebar */
+.custom-navbar-collapse .nav-link,
+.custom-navbar-collapse .dropdown-item {
+  padding: 15px;
+  font-family: "Oswald", sans-serif;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 400;
+  /* Agregamos estas líneas para evitar los cambios de color cuando toco o hago hover sobre los
+  items del dropdown (viene por defecto con Bootstrap) */
+  background-color: transparent !important;
+  color: rgba(0, 0, 0, 0.79) !important;
+}
+
+.custom-navbar-collapse .dropdown-item {
+  font-weight: 300;
+}
+
+.dropdown-menu {
+  background-color: #F0DFC8 !important;
+  border: none !important;
+}
+
+/* Botón de cerrar (la cruz X) */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  font-size: 40px;
+  cursor: pointer;
+}
+
+img {
+  height: 25vh;
+}
+
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Espacio entre los íconos */
+}
+
+.icon {
+  font-size: 30px;
+  cursor: pointer;
+}

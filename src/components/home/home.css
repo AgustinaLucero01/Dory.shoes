@@ -1,0 +1,65 @@
+
+  
+  /* Barra de envíos */
+  .barra-envios {
+    background-color: #303030;
+    color: rgb(230, 239, 237);
+    text-align: center;
+    padding: 10px 0;
+    font-weight: bold;
+    font-size: 20px;
+    width: 100%;
+    margin: 0; /* Elimina margen inferior */
+    z-index: 100; 
+    position: relative; /* Asegura que esté encima del contenido */
+  }
+  #carouselExample {
+    margin: 0; /* Eliminar márgenes del carrusel */
+    padding-top: 50px;
+    padding-bottom: 0; /* Eliminar padding del carrusel */
+  }
+  /* Imágenes del carrusel */
+  .imagen-carrusel {
+    height: 500px;
+    object-fit: cover;
+    margin: 0;
+    padding: 0;
+  }
+  .categorias-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas */
+    gap: 0; /* sin separación entre ellas */
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Contenedor de cada categoría */
+  .categoria-contenedor {
+    position: relative;
+    margin: 0;
+    padding: 0;
+  
+  }
+  
+  /* Imagen de la categoría */
+  .imagen-categoria {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Título centrado sobre la imagen */
+  .titulo-categoria {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 8px;
+  }
+  
