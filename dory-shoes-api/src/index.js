@@ -1,9 +1,9 @@
 import express from "express";
 
 import { PORT } from "./config.js";
-import bookRoutes from "./routes/book.routes.js";
+import productRoutes from "./routes/product.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 import { sequelize } from "./db.js";
-import "./models/Books.js";
 
 const app = express();
 
@@ -16,12 +16,11 @@ try {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "*");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    //next: pasa al siguiente middleware, sin terminar la ejecución del ciclo request-response
-    //Este código es RIESGOSO
     next();
   });
 
-  app.use(bookRoutes);
+  app.use(productRoutes);
+  app.use(authRoutes);
   await sequelize.authenticate();
   await sequelize.sync(); // crea las tablas si no existen
 

@@ -1,8 +1,8 @@
 import { Router } from "express";
 
 import {
-    createProduct,
-    deleteProduct,
+    createCart,
+    emptyCart,
     getAllProducts,
     getProductById,
     updateProduct,
@@ -23,4 +23,4 @@ router.put("/products/:id", verifyToken, updateProduct);
 
 router.delete("/products/:id", verifyToken, deleteProduct);
 
-export default router;
+export default router; // importar en index.js y app.use()
