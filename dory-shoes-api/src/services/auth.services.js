@@ -31,6 +31,7 @@ export const verifyToken = (req, res, next) => {
 };
 
 // POST -> Registra un nuevo usuario en la BBDD
+// Falta agregar la creación del carrito
 export const registerUser = async (req, res) => {
 
   const result = validateRegisterUser(req.body);
