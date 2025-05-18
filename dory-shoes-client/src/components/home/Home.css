@@ -1,0 +1,129 @@
+.home-container {
+  min-height: 100vh; /* Asegura que el contenido ocupe el 100% de la altura */
+  display: flex;
+  flex-direction: column;
+  width: 100%; 
+  padding: 0; 
+  margin: 0; 
+  width: 100vw; /* Usa el ancho real de la ventana, no del contenedor */
+  overflow-y: auto;
+  box-sizing: border-box; /* Evita que el padding sume al ancho */
+  overflow-x: hidden; /* Previene que cause scroll lateral */
+  flex-grow: 1; /* El contenido principal crece para llenar el espacio disponible */
+  margin-top: 20vh !important;
+
+}
+
+  
+
+.barra-envios {
+  position: fixed;
+  margin-top: 30px;
+  width: 100%;
+  height: auto; /* Dejá que el contenido defina la altura */
+  background-color: #303030;
+  z-index: 1061;
+  text-align: center;
+  font-size: 10px; 
+  color: aliceblue;
+  padding: 4px 0; /* MUY importante: bajamos el padding vertical */
+  line-height: normal; /* opcional: podés dejarlo o ajustarlo */
+}
+
+
+  #carouselExample {
+    margin: 0; 
+    padding-top: 0;
+    width: 100%;
+   
+   
+  }
+  /* Imágenes del carrusel */
+  .imagen-carrusel {
+     height: 90vh;
+    object-fit: cover;
+    margin: 0;
+    padding: 0;
+  
+  }
+  .carousel-item {
+  transition: none !important;
+  backface-visibility: hidden;
+  overflow: hidden;
+}
+
+.carousel-inner {
+  overflow: hidden; /* Evita que el contenido se desborde */
+}
+
+.linea-gris {
+  height: 8px;
+  width: 100%;
+  background-color : #303030;
+  margin: 0;
+  padding: 0;
+  
+ 
+   
+}
+
+  .categorias-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas */
+    gap: 0; /*sin separación entre ellas */
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+
+  /* Contenedor de cada categoría */
+  .categoria-contenedor {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    ;
+  }
+  
+  
+  .imagen-categoria {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    margin: 0;
+    padding: 0;
+  }
+
+
+ 
+  .titulo-categoria {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 8px;
+  }
+ 
+
+  .carousel-control-prev,
+.carousel-control-next {
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.carousel-control-prev:focus,
+.carousel-control-next:focus,
+.carousel-control-prev:active,
+.carousel-control-next:active {
+  background: none !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+    
