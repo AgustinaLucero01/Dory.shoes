@@ -11,9 +11,5 @@ export const Cart = sequelize.define("cart", {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    productId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
   }, { timestamps: false }
 );

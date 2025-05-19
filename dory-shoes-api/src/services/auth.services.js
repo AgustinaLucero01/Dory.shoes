@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
+import { Cart } from "../models/Cart.js";
 import {
   validateString,
   validateEmail,
@@ -69,7 +70,13 @@ export const registerUser = async (req, res) => {
     dateOfBirth,
   });
 
-  res.json(newUser.id);
+  //Creamos la instancia del carrito que el usuario va a usar para comprar
+  const newCart = await Cart.create({
+    userId: newUser.id,
+  })
+
+  //Devolvemos los id de las instancias creadas
+  res.json({ userId: newUser.id, cartId: newCart.id });
 };
 
 // Función para validar los datos ingresados por el usuario en el Login

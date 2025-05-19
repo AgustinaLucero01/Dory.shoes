@@ -1,26 +1,25 @@
 import { Router } from "express";
 
 import {
-    createCart,
-    emptyCart,
-    getAllProducts,
-    getProductById,
-    updateProduct,
-  } from "../services/product.services.js";
-  import { verifyToken } from "../services/auth.services.js"
+  showAllProductsFromCart,
+  addProductToCart,
+  dropProductFromCart,
+  modifyQuantity,
+} from "../services/cart.services.js";
+import { verifyToken } from "../services/auth.services.js";
 
-// Rutas para hacer consultas sobre productos
+// Rutas relacionadas con el carrito
+// - La creación está dentro del registro de usuario
+// - El vacío del carrito está dentro de la creación de una venta (Sale)
 
 const router = Router();
 
-router.get("/products", verifyToken, getAllProducts);
+router.post("/cart", verifyToken, showAllProductsFromCart);
 
-router.get("/products/:id", verifyToken, getProductById);
+router.post("/cart/:id", verifyToken, addProductToCart);
 
-router.post("/createProduct", verifyToken, createProduct);
+router.delete("/cart/:id", verifyToken, dropProductFromCart);
 
-router.put("/products/:id", verifyToken, updateProduct);
-
-router.delete("/products/:id", verifyToken, deleteProduct);
+router.put("/cart/:id", verifyToken, modifyQuantity);
 
 export default router; // importar en index.js y app.use()
