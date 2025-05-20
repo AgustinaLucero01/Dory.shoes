@@ -3,6 +3,8 @@ import express from "express";
 import { PORT } from "./config.js";
 import productRoutes from "./routes/product.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import cartRoutes from "./routes/cart.routes.js";
+import saleRoutes from "./routes/sale.routes.js";
 import { sequelize } from "./db.js";
 
 const app = express();
@@ -21,6 +23,8 @@ try {
 
   app.use(productRoutes);
   app.use(authRoutes);
+  app.use(cartRoutes);
+  app.use(saleRoutes);
   await sequelize.authenticate();
   await sequelize.sync(); // crea las tablas si no existen
 
