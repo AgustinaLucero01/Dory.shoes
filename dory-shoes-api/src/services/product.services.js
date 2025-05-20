@@ -1,6 +1,6 @@
 import { ProductSize } from "../models/ProductSize.js";
 import { Product } from "../models/Product.js";
-import { Op } from 'sequelize';
+import { Op } from "sequelize";
 
 // GET -> todos los productos que están disponibles
 export const getAvailableProducts = async (req, res) => {
@@ -15,7 +15,7 @@ export const getAvailableProducts = async (req, res) => {
         },
         attributes: [], // no queremos traer los talles ni sus datos
       },
-      group: ['Product.id'],
+      group: ["Product.id"],
     });
 
     res.json(products);
@@ -35,10 +35,10 @@ export const getProductById = async (req, res) => {
         where: {
           stock: { [Op.gt]: 0 }, //solo trae las instancias de ProductSize que tengan stock
         },
-        attributes: ['size', 'stock'],
+        attributes: ["size", "stock"],
         required: false,
-      }
-    ]
+      },
+    ],
   });
 
   if (!product) {
@@ -59,9 +59,9 @@ export const getProductById = async (req, res) => {
 };
 
 // POST -> crea un nuevo producto
-// Falta agregar la creación por talle
 export const createProduct = async (req, res) => {
-  const { name, description, price, imageUrl, category } = req.body;
+  //Espera los datos del producto y un diccionario (talle: stock)
+  const { name, description, price, imageUrl, category, sizes } = req.body;
 
   if (!name || !description || !price) {
     return res
@@ -69,21 +69,46 @@ export const createProduct = async (req, res) => {
       .send({ message: "Nombre, descripción y precio son requeridos." });
   }
 
-  const newProduct = await Product.create({
-    name,
-    description,
-    price,
-    imageUrl,
-    category,
-  });
+  try {
+    const newProduct = await Product.create({
+      name,
+      description,
+      price,
+      imageUrl,
+      category,
+    });
 
-  res.send(newProduct);
+    //Creo un arreglo para guardar todas las instancias de ProductSize que debo crear
+    const sizesToCreate = [];
+
+    for (const size in sizes) {
+      const stock = sizes[size];
+      if (stock > 0) {
+        sizesToCreate.push({
+          productId: newProduct.id,
+          size,
+          stock,
+        });
+      }
+    }
+
+    //Crea todos los ProductSize juntos (bulkCreate)
+    const newProductSizes = await ProductSize.bulkCreate(sizesToCreate);
+
+    return res.status(201).json({
+      product: newProduct,
+      sizes: newProductSizes,
+    });
+  } catch (error) {
+    console.error("Error al crear producto:", error);
+    return res.status(500).send({ message: "Error interno del servidor" });
+  }
 };
 
 // PUT -> Modificar datos de un producto especifico
 export const updateProduct = async (req, res) => {
   const { id } = req.params;
-  const { name, description, price, imageUrl, category } = req.body;
+  const { name, description, price, imageUrl, category, sizes } = req.body;
 
   const product = await Product.findByPk(id);
 
@@ -91,19 +116,64 @@ export const updateProduct = async (req, res) => {
     return res.status(404).send({ message: "Producto no encontrado." });
   }
 
-  await product.update({
-    name,
-    description,
-    price,
-    imageUrl,
-    category,
-  });
+  try {
+    await product.update({
+      name,
+      description,
+      price,
+      imageUrl,
+      category,
+    });
 
-  res.send(product);
+    for (const size in sizes) {
+      const stock = sizes[size];
+
+      // Buscamos si ya existe un ProductSize para este talle
+      const existingSize = await ProductSize.findOne({
+        where: {
+          productId: product.id,
+          size: size,
+        },
+      });
+
+      if (stock > 0) {
+        if (existingSize) {
+          // Si existe, lo actualizamos
+          await existingSize.update({ stock });
+        } else {
+          // Si no existe, lo creamos
+          await ProductSize.create({
+            productId: product.id,
+            size,
+            stock,
+          });
+        }
+      } else {
+        // Si el stock es 0 y existe, lo eliminamos
+        if (existingSize) {
+          await existingSize.destroy();
+        }
+      }
+    }
+
+    // Traemos el producto actualizado con talles (JOIN)
+    const updatedProduct = await Product.findByPk(id, {
+      include: [
+        {
+          model: ProductSize,
+          attributes: ["size", "stock"],
+        },
+      ],
+    });
+
+    return res.status(200).json(updatedProduct);
+  } catch (error) {
+    console.error("Error al actualizar producto:", error);
+    return res.status(500).send({ message: "Error interno del servidor" });
+  }
 };
 
-// DELETE -> Borra un producto de la bbdd (modificar por atributo "activo")
-// Hay un atributo "activo" en Product y User para desactivarlos de la tienda
+// DELETE -> Borra un producto de la bbdd
 export const deleteProduct = async (req, res) => {
   const { id } = req.params;
 

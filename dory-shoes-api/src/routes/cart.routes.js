@@ -14,7 +14,7 @@ import { verifyToken } from "../services/auth.services.js";
 
 const router = Router();
 
-router.post("/cart", verifyToken, showAllProductsFromCart);
+router.get("/cart", verifyToken, showAllProductsFromCart);
 
 router.post("/cart/:id", verifyToken, addProductToCart);
 
