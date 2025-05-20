@@ -18,6 +18,10 @@ export const CartProducts = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    quantity: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   },
   { timestamps: false }
 );

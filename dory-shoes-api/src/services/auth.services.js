@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
+import { Cart } from "../models/Cart.js";
 import {
   validateString,
   validateEmail,
@@ -31,9 +32,7 @@ export const verifyToken = (req, res, next) => {
 };
 
 // POST -> Registra un nuevo usuario en la BBDD
-// Falta agregar la creación del carrito
 export const registerUser = async (req, res) => {
-
   const result = validateRegisterUser(req.body);
 
   if (result.error) {
@@ -70,7 +69,13 @@ export const registerUser = async (req, res) => {
     dateOfBirth,
   });
 
-  res.json(newUser.id);
+  //Creamos la instancia del carrito que el usuario va a usar para comprar
+  const newCart = await Cart.create({
+    userId: newUser.id,
+  });
+
+  //Devolvemos los id de las instancias creadas
+  res.json({ userId: newUser.id, cartId: newCart.id });
 };
 
 // Función para validar los datos ingresados por el usuario en el Login
@@ -106,11 +111,9 @@ const validateRegisterUser = (req) => {
   return result;
 };
 
-
 // POST -> Autentica al usuario que quiere iniciar sesión
 export const loginUser = async (req, res) => {
   try {
-
     const result = validateLoginUser(req.body);
 
     if (result.error) {
@@ -170,4 +173,42 @@ const validateLoginUser = (req) => {
   return result;
 };
 
+// PUT -> Modifica los datos del usuario
+export const updateUser = async (req, res) => {
+  const { id, name, email, password, phone, address, zipCode, dateOfBirth } =
+    req.body;
 
+  try {
+    const user = await User.findOne({ where: { id } });
+
+    if (!user) {
+      return res
+        .status(400)
+        .send({ message: "Este usuario no está registrado." });
+    }
+
+    const fieldsToUpdate = {
+      name,
+      email,
+      phone,
+      address,
+      zipCode,
+      dateOfBirth,
+    };
+
+    // Solo si se envió una nueva contraseña, la hasheamos
+    if (password && password.trim() !== "") {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      fieldsToUpdate.password = hashedPassword;
+    }
+
+    // Actualizamos el usuario
+    await user.update(fieldsToUpdate);
+
+    res.json({ message: "Usuario actualizado correctamente", userId: user.id });
+  } catch (error) {
+    console.error("Error al actualizar el usuario:", error);
+    res.status(500).send({ message: "Error interno del servidor" });
+  }
+};
