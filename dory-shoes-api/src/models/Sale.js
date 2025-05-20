@@ -9,7 +9,7 @@ export const Sale = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    cartId: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

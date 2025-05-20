@@ -3,7 +3,7 @@ import { Router } from "express";
 import {
     createProduct,
     deleteProduct,
-    getAllProducts,
+    getAvailableProducts,
     getProductById,
     updateProduct,
   } from "../services/product.services.js";
@@ -13,7 +13,7 @@ import {
 
 const router = Router();
 
-router.get("/products", verifyToken, getAllProducts);
+router.get("/products", verifyToken, getAvailableProducts);
 
 router.get("/products/:id", verifyToken, getProductById);
 
