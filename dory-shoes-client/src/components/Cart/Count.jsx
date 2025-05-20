@@ -1,6 +1,6 @@
 import {React, useState} from "react";
-import Products from "../../products/Products.jsx"
-import Cart from "../Cart.jsx";
+import Products from "../products/Products.jsx";
+import Cart from "./Cart.jsx";
 const Count =() =>{
  const [Total, setTotal]=useState(0);
  const [CountProduct, setCountProduct]=useState(0);

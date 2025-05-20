@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaShoppingCart } from "react-icons/fa";
-import "./Cart.css";
+import "./cart.css";
 
 const Cart = ({Allproduct = [],setAllproduct, Total,CountProduct,setCountProduct,setTotal}) => {
   const [active, setActive] = useState(false);
@@ -24,9 +24,9 @@ const Cart = ({Allproduct = [],setAllproduct, Total,CountProduct,setCountProduct
   return (
     <div>
       <div className="icon-cart">
-        <FaShoppingCart onClick={() => setActive(!active)} className="icon" />
-        <div className="count">
-          <span id="count-product">{CountProduct}</span>
+       <FaShoppingCart onClick={() => setActive(!active)} className="icon-cart-product" /> 
+        <div className="count-product">
+          <span id="count-product"  onClick={() => setActive(!active)}> {CountProduct}</span>
         </div>
       </div>
 
@@ -47,7 +47,7 @@ const Cart = ({Allproduct = [],setAllproduct, Total,CountProduct,setCountProduct
                       ${product.precio}
                     </span>
                   </div>
-                   <button onClick={() => onDeleteProduct(product.id)}>Eliminar</button> 
+                   <button onClick={() => onDeleteProduct(product)}>Eliminar</button> 
                 </div>
               ))}
             </div>
@@ -56,10 +56,11 @@ const Cart = ({Allproduct = [],setAllproduct, Total,CountProduct,setCountProduct
               <span>${Total}</span>
             </div>
             <button className="btn-clear-all" onClick={onclickCart}>Vaciar carrito</button>
+            <button>Finalizar pedido</button>
           </>
         ) : (
           <p>El carrito está vacío</p>
-        )}
+        )} 
       </div> 
     </div>
   );

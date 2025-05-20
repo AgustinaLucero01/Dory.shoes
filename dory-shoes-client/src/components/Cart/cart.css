@@ -8,10 +8,11 @@
     cursor: pointer;
 }
 
-.count-products{
+
+.count-product{
     position: absolute;
-    top: 55%;
-    right: 0;
+    top: 30%;
+    right: 2.50%;
 
     background-color: #000;
     color: #fff;
@@ -30,15 +31,19 @@
 
 .container-cart-products{
     position: absolute;
-    top: 50px;
+    top: 250px;
     right: 0;
-
     background-color: #fff;
     width: 400px;
     z-index: 1;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.20);
     border-radius: 10px;
-    
+     max-height: 300px; /* O la altura que quieras */
+  overflow-y: auto;  /* Scroll vertical cuando el contenido sobrepasa */
+}
+
+.container-cart-products p{
+    text-align: center;
 }
 
 .cart-product{
