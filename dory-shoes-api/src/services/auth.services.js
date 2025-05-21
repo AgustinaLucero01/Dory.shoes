@@ -175,7 +175,8 @@ const validateLoginUser = (req) => {
 
 // PUT -> Modifica los datos del usuario
 export const updateUser = async (req, res) => {
-  const { id, name, email, password, phone, address, zipCode, dateOfBirth } =
+  const { id } = req.params;
+  const { name, email, password, phone, address, zipCode, dateOfBirth } =
     req.body;
 
   try {
@@ -209,6 +210,6 @@ export const updateUser = async (req, res) => {
     res.json({ message: "Usuario actualizado correctamente", userId: user.id });
   } catch (error) {
     console.error("Error al actualizar el usuario:", error);
-    res.status(500).send({ message: "Error interno del servidor" });
+    res.send({ message: error.message });
   }
 };

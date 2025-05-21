@@ -14,12 +14,12 @@ import { verifyToken } from "../services/auth.services.js";
 
 const router = Router();
 
-router.get("/cart", verifyToken, showAllProductsFromCart);
+router.get("/cart", showAllProductsFromCart);
 
-router.post("/cart/:id", verifyToken, addProductToCart);
+router.post("/cart/:productId", addProductToCart);
 
-router.delete("/cart/:id", verifyToken, dropProductFromCart);
+router.delete("/cart", dropProductFromCart);
 
-router.put("/cart/:id", verifyToken, modifyQuantity);
+router.put("/cart", modifyQuantity);
 
-export default router; // importar en index.js y app.use()
+export default router;

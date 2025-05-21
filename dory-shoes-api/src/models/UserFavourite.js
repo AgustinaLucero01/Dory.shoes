@@ -1,8 +1,8 @@
 import { DataTypes, NOW } from "sequelize";
 import { sequelize } from "../db.js";
 
-export const UserFavourites = sequelize.define(
-  "userFavourites",
+export const UserFavourite = sequelize.define(
+  "userFavourite",
   {
     id: {
       type: DataTypes.INTEGER,

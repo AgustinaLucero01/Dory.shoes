@@ -31,7 +31,8 @@ export const showAllProductsFromCart = async (req, res) => {
 
 // POST -> Agrega un producto nuevo al carrito
 export const addProductToCart = async (req, res) => {
-  const { cartId, productId, quantity } = req.body;
+  const { productId } = req.params;
+  const { cartId, quantity } = req.body;
 
   //Verifica que el body haya traído los ID
   if (!cartId || !productId || !quantity) {
@@ -95,14 +96,14 @@ export const modifyQuantity = async (req, res) => {
   const { cartProductId, quantity } = req.body;
 
   //Verifica que el body haya traído los datos necesarios
-  if (!cartProductId || !quantity) {
+  if (!cartProductId) {
     return res
       .status(400)
-      .send({ message: "No se encontraron los datos necesarios." });
+      .send({ message: "No se encontró el id del producto a eliminar." });
   }
 
   //Verificar que exista la instancia de cartProduct correspondiente
-  const cartProduct = await Product.findByPk(cartProductId);
+  const cartProduct = await CartProduct.findByPk(cartProductId);
 
   if (!cartProduct) {
     return res.status(404).send({ message: "Producto no encontrado." });
@@ -111,13 +112,6 @@ export const modifyQuantity = async (req, res) => {
   if (quantity === 0) {
     await cartProduct.destroy();
     return res.send("Producto eliminado del carrito.");
-  }
-
-  //Verificar que la cantidad sea mayor o igual a 1
-  if (quantity < 1) {
-    return res
-      .status(400)
-      .send({ message: "La cantidad debe ser mayor o igual a 1." });
   }
 
   await cartProduct.update({
