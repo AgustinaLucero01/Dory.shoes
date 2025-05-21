@@ -6,6 +6,7 @@ import productRoutes from "./routes/product.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import cartRoutes from "./routes/cart.routes.js";
 import saleRoutes from "./routes/sale.routes.js";
+import favouriteRoutes from "./routes/favourite.routes.js";
 // BASE DE DATOS
 import { sequelize } from "./db.js";
 import "./models/index.js";
@@ -28,6 +29,7 @@ try {
   app.use(authRoutes);
   app.use(cartRoutes);
   app.use(saleRoutes);
+  app.use(favouriteRoutes);
   await sequelize.authenticate();
   await sequelize.sync(); // crea las tablas si no existen
 

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addFavourite, deleteFavourite, showAllUserFavourites } from "../services/favourites.services.js";
+import { addFavourite, deleteFavourite, showAllUserFavourites } from "../services/favourite.services.js";
 
 const router = Router();
 

@@ -17,11 +17,6 @@ export const UserFavourite = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    creationDate: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: sequelize.NOW,
-    },
   },
   { timestamps: false }
 );

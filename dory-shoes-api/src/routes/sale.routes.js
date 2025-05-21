@@ -8,8 +8,8 @@ import { verifyToken } from "../services/auth.services.js";
 
 const router = Router();
 
-router.post("/newSale", verifyToken, createSale);
+router.post("/newSale", createSale);
 
-router.get("/sales", verifyToken, showAllSales);
+router.get("/sales", showAllSales);
 
-export default router; // importar en index.js y app.use()
+export default router;

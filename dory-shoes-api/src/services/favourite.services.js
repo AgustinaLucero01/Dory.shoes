@@ -29,7 +29,7 @@ export const addFavourite = async (req, res) => {
     res.json(newUserFavourite);
   } catch (error) {
     console.error("Error al agregar a favoritos:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -56,7 +56,7 @@ export const deleteFavourite = async (req, res) => {
     res.send("Producto eliminado de favoritos.");
   } catch (error) {
     console.error("Error al quitar producto de favoritos:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -79,12 +79,13 @@ export const showAllUserFavourites = async (req, res) => {
       });
     }
 
-    const favouriteProducts = await Product.findAll({
+    const favouriteProducts = await UserFavourite.findAll({
       where: { userId: id },
     });
+
     res.json(favouriteProducts);
   } catch (error) {
     console.error("Error al mostrar favoritos:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
+    res.status(500).json({ message: error.message });
   }
 };
