@@ -1,9 +1,9 @@
-import { DataTypes, NOW } from "sequelize";
+import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
 
 // Tabla intermedia para poder guardar varios productos en un mismo carrito
-export const CartProducts = sequelize.define(
-  "cartProducts",
+export const CartProduct = sequelize.define(
+  "cartProduct",
   {
     id: {
       type: DataTypes.INTEGER,

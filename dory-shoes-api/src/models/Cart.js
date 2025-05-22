@@ -1,7 +1,9 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
 
-export const Cart = sequelize.define("cart", {
+export const Cart = sequelize.define(
+  "cart",
+  {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -11,5 +13,6 @@ export const Cart = sequelize.define("cart", {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-  }, { timestamps: false }
+  },
+  { timestamps: false }
 );

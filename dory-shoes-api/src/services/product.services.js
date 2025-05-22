@@ -17,11 +17,14 @@ export const getAvailableProducts = async (req, res) => {
       },
       group: ["Product.id"],
     });
+    if (!products) {
+      res.status(400).json({ message: "No hay productos para mostrar" });
+    }
 
     res.json(products);
   } catch (error) {
     console.error("Error al obtener productos con stock:", error);
-    res.status(500).json({ message: "Error interno del servidor" });
+    res.json({ message: error });
   }
 };
 
@@ -63,10 +66,10 @@ export const createProduct = async (req, res) => {
   //Espera los datos del producto y un diccionario (talle: stock)
   const { name, description, price, imageUrl, category, sizes } = req.body;
 
-  if (!name || !description || !price) {
+  if (!name || !description || !price || !sizes) {
     return res
       .status(400)
-      .send({ message: "Nombre, descripción y precio son requeridos." });
+      .send({ message: "Nombre, descripción, precio y talles son requeridos." });
   }
 
   try {
@@ -101,7 +104,7 @@ export const createProduct = async (req, res) => {
     });
   } catch (error) {
     console.error("Error al crear producto:", error);
-    return res.status(500).send({ message: "Error interno del servidor" });
+    return res.send({ message: error });
   }
 };
 
@@ -169,7 +172,7 @@ export const updateProduct = async (req, res) => {
     return res.status(200).json(updatedProduct);
   } catch (error) {
     console.error("Error al actualizar producto:", error);
-    return res.status(500).send({ message: "Error interno del servidor" });
+    return res.send({ message: error });
   }
 };
 
