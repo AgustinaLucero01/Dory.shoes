@@ -54,7 +54,12 @@ export const createSale = async (req, res) => {
 export const showAllSales = async (req, res) => {
   try {
     const sales = await Sale.findAll();
-    res.json(sales);
+    const totalAmount = await Sale.sum("amount");
+
+    res.status(200).json({
+      sales,
+      totalAmount,
+    });
   } catch (error) {
     console.error("Error al obtener las ventas:", error);
     res.status(500).json({ message: "Error interno del servidor" });
