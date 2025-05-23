@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import { FaUser, FaShoppingCart, FaSearch } from "react-icons/fa";
 import "./Navbar.css";
+import { Link } from "react-router-dom";
 
 const CustomNavbar = (carritoCantidad) => {
   // manejamos el estado de "expanded" para definir si la navbar está abierta o no
@@ -32,23 +33,24 @@ const CustomNavbar = (carritoCantidad) => {
             &times;
           </div>
           <Nav className="flex-column">
-            <Nav.Link href="#inicio" onClick={handleClose}>
+            <Nav.Link as={Link} to="/" onClick={handleClose}>
               Inicio
             </Nav.Link>
+
             <NavDropdown title="Productos" id="productos-dropdown">
-              <NavDropdown.Item href="#todos" onClick={handleClose}>
+              <NavDropdown.Item as={Link} to="/categoria" onClick={handleClose}>
                 Todos los productos
               </NavDropdown.Item>
-              <NavDropdown.Item href="#botas" onClick={handleClose}>
+              <NavDropdown.Item as={Link} to="/categoria/botas" onClick={handleClose}>
                 Botas
               </NavDropdown.Item>
-              <NavDropdown.Item href="#zapatillas" onClick={handleClose}>
+              <NavDropdown.Item as={Link} to="/categoria/zapatillas" onClick={handleClose}>
                 Zapatillas
               </NavDropdown.Item>
-              <NavDropdown.Item href="#zapatos" onClick={handleClose}>
+              <NavDropdown.Item as={Link} to="/categoria/zapatos" onClick={handleClose}>
                 Zapatos
               </NavDropdown.Item>
-              <NavDropdown.Item href="#pantuflas" onClick={handleClose}>
+              <NavDropdown.Item as={Link} to="/categoria/pantuflas" onClick={handleClose}>
                 Pantuflas
               </NavDropdown.Item>
             </NavDropdown>
@@ -64,17 +66,18 @@ const CustomNavbar = (carritoCantidad) => {
           </Nav>
         </Navbar.Collapse>
 
-        <Navbar.Brand href="#home">
+        <Navbar.Brand as={Link} to="/">
           <img
             src="../../../images/DoryShoes-Logo.jpg"
             className="d-inline-block align-top"
             alt="Logo de Dory Shoes"
           />
         </Navbar.Brand>
+
         <div className="header-icons">
-          <FaSearch className="icon"/>
+          <FaSearch className="icon" />
           <FaUser className="icon" />
-          <FaShoppingCart className="icon"/>
+          <FaShoppingCart className="icon" />
         </div>
       </Container>
     </Navbar>
