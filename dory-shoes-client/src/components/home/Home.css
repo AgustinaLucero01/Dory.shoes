@@ -15,19 +15,18 @@
 }
 
   
-
 .barra-envios {
   position: fixed;
   margin-top: 30px;
   width: 100%;
   height: auto; /* Dejá que el contenido defina la altura */
   background-color: #303030;
-  z-index: 1061;
+
   text-align: center;
   font-size: 10px; 
   color: aliceblue;
-  padding: 4px 0; /* MUY importante: bajamos el padding vertical */
-  line-height: normal; /* opcional: podés dejarlo o ajustarlo */
+  padding: 4px 0; 
+  line-height: normal; 
 }
 
 
