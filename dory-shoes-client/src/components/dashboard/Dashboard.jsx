@@ -1,15 +1,16 @@
-import React from "react";
-import { Route, Routes, useNavigate, Link } from "react-router-dom";
-import DashboardHome from "./DashboardHome";
+import React, { useEffect, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import "./Dashboard.css";
+
 import ProductForm from "../productForm/ProductForm";
+import DashboardHome from "./DashboardHome";
 
-const Dashboard = ({ user }) => {
-
+const Dashboard = ({}) => {
   return (
     <div>
-      <h1>Bienvenido al Dashboard, User</h1>
+      <h1>Dashboard</h1>
       <Routes>
-        <Route index element={<DashboardHome user={user}/>}></Route>
+        <Route index element={<DashboardHome />}></Route>
         <Route path="crear-producto" element={<ProductForm />} />
         <Route path="editar-producto/:id" element={<ProductForm />} />
       </Routes>
