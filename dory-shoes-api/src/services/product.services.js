@@ -35,9 +35,6 @@ export const getProductById = async (req, res) => {
     include: [
       {
         model: ProductSize,
-        where: {
-          stock: { [Op.gt]: 0 }, //solo trae las instancias de ProductSize que tengan stock
-        },
         attributes: ["size", "stock"],
         required: false,
       },
@@ -63,7 +60,6 @@ export const getProductById = async (req, res) => {
 
 // POST -> crea un nuevo producto
 export const createProduct = async (req, res) => {
-  //Espera los datos del producto y un diccionario (talle: stock)
   const { name, description, price, imageUrl, category, sizes } = req.body;
 
   if (!name || !description || !price || !sizes) {
@@ -81,21 +77,16 @@ export const createProduct = async (req, res) => {
       category,
     });
 
-    //Creo un arreglo para guardar todas las instancias de ProductSize que debo crear
-    const sizesToCreate = [];
+    // Talles posibles del 35 al 40
+    const allSizes = ["35", "36", "37", "38", "39", "40"];
 
-    for (const size in sizes) {
-      const stock = sizes[size];
-      if (stock > 0) {
-        sizesToCreate.push({
-          productId: newProduct.id,
-          size,
-          stock,
-        });
-      }
-    }
+    // Si no se ingresaron datos en un talle, se inicializa en 0
+    const sizesToCreate = allSizes.map((size) => ({
+      productId: newProduct.id,
+      size,
+      stock: sizes[size] ?? 0, // si no viene ese talle, stock 0
+    }));
 
-    //Crea todos los ProductSize juntos (bulkCreate)
     const newProductSizes = await ProductSize.bulkCreate(sizesToCreate);
 
     return res.status(201).json({
@@ -104,7 +95,7 @@ export const createProduct = async (req, res) => {
     });
   } catch (error) {
     console.error("Error al crear producto:", error);
-    return res.send({ message: error });
+    return res.status(500).send({ message: error.message });
   }
 };
 
@@ -128,10 +119,11 @@ export const updateProduct = async (req, res) => {
       category,
     });
 
-    for (const size in sizes) {
-      const stock = sizes[size];
+    const allSizes = ["35", "36", "37", "38", "39", "40"];
 
-      // Buscamos si ya existe un ProductSize para este talle
+    for (const size of allSizes) {
+      const stock = sizes[size] ?? 0;
+
       const existingSize = await ProductSize.findOne({
         where: {
           productId: product.id,
@@ -139,27 +131,17 @@ export const updateProduct = async (req, res) => {
         },
       });
 
-      if (stock > 0) {
-        if (existingSize) {
-          // Si existe, lo actualizamos
-          await existingSize.update({ stock });
-        } else {
-          // Si no existe, lo creamos
-          await ProductSize.create({
-            productId: product.id,
-            size,
-            stock,
-          });
-        }
+      if (existingSize) {
+        await existingSize.update({ stock });
       } else {
-        // Si el stock es 0 y existe, lo eliminamos
-        if (existingSize) {
-          await existingSize.destroy();
-        }
+        await ProductSize.create({
+          productId: product.id,
+          size,
+          stock,
+        });
       }
     }
 
-    // Traemos el producto actualizado con talles (JOIN)
     const updatedProduct = await Product.findByPk(id, {
       include: [
         {
@@ -172,7 +154,7 @@ export const updateProduct = async (req, res) => {
     return res.status(200).json(updatedProduct);
   } catch (error) {
     console.error("Error al actualizar producto:", error);
-    return res.send({ message: error });
+    return res.status(500).send({ message: error.message });
   }
 };
 
