@@ -40,7 +40,7 @@ nav {
 /* Links estilo sidebar */
 .custom-navbar-collapse .nav-link,
 .custom-navbar-collapse .dropdown-item {
-  padding: 10px;
+  padding: 15px;
   font-family: "Oswald", sans-serif;
   text-align: center;
   font-size: 20px;
@@ -70,7 +70,7 @@ nav {
 }
 
 img {
-  height: 22vh;
+  height: 25vh;
 }
 
 .header-icons {
@@ -82,4 +82,13 @@ img {
 .icon {
   font-size: 30px;
   cursor: pointer;
+}
+
+.search-container {
+  position: absolute;
+  top: 50%; /* Ajustar según el tamaño del navbar */
+  right: 180px; /* O lo que necesites para dejar espacio al ícono de la lupa */
+  transform: translateY(-35%);
+  z-index: 999; /* Para que quede por encima del contenido */
+  width: 250px; 
 }

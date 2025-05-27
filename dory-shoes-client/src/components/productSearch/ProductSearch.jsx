@@ -1,22 +1,28 @@
 import React from "react";
 import { Form } from "react-bootstrap";
 
-const BookSearch = ({ search, onSearch }) => {
-  const handleProductSearch = (e) => {
+const ProductSearch = ({ search, onSearch, onSubmit }) => {
+  const handleChange = (e) => {
     onSearch(e.target.value);
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit();        
+  };
+
   return (
-    <div>
-      <Form.Group className="mb-3 form-search" controlId="searchBook">
+    <Form onSubmit={handleSubmit}>
+      <Form.Group className="mb-3 form-search" controlId="searchProduct">
         <Form.Control
           type="text"
           placeholder="Buscar"
-          onChange={handleProductSearch}
           value={search}
+          onChange={handleChange}
         />
       </Form.Group>
-    </div>
+    </Form>
   );
 };
 
-export default BookSearch;
+export default ProductSearch;

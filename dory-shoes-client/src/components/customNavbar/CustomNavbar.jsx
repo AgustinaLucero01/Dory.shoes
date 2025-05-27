@@ -2,11 +2,23 @@ import React, { useState } from "react";
 import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import { FaUser, FaShoppingCart, FaSearch } from "react-icons/fa";
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import ProductSearch from "../productSearch/ProductSearch";
+import { useNavigate } from "react-router-dom";
 
 const CustomNavbar = (carritoCantidad) => {
   // manejamos el estado de "expanded" para definir si la navbar está abierta o no
   const [expanded, setExpanded] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const navigate = useNavigate();
+  //encodeURIComponent: Convierte los caracteres especiales en una forma segura para la URL.
+  const handleSearchRedirect = () => {
+    if (searchTerm.trim()) {
+      navigate(`/products?search=${encodeURIComponent(searchTerm.trim())}`);
+      setShowSearch(false);
+    }
+  };
 
   const handleToggle = () => {
     setExpanded(!expanded);
@@ -14,6 +26,10 @@ const CustomNavbar = (carritoCantidad) => {
 
   const handleClose = () => {
     setExpanded(false);
+  };
+
+  const toggleSearch = () => {
+    setShowSearch(!showSearch);
   };
 
   return (
@@ -33,24 +49,23 @@ const CustomNavbar = (carritoCantidad) => {
             &times;
           </div>
           <Nav className="flex-column">
-            <Nav.Link as={Link} to="/" onClick={handleClose}>
+            <Nav.Link href="#inicio" onClick={handleClose}>
               Inicio
             </Nav.Link>
-
             <NavDropdown title="Productos" id="productos-dropdown">
-              <NavDropdown.Item as={Link} to="/categoria" onClick={handleClose}>
+              <NavDropdown.Item href="#todos" onClick={handleClose}>
                 Todos los productos
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/categoria/botas" onClick={handleClose}>
+              <NavDropdown.Item href="#botas" onClick={handleClose}>
                 Botas
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/categoria/zapatillas" onClick={handleClose}>
+              <NavDropdown.Item href="#zapatillas" onClick={handleClose}>
                 Zapatillas
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/categoria/zapatos" onClick={handleClose}>
+              <NavDropdown.Item href="#zapatos" onClick={handleClose}>
                 Zapatos
               </NavDropdown.Item>
-              <NavDropdown.Item as={Link} to="/categoria/pantuflas" onClick={handleClose}>
+              <NavDropdown.Item href="#pantuflas" onClick={handleClose}>
                 Pantuflas
               </NavDropdown.Item>
             </NavDropdown>
@@ -66,16 +81,24 @@ const CustomNavbar = (carritoCantidad) => {
           </Nav>
         </Navbar.Collapse>
 
-        <Navbar.Brand as={Link} to="/">
+        <Navbar.Brand href="#home">
           <img
             src="../../../images/DoryShoes-Logo.jpg"
             className="d-inline-block align-top"
             alt="Logo de Dory Shoes"
           />
         </Navbar.Brand>
-
+        {showSearch && (
+          <div className="search-container">
+            <ProductSearch
+              search={searchTerm}
+              onSearch={setSearchTerm}
+              onSubmit={handleSearchRedirect}
+            />
+          </div>
+        )}
         <div className="header-icons">
-          <FaSearch className="icon" />
+          <FaSearch className="icon" onClick={toggleSearch} />
           <FaUser className="icon" />
           <FaShoppingCart className="icon" />
         </div>
