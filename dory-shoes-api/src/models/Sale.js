@@ -1,4 +1,4 @@
-import { DataTypes, NOW } from "sequelize";
+import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
 
 export const Sale = sequelize.define(

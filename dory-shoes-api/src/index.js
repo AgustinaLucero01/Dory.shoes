@@ -30,7 +30,6 @@ try {
   app.use(cartRoutes);
   app.use(saleRoutes);
   app.use(favouriteRoutes);
-  await sequelize.authenticate();
   await sequelize.sync(); // crea las tablas si no existen
 
   app.listen(PORT, () => {
