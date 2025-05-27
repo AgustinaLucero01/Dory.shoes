@@ -43,6 +43,11 @@ export const User = sequelize.define(
       type: DataTypes.DATE,
       allowNull: true,
     },
+    active: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    }
   },
   {
     timestamps: false,
