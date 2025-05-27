@@ -44,7 +44,7 @@ const DashboardHome = ({}) => {
   };
 
   return (
-    <Container className="dashboard-container">
+    <Container>
       <Row className="mb-4">
         <Col>
           <Card>

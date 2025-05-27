@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Table, Alert } from "react-bootstrap";
 import "./Dashboard.css";
+import { useNavigate } from "react-router-dom";
 
 const AdminsDashboard = ({ openConfirmModal }) => {
+   const navigate = useNavigate();
+
   const [admins, setAdmins] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [adminToDelete, setAdminToDelete] = useState(null);
 
   useEffect(() => {
     fetchAdmins();
@@ -39,6 +40,10 @@ const AdminsDashboard = ({ openConfirmModal }) => {
       onConfirm: () => eliminateAdmin(id),
     });
   };
+
+  const handleRegisterForm = (id) => {
+    navigate(`agregar-admin`);
+  };
   return (
     <Row className="mb-4">
       <Col>
@@ -46,7 +51,7 @@ const AdminsDashboard = ({ openConfirmModal }) => {
         <Button
           variant="success"
           className="add-button"
-          onClick={() => handleProductForm(null)}
+          onClick={() => handleRegisterForm()}
         >
           Agregar administrador
         </Button>
