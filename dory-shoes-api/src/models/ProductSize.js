@@ -16,12 +16,12 @@ export const ProductSize = sequelize.define(
     },
     size: {
       type: DataTypes.ENUM(
+        "35",
         "36",
         "37",
         "38",
         "39",
-        "40",
-        "41"
+        "40"
       ),
       allowNull: false,
     },

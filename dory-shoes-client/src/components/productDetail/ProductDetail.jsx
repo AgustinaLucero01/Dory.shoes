@@ -4,7 +4,7 @@ import ProductData from "../../data/products.json";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import "./ProductDetail.css";
 import ModalImage from "../ui/ModalImage";
-
+import ModalProduct from "../ui/ModalProduct";
 function ProductDetail() {
   const { id } = useParams();
   const Productos = ProductData.find((p) => p.id === parseInt(id));
@@ -20,7 +20,7 @@ function ProductDetail() {
   const [favorites, setFavorites] = useState([]);
   const [cart, setCart] = useState([]);
   const [showModal, setShowModal] = useState(false);
-
+  const [showModalProduct, setShowModalProduct] = useState(false);
   const sizes = Object.keys(Productos.size || {});
 
   const handleAddToCart = () => {
@@ -78,6 +78,10 @@ function ProductDetail() {
             </button>
           ))}
         </div>
+        <button className="no-size-button" onClick={() => setShowModalProduct(true)}>
+          Tabla de talles
+
+        </button>
       </div>
 
       <button onClick={() => window.history.back()}>Volver</button>
@@ -92,6 +96,7 @@ function ProductDetail() {
         image={Productos.imagen}
         alt={Productos.nombre}
       />
+      <ModalProduct show={showModalProduct} onHide={() => setShowModalProduct(false)} />
     </div>
   );
 }

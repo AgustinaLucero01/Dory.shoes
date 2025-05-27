@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
+import { Cart } from "../models/Cart.js";
 import {
   validateString,
   validateEmail,
@@ -31,16 +32,14 @@ export const verifyToken = (req, res, next) => {
 };
 
 // POST -> Registra un nuevo usuario en la BBDD
-// Falta agregar la creación del carrito
 export const registerUser = async (req, res) => {
-
   const result = validateRegisterUser(req.body);
 
   if (result.error) {
     return res.status(400).send({ message: result.message });
   }
 
-  const { name, email, password, phone, address, zipCode, dateOfBirth } =
+  const { name, email, password, role, phone, address, zipCode, dateOfBirth } =
     req.body;
 
   // Busca si ya existe un usuario con ese email
@@ -65,12 +64,20 @@ export const registerUser = async (req, res) => {
     email,
     password: hashedPassword,
     phone,
+    role,
     address,
     zipCode,
     dateOfBirth,
+    active: 1
   });
 
-  res.json(newUser.id);
+  //Creamos la instancia del carrito que el usuario va a usar para comprar
+  const newCart = await Cart.create({
+    userId: newUser.id,
+  });
+
+  //Devolvemos los id de las instancias creadas
+  res.json({ userId: newUser.id, cartId: newCart.id });
 };
 
 // Función para validar los datos ingresados por el usuario en el Login
@@ -106,11 +113,9 @@ const validateRegisterUser = (req) => {
   return result;
 };
 
-
 // POST -> Autentica al usuario que quiere iniciar sesión
 export const loginUser = async (req, res) => {
   try {
-
     const result = validateLoginUser(req.body);
 
     if (result.error) {
@@ -124,6 +129,10 @@ export const loginUser = async (req, res) => {
     });
 
     if (!user) return res.status(401).send({ message: "Usuario no existente" });
+
+    if (!user.active) {
+      return res.status(401).send({ message: "El usuario ingresado está inactivo" });
+    }
 
     const comparison = await bcrypt.compare(password, user.password);
 
@@ -140,7 +149,7 @@ export const loginUser = async (req, res) => {
     return res.json(token);
   } catch (error) {
     console.error("Error en loginUser:", error);
-    return res.status(500).send({ message: "Error interno del servidor" });
+    return res.status(500).send({ message: error });
   }
 };
 
@@ -170,4 +179,114 @@ const validateLoginUser = (req) => {
   return result;
 };
 
+// PUT -> Modifica los datos del usuario
+export const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, password, phone, address, zipCode, dateOfBirth, role, active } =
+    req.body;
 
+  try {
+    const user = await User.findOne({ where: { id } });
+
+    if (!user) {
+      return res
+        .status(400)
+        .send({ message: "Este usuario no está registrado." });
+    }
+
+    const fieldsToUpdate = {
+      name,
+      email,
+      phone,
+      address,
+      zipCode,
+      dateOfBirth,
+      role,
+      active
+    };
+
+    // Solo si se envió una nueva contraseña, la hasheamos
+    if (password && password.trim() !== "") {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      fieldsToUpdate.password = hashedPassword;
+    }
+
+    // Actualizamos el usuario
+    await user.update(fieldsToUpdate);
+
+    res.json({ message: "Usuario actualizado correctamente", userId: user.id });
+  } catch (error) {
+    console.error("Error al actualizar el usuario:", error);
+    res.send({ message: error.message });
+  }
+};
+
+export const getAllAdmins = async (req, res) => {
+  try {
+    const admins = await User.findAll({
+      where: {
+        role: "admin",
+        active: 1,
+      },
+    });
+    if (!admins) {
+      res.status(400).json({ message: "No hay usuarios para mostrar" });
+    }
+
+    res.json(admins);
+  } catch (error) {
+    console.error("Error al obtener usuarios con rol de administrador:", error);
+    res.json({ message: error });
+  }
+};
+
+export const getUserByPk = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findByPk(id);
+
+  if (!user) {
+    return res.status(404).send({ message: "Usuario no encontrado." });
+  }
+  if (!user.active) {
+      return res.status(400).json({ message: "El usuario está inactivo." });
+    }
+  res.json(user);
+};
+
+export const deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado." });
+    }
+
+    if (!user.active) {
+      return res.status(400).json({ message: "El usuario ya está inactivo." });
+    }
+
+    await user.update({ active: false });
+
+    return res.status(200).json({ message: "Usuario desactivado correctamente." });
+  } catch (error) {
+    console.error("Error al desactivar el usuario:", error);
+    return res.status(500).json({ message: error });
+  }
+};
+
+export const getAllUsers = async (req,res)=> {
+  try {
+    const users = await User.findAll();
+    if (!users) {
+      res.status(400).json({ message: "No hay usuarios para mostrar" });
+    }
+
+    res.json(users);
+  } catch (error) {
+    console.error("Error al obtener usuarios con rol de administrador:", error);
+    res.json({ message: error });
+  }
+};

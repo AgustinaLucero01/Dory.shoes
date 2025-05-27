@@ -1,8 +1,8 @@
 import { DataTypes, NOW } from "sequelize";
 import { sequelize } from "../db.js";
 
-export const UserFavourites = sequelize.define(
-  "userFavourites",
+export const UserFavourite = sequelize.define(
+  "userFavourite",
   {
     id: {
       type: DataTypes.INTEGER,
@@ -16,11 +16,6 @@ export const UserFavourites = sequelize.define(
     productId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
-    creationDate: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: sequelize.NOW,
     },
   },
   { timestamps: false }

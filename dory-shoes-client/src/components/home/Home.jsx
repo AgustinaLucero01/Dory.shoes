@@ -57,7 +57,7 @@ const Home = () => {
 
       <div className="linea-gris"></div>
 
-      {/* Categorías con cuadrícula */}
+    
       <div className="categorias-grid">
         {categorias.map((cat, i) => (
           <Link to={`/categoria/${cat.nombre.toLowerCase()}`} key={i}>
@@ -79,4 +79,3 @@ const Home = () => {
 export default Home;
 
 
-/* este componente va a ser actualizado con hooks*/
