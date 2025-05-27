@@ -1,0 +1,40 @@
+
+.navbar-container {
+    background-color: #F0DFC8;
+}
+
+/* Sidebar estilo */
+.custom-navbar-collapse {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #F0DFC8;
+    padding-top: 70px;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    z-index: 1050;
+  }
+  
+  /* Mostrar sidebar cuando se abre */
+  .navbar-collapse.show.custom-navbar-collapse {
+    left: 0;
+  }
+  
+  /* Links estilo sidebar */
+  .custom-navbar-collapse .nav-link,
+  .custom-navbar-collapse .dropdown-item {
+    padding: 15px;
+  }
+  
+  /* Botón de cerrar (la cruz X) */
+  .close-btn {
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    font-size: 30px;
+    cursor: pointer;
+  }
+
+  
