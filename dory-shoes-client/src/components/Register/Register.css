@@ -1,11 +1,10 @@
 .Registro-box{
     border: solid 1px rgb(157, 157, 157);
-    height: 750px;
-    width: 700px;
     text-align: center;
-    margin-top: 130px;
-    margin-left: 40%;
     background-color: #fff;
+    /* modificar el margin para que aplique a toda la app */
+    margin-top: 30vh !important;
+    margin-bottom: 5vh;
 }
 
 .Registro-box form{

@@ -1,32 +1,43 @@
-import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import ProductData from "../../data/products.json";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import "./ProductDetail.css";
 import ModalImage from "../ui/ModalImage";
 import ModalProduct from "../ui/ModalProduct";
 function ProductDetail() {
+  const navigate = useNavigate();
   const { id } = useParams();
-  const Productos = ProductData.find((p) => p.id === parseInt(id));
-  
-  console.log("ID recibido:", id);
-  console.log("Producto encontrado:", Productos);
 
-  if (!Productos) {
-    return <div className="product-detail"><h2>Producto no encontrado</h2></div>;
-  }
-
+  const [product, setProduct] = useState();
   const [selectedSize, setSelectedSize] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [cart, setCart] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showModalProduct, setShowModalProduct] = useState(false);
-  const sizes = Object.keys(Productos.size || {});
+
+  useEffect(() => {
+    fetchProducto();
+  }, [id]);
+
+  const fetchProducto = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/products/${id}`);
+      if (!response.ok) {
+        navigate("/");
+        throw new Error("Producto no encontrado");
+      }
+      const data = await response.json();
+      setProduct(data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   const handleAddToCart = () => {
     if (selectedSize) {
       const existingIndex = cart.findIndex(
-        (item) => item.id === Productos.id && item.size === selectedSize
+        (item) => item.id === product.id && item.size === selectedSize
       );
 
       if (existingIndex !== -1) {
@@ -34,7 +45,7 @@ function ProductDetail() {
         updatedCart[existingIndex].quantity += 1;
         setCart(updatedCart);
       } else {
-        const newItem = { ...Productos, size: selectedSize, quantity: 1 };
+        const newItem = { ...product, size: selectedSize, quantity: 1 };
         setCart([...cart, newItem]);
       }
       alert("Producto agregado al carrito");
@@ -44,59 +55,65 @@ function ProductDetail() {
   };
 
   const toggleFavorite = () => {
-    if (favorites.includes(Productos.id)) {
-      setFavorites(favorites.filter((favId) => favId !== Productos.id));
+    if (favorites.includes(product.id)) {
+      setFavorites(favorites.filter((favId) => favId !== product.id));
     } else {
-      setFavorites([...favorites, Productos.id]);
+      setFavorites([...favorites, product.id]);
     }
   };
 
   return (
     <div className="product-detail">
       <img
-        src={Productos.imagen}
-        alt={Productos.nombre}
+        src={product?.imageUrl}
+        alt={product?.name}
         className="product-image"
         onClick={() => setShowModal(true)}
         style={{ cursor: "pointer" }}
       />
 
-      <h2>{Productos.nombre}</h2>
-      <p>${Productos.precio}</p>
+      <h2>{product?.name}</h2>
+      <p>${product?.price}</p>
 
       <div className="sizes">
         <p>Selecciona un talle:</p>
         <div className="size-options">
-          {sizes.map((size) => (
+          {product?.productSizes.map((sizeObj) => (
             <button
-              key={size}
-              onClick={() => setSelectedSize(size)}
-              className={selectedSize === size ? "selected" : ""}
-              disabled={Productos.size[size] === 0}
+              key={sizeObj.size}
+              onClick={() => setSelectedSize(sizeObj.size)}
+              className={selectedSize === sizeObj.size ? "selected" : ""}
+              disabled={sizeObj.stock === 0}
             >
-              {Productos.size[size] === 0 ? <s>{size}</s> : size}
+              {sizeObj.stock === 0 ? <s>{sizeObj.size}</s> : sizeObj.size}
             </button>
           ))}
         </div>
-        <button className="no-size-button" onClick={() => setShowModalProduct(true)}>
+        <button
+          className="no-size-button"
+          onClick={() => setShowModalProduct(true)}
+        >
           Tabla de talles
-
         </button>
       </div>
 
       <button onClick={() => window.history.back()}>Volver</button>
       <button onClick={handleAddToCart}>Agregar al carrito</button>
       <button onClick={toggleFavorite}>
-        {favorites.includes(Productos.id) ? <AiFillHeart /> : <AiOutlineHeart />} Favorito
+        {favorites.includes(product?.id) ? <AiFillHeart /> : <AiOutlineHeart />}{" "}
+        Favorito
       </button>
 
       <ModalImage
         show={showModal}
         onClose={() => setShowModal(false)}
-        image={Productos.imagen}
-        alt={Productos.nombre}
+        image={product?.imageUrl}
+        alt={product?.name}
       />
-      <ModalProduct show={showModalProduct} onHide={() => setShowModalProduct(false)} />
+      <ModalProduct
+        show={showModalProduct}
+        onHide={() => setShowModalProduct(false)}
+      />
     </div>
   );
 }

@@ -7,7 +7,7 @@ router.post("/register", registerUser);
 
 router.post("/login", loginUser);
 
-router.post("/updateUser/:id", updateUser);
+router.put("/updateUser/:id", updateUser);
 
 router.get("/getAdmins", getAllAdmins);
 
