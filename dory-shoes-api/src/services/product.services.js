@@ -68,6 +68,11 @@ export const createProduct = async (req, res) => {
       .send({ message: "Nombre, descripción, precio y talles son requeridos." });
   }
 
+  const existing = await Product.findOne({ where: { name: name } });
+  if (existing) {
+  return res.status(400).json({ message: "Producto ya existe" });
+  }
+
   try {
     const newProduct = await Product.create({
       name,

@@ -229,7 +229,7 @@ const products = [
     description: "Zapatos",
     price: 16000,
     category: "zapatos",
-    imagen: "/images/Zapatos/zapato4.jpg",
+    imageUrl: "/images/Zapatos/zapato4.jpg",
     sizes: {
       35: 1,
       36: 0,
@@ -240,12 +240,31 @@ const products = [
     },
   },
 ];
-const API_URL = "http://localhost:3000/createProduct";
+
+const superAdmin = {
+  name: "Super Administrador",
+  email: "superAdmin@gmail.com",
+  password: "SuperAdmin123",
+  role: "superAdmin",
+  phone: "123456787",
+  address: "Pellegrini 504",
+  zipCode: "2000",
+  dateOfBirth: "1999-05-27",
+};
+const API_URL_PRODUCT = "http://localhost:3000/createProduct";
+const API_URL_USER = "http://localhost:3000/register";
 
 async function populateDB() {
+  await fetch(API_URL_USER, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(superAdmin),
+  });
   for (const product of products) {
     try {
-      const res = await fetch(API_URL, {
+      const res = await fetch(API_URL_PRODUCT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
