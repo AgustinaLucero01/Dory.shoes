@@ -24,12 +24,12 @@ const ProductForm = () => {
     imageUrl: "",
     category: "botas",
     sizes: {
+      35: 0,
       36: 0,
       37: 0,
       38: 0,
       39: 0,
       40: 0,
-      41: 0,
     },
   });
 
