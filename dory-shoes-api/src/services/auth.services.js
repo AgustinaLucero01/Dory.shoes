@@ -33,7 +33,8 @@ export const verifyToken = (req, res, next) => {
 
 // POST -> Registra un nuevo usuario en la BBDD
 export const registerUser = async (req, res) => {
-  const result = validateRegisterUser(req.body);
+  try {
+    const result = validateRegisterUser(req.body);
 
   if (result.error) {
     return res.status(400).send({ message: result.message });
@@ -78,6 +79,9 @@ export const registerUser = async (req, res) => {
 
   //Devolvemos los id de las instancias creadas
   res.json({ userId: newUser.id, cartId: newCart.id });
+  } catch (err) {
+    res.json({message: `Error al crear usuario: ${err.message}`})
+  }
 };
 
 // Función para validar los datos ingresados por el usuario en el Login
@@ -103,7 +107,7 @@ const validateRegisterUser = (req) => {
     };
   }
 
-  if (!password || !validatePassword(password, 7, null, true, true)) {
+  if (!password || !validatePassword(password, 5, null, true, true)) {
     return {
       error: true,
       message: "Contraseña inválida.",
@@ -258,14 +262,10 @@ export const deleteUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const user = await User.findByPk(id);
+    const user = await User.findOne({ where: { id, active: 1 } });
 
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado." });
-    }
-
-    if (!user.active) {
-      return res.status(400).json({ message: "El usuario ya está inactivo." });
     }
 
     await user.update({ active: false });
