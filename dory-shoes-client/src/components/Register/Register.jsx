@@ -1,175 +1,266 @@
-import React, { useRef, useState } from "react";
-import { Button } from "react-bootstrap";
-import "./Register.css"
-import { useNavigate } from "react-router";
+import React, { useRef, useState, useEffect } from "react";
+import { Container, Button } from "react-bootstrap";
+import "./Register.css";
+import { useNavigate, useParams } from "react-router-dom";
 
-const Registro =()=>{
-    const [Email,setEmail]=useState("");
-    const [name,setName]=useState("");
-    const [Lastname, setLastname]=useState("");
-    const [Phone, setPhone]=useState("");
-    const [password,setPassword]=useState("")
-    const [newPassword,setNewPassword]=useState("")
+const Registro = ({ role, isEdit }) => {
+  const { id } = useParams();
 
-    const NameRef=useRef(null);
-    const EmailRef=useRef(null);
-    const LastnameRef=useRef(null);
-    const PhoneRef=useRef(null);
-    const passwordRef=useRef(null);
-    const NewpasswordRef=useRef(null);
+  const [user, setUser] = useState();
 
-    const [errors,setErrors]=useState({
-        Email:false, 
-        name:false, 
-        Lastname:false, 
-        Phone:false,
-        password:false,
-        newPassword:false
-    })
+  useEffect(() => {
+      fetchUser();
+    }, [id]);
+  
+    const fetchUser = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/getUser/${id}`);
+        if (!response.ok) {
+          navigate("/");
+          throw new Error("Usuario no encontrado");
+        }
+        const data = await response.json();
+        setUser(data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    };
 
-    const navigate= useNavigate()
-    const handleRoter=()=>{
+  const [email, setEmail] = useState(user?.email || "");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [address, setAddress] = useState("");
+  const [zipCode, setZipCode] = useState("");
+
+  const nameRef = useRef(null);
+  const emailRef = useRef(null);
+  const phoneRef = useRef(null);
+  const addressRef = useRef(null);
+  const zipCodeRef = useRef(null);
+  const passwordRef = useRef(null);
+  const newPasswordRef = useRef(null);
+
+  const [errors, setErrors] = useState({
+    email: false,
+    name: false,
+    phone: false,
+    address: false,
+    zipCode: false,
+    password: false,
+    newPassword: false,
+  });
+
+  const navigate = useNavigate();
+  const handleRouter = () => {
+    if(role === "admin") {
+        navigate("/dashboard");
+    } else {
         navigate("/login");
     }
+  };
 
-    const handleOnChange=(event)=>{
-        setName(event.target.value);
-        setErrors({...errors,name:false})
+  const handleOnChangeName = (event) => {
+    setName(event.target.value);
+    setErrors({ ...errors, name: false });
+  };
+
+  const handleOnChangeEmail = (event) => {
+    setEmail(event.target.value);
+    setErrors({ ...errors, email: false });
+  };
+
+  const handleOnChangePhone = (event) => {
+    setPhone(event.target.value);
+    setErrors({ ...errors, phone: false });
+  };
+
+  const handleOnChangeAddress = (event) => {
+    setAddress(event.target.value);
+    setErrors({ ...errors, address: false });
+  };
+
+  const handleOnChangeZipCode = (event) => {
+    setZipCode(event.target.value);
+    setErrors({ ...errors, zipCode: false });
+  };
+
+  const handleOnChangePassword = (event) => {
+    setPassword(event.target.value);
+    setErrors({ ...errors, password: false });
+  };
+
+  const handleOnChangeNewPW = (event) => {
+    setNewPassword(event.target.value);
+    setErrors({ ...errors, newPassword: false });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    let hasError = false;
+
+    if (!nameRef.current.value.length) {
+      setErrors({ ...errors, name: true });
+      nameRef.current.focus();
+      hasError = true;
+      return;
     }
 
-    const handleOnchangeLastName=(event)=>{
-        setLastname(event.target.value)
-        setErrors({...errors,Lastname:false})
+    if (!emailRef.current.value.length) {
+      setErrors({ ...errors, email: true });
+      emailRef.current.focus();
+      hasError = true;
+      return;
     }
 
-    const handleOnChangeEmail=(event)=>{
-        setEmail(event.target.value)
-        setErrors({...errors,Email:false})
+    if (!phone.length || phone.length <= 10) {
+      setErrors({ ...errors, phone: true });
+      if (!hasError) phoneRef.current.focus();
+      hasError = true;
+      return;
     }
 
-    const handleOnChangePhone=(event)=>{
-        setPhone(event.target.value)
-        setErrors({...errors,Phone:false})
+    if (!addressRef.current.value.length) {
+      setErrors({ ...errors, address: true });
+      if (!hasError) addressRef.current.focus();
+      hasError = true;
+      return;
     }
 
-    const handleOnChangePassword=(event)=>{
-        setPassword(event.target.value)
-        setErrors({...errors,password:false})
+    if (!zipCodeRef.current.value.length) {
+      setErrors({ ...errors, zipCode: true });
+      if (!hasError) zipCode.current.focus();
+      hasError = true;
+      return;
+    }
+    if (!password.length || password.length < 4) {
+      setErrors({ ...errors, password: true });
+      if (!hasError) passwordRef.current.focus();
+      hasError = true;
+      return;
     }
 
-    const handleOnChangeNewPW=(event)=>{
-        setNewPassword(event.target.value)
-        setErrors({...errors,newPassword:false})
+    if (newPassword != password) {
+      setErrors({ ...errors, newPassword: true });
+      if (!hasError) newPasswordRef.current.focus();
+      hasError = true;
+      return;
     }
 
+    const formData = {
+      name,
+      email,
+      phone,
+      address,
+      zipCode,
+      password,
+      role,
+    };
+    const method = isEdit ? "PUT" : "POST";
+    const url = isEdit ? `/updateUser/${id}` : "/register";
+    //FUNCIONA, FALTA TOAST
+    try {
+      await fetch(`http://localhost:3000${url}`, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),});
 
-    const handleSubmint=(event)=>{
-        event.preventDefault();
-        let hasError=false;
-        
-        if (!NameRef.current.value.length) {
-            setErrors({ ...errors, name: true }); 
-            NameRef.current.focus();
-            hasError = true;
-            return;
-
-        } 
-        
-        if (!LastnameRef.current.value.length){
-            setErrors({...errors,Lastname:true});
-            LastnameRef.current.focus();
-            hasError=true;
-            return;
-        } 
-        
-        if(!EmailRef.current.value.length){
-           setErrors({...errors,Email:true});
-           EmailRef.current.focus()
-            hasError=true;
-            return;
-        } 
-
-        if(!Phone.length || Phone.length<=10){
-            setErrors({...errors,Phone:true});
-            if(!hasError)PhoneRef.current.focus()
-            hasError=true
-            return;
+        if(role === "admin" && !isEdit) {
+            navigate("/dashboard");
+        } else {
+            navigate("/");
         }
-        if(!password.length || password.length<4){
-           setErrors({...errors,password:true})
-           if(!hasError)passwordRef.current.focus()
-            hasError=true
-           return;
-        }
-
-        if(newPassword != password){
-           setErrors({...errors, newPassword:true});
-           if(!hasError)NewpasswordRef.current.focus();
-            hasError=true;
-            return;
-        }
-
-        if (hasError) return
-        alert("enviado con exito")
+    } catch (err) {
+      console.log("Error al enviar el formulario.");
     }
+  };
 
-    return(
-            <div className="Registro-box">
-                <h2>Registro</h2>
-                <form action="" onSubmit={handleSubmint}>
-                    <input 
-                    type="text"
-                     placeholder="Ingrese su nombre" 
-                     ref={NameRef}
-                     value={name}
-                     onChange={handleOnChange}
-                     />
-                     {errors.name && <p className="error-text">complete el campo</p>}
 
-                    <input type="text" 
-                    placeholder="Ingrese su apellido" 
-                    value={Lastname} 
-                    ref={LastnameRef}
-                    onChange={handleOnchangeLastName}
-                    />
-                    {errors.Lastname && <p className="error-text">complete el campo</p>}
+  return (
+    <Container
+      className="d-flex justify-content-center align-items-center"
+      style={{ minHeight: "100vh" }}
+    >
+      <div className="Registro-box">
+        {isEdit ? <h2>Modifica tus datos</h2> :<h2>Registro</h2>}
+        <form action="" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Ingrese su nombre"
+            ref={nameRef}
+            value={name}
+            onChange={handleOnChangeName}
+          />
+          {errors.name && <p className="error-text">Complete el campo</p>}
 
-                    <input type="email" 
-                    placeholder="Ingrese su email" 
-                    value={Email}
-                     ref={EmailRef} 
-                     onChange={handleOnChangeEmail}
-                     />
-                    {errors.Email && <p className="error-text">complete el campo</p>}
-                   
-                    <input type="number" 
-                    placeholder="Ingrese su numero de telefono" 
-                    value={Phone} 
-                    ref={PhoneRef}
-                    onChange={handleOnChangePhone}
-                    />
-                    {errors.Phone && <p className="error-text">complete el campo con 12 caracteres</p>}
+          <input
+            type="email"
+            placeholder="Ingrese su email"
+            value={email}
+            ref={emailRef}
+            onChange={handleOnChangeEmail}
+          />
+          {errors.email && <p className="error-text">Complete el campo</p>}
 
-                    <input type="password" 
-                    placeholder="Ingrese una contraseña"
-                    value={password}
-                    ref={passwordRef}
-                    onChange={handleOnChangePassword}
-                    />
-                    {errors.password && <p className="error-text">complete el campo con 4 o mas caracteres</p>}
-                   
-                    <input type="password"
-                     placeholder="Vuleva a ingresar la contraseña" 
-                     value={newPassword} 
-                     ref={NewpasswordRef}
-                     onChange={handleOnChangeNewPW}
-                      />
-                     {errors.newPassword && <p className="error-text">asegurate que la contraseña sea igual</p>}
-                   
-                    <Button type="submint">enviar</Button>
-                    <Button onClick={handleRoter}>Regresar</Button>
-                </form>
-            </div>
-    )
-}
+          <input
+            type="number"
+            placeholder="Ingrese su número de teléfono"
+            value={phone}
+            ref={phoneRef}
+            onChange={handleOnChangePhone}
+          />
+          {errors.phone && (
+            <p className="error-text">Complete el campo con 12 caracteres</p>
+          )}
+
+          <input
+            type="text"
+            placeholder="Ingrese su dirección"
+            value={address}
+            ref={addressRef}
+            onChange={handleOnChangeAddress}
+          />
+          {errors.address && <p className="error-text">Complete el campo</p>}
+
+          <input
+            type="text"
+            placeholder="Ingrese su código postal"
+            value={zipCode}
+            ref={zipCodeRef}
+            onChange={handleOnChangeZipCode}
+          />
+          {errors.zipCode && <p className="error-text">Complete el campo</p>}
+
+          <input
+            type="password"
+            placeholder="Ingrese una contraseña"
+            value={password}
+            ref={passwordRef}
+            onChange={handleOnChangePassword}
+          />
+          {errors.password && (
+            <p className="error-text">
+              Complete el campo con 4 o mas caracteres
+            </p>
+          )}
+
+          <input
+            type="password"
+            placeholder="Vuleva a ingresar la contraseña"
+            value={newPassword}
+            ref={newPasswordRef}
+            onChange={handleOnChangeNewPW}
+          />
+          {errors.newPassword && (
+            <p className="error-text">Asegurate que la contraseña sea igual</p>
+          )}
+
+          <Button type="submit">Enviar</Button>
+          <Button onClick={handleRouter}>Regresar</Button>
+        </form>
+      </div>
+    </Container>
+  );
+};
 export default Registro;
