@@ -5,6 +5,7 @@
     /* modificar el margin para que aplique a toda la app */
     margin-top: 30vh !important;
     margin-bottom: 5vh;
+    padding: 15px;
 }
 
 .Registro-box form{
@@ -25,11 +26,14 @@
     background-color: black;
     color: #fff;
     height: 45px;
-    width: 500px;
+    width: 80%;
+    border: 1px solid black;
+
 }
 
 .Registro-box Button:hover{
-    border: solid 1px black;
+    background-color: rgba(0, 0, 0, 0.402);
+    border: 1px solid black;
 }
 
 .error-text {

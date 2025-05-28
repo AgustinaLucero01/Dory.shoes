@@ -33,8 +33,6 @@ const ProductForm = () => {
     },
   });
 
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const CATEGORIES = ["botas", "zapatillas", "zapatos", "pantuflas"];
 
@@ -65,13 +63,17 @@ const ProductForm = () => {
             sizes: sizesObj,
           });
         })
-        .catch((err) => setError(`Error al cargar el producto: ${err}`));
+        .catch((err) => console.log(`Error al cargar el producto: ${err}`));
     }
   }, [id, isEdit]);
 
+  // Función que se encarga de actualizar el estado de FormData
   const handleChange = (e) => {
+    //Obtiene el name y el value del input que disparó el cambio
     const { name, value } = e.target;
+    // Fijarse si es uno de los inputs de talle
     if (name.startsWith("size_")) {
+      // extraemos el número del talle (ej.: name: size_36)
       const size = name.split("_")[1];
       setFormData((prev) => ({
         ...prev,
@@ -90,8 +92,6 @@ const ProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
 
     const method = isEdit ? "PUT" : "POST";
     const url = isEdit ? `/products/${id}` : "/createProduct";
@@ -108,13 +108,12 @@ const ProductForm = () => {
       const result = await response.json();
 
       if (response.ok) {
-        setSuccess(isEdit ? "Producto actualizado." : "Producto creado.");
-        setTimeout(() => navigate("/dashboard"), 1000);
+        navigate("/dashboard");
       } else {
-        setError(result.message || "Ocurrió un error.");
+        console.log(result.message || "Ocurrió un error.");
       }
     } catch (err) {
-      setError("Error al enviar el formulario.");
+      console.log(`Error al enviar el formulario: ${err.message}`);
     }
   };
 
@@ -125,9 +124,6 @@ const ProductForm = () => {
           <Card.Title className="mb-4 text-center">
             {isEdit ? "Actualizar producto" : "Crear producto"}
           </Card.Title>
-
-          {error && <Alert variant="danger">{error}</Alert>}
-          {success && <Alert variant="success">{success}</Alert>}
 
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formName">
