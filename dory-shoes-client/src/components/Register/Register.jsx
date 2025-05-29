@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Container, Button } from "react-bootstrap";
 import "./Register.css";
-import {validatePassword} from "./validations.js";
+import { validatePassword } from "./validations.js";
 import { useNavigate, useParams } from "react-router-dom";
 import ConfirmModal from "../ui/ConfirmModal.jsx";
 
@@ -13,7 +13,7 @@ const Registro = ({ role, isEdit }) => {
 
   const toggleModal = () => {
     setShowModal(!showModal);
-  }
+  };
 
   useEffect(() => {
     if (id) {
@@ -21,18 +21,19 @@ const Registro = ({ role, isEdit }) => {
     }
   }, [id]);
 
-  useEffect(() => {
-    if (user) {
-      setName(user.name || "");
-      setEmail(user.email || "");
-      setPhone(user.phone || "");
-      setAddress(user.address || "");
-      setZipCode(user.zipCode || "");
-      setPassword("Password1");
-      setNewPassword("Password1");
-    }
-  }, [user]);
+   useEffect(() => {
+     if (user) {
+       setName(user.name || "");
+       setEmail(user.email || "");
+       setPhone(user.phone || "");
+       setAddress(user.address || "");
+       setZipCode(user.zipCode || "");
+       setPassword("Password1");
+       setNewPassword("Password1");
+     }
+   }, [user]);
 
+  //fetch para traer los datos del usuario (id enviado por ruta)
   const fetchUser = async () => {
     try {
       const response = await fetch(`http://localhost:3000/getUser/${id}`);
@@ -83,17 +84,17 @@ const Registro = ({ role, isEdit }) => {
   };
 
   const handleDelete = async () => {
-  try {
-    await fetch(`http://localhost:3000/deleteUser/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-    });
-    setShowModal(false);
-    navigate("/");
-  } catch (err) {
-    console.log("Error al eliminar el usuario:", err);
-  }
-};
+    try {
+      await fetch(`http://localhost:3000/deleteUser/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+      });
+      setShowModal(false);
+      navigate("/");
+    } catch (err) {
+      console.log("Error al eliminar el usuario:", err);
+    }
+  };
 
   const handleOnChangeName = (event) => {
     setName(event.target.value);
@@ -182,21 +183,29 @@ const Registro = ({ role, isEdit }) => {
       return;
     }
 
-    const formData = {
-      name,
-      email,
-      password,
-      role,
-      phone,
-      address,
-      zipCode,
-      dateOfBirth: "1999-02-03",
-    };
+    const formData = isEdit
+      ? {
+          name,
+          email,
+          role,
+          phone,
+          address,
+          zipCode,
+        }
+      : {
+          name,
+          email,
+          password,
+          role,
+          phone,
+          address,
+          zipCode,
+        };
     const method = isEdit ? "PUT" : "POST";
     const url = isEdit ? `/updateUser/${id}` : "/register";
     //FUNCIONA, FALTA TOAST
     try {
-      console.log(url, method)
+      console.log(url, method);
       await fetch(`http://localhost:3000${url}`, {
         method,
         headers: { "Content-Type": "application/json" },
@@ -267,7 +276,6 @@ const Registro = ({ role, isEdit }) => {
             onChange={handleOnChangeZipCode}
           />
           {errors.zipCode && <p className="error-text">Complete el campo</p>}
-
           <input
             type="password"
             placeholder="Ingrese una contraseña"
@@ -278,7 +286,8 @@ const Registro = ({ role, isEdit }) => {
           />
           {errors.password && (
             <p className="error-text">
-              La contraseña debe tener más de 5 caracteres, una mayúscula y un número.
+              La contraseña debe tener más de 5 caracteres, una mayúscula y un
+              número.
             </p>
           )}
 
@@ -300,14 +309,14 @@ const Registro = ({ role, isEdit }) => {
         </form>
       </div>
       <ConfirmModal
-              show={showModal}
-              onHide={toggleModal}
-              onConfirm={handleDelete}
-              title={"Eliminar usuario"}
-              message={"¿Estás seguro de que deseas eliminar tu usuario?"}
-              confirmText="Sí, eliminar"
-              cancelText="Cancelar"
-            />
+        show={showModal}
+        onHide={toggleModal}
+        onConfirm={handleDelete}
+        title={"Eliminar usuario"}
+        message={"¿Estás seguro de que deseas eliminar tu usuario?"}
+        confirmText="Sí, eliminar"
+        cancelText="Cancelar"
+      />
     </Container>
   );
 };
