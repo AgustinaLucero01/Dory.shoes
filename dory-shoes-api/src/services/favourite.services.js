@@ -36,7 +36,7 @@ export const addFavourite = async (req, res) => {
 //DELETE -> Quita a un producto de los favoritos del usuario
 export const deleteFavourite = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
 
     if (!id) {
       return res

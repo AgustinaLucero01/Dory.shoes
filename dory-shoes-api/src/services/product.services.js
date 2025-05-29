@@ -1,6 +1,7 @@
 import { ProductSize } from "../models/ProductSize.js";
 import { Product } from "../models/Product.js";
 import { Op } from "sequelize";
+import { UserFavourite } from "../models/UserFavourite.js";
 
 // GET -> todos los productos que están disponibles
 export const getAvailableProducts = async (req, res) => {
@@ -31,6 +32,8 @@ export const getAvailableProducts = async (req, res) => {
 // GET -> devuelve un producto especifico y los talles disponibles
 export const getProductById = async (req, res) => {
   const { id } = req.params;
+  const { userId } = req.query;
+  // const userId = req.user.id; CAMBIAR CUANDO APLIQUEMOS JWT
   const product = await Product.findByPk(id, {
     include: [
       {
@@ -45,6 +48,21 @@ export const getProductById = async (req, res) => {
     return res.status(404).send({ message: "Producto no encontrado." });
   }
 
+  //Buscamos si el usuario logueado tiene este producto en favorito
+  let favourite = null;
+  if (userId) {
+    favourite = await UserFavourite.findOne({
+      where: {
+        userId,
+        productId: id,
+      },
+    });
+  }
+  const productData = product.toJSON();
+  productData.favourite = favourite;
+
+  res.json(productData);
+
   // El json va tener todos los datos del producto con el Id ingresado y además un atributo
   // extra con un array de talles disponibles llamado "ProductSizes" (nombre por defecto). Ejemplo:
   // {
@@ -55,7 +73,6 @@ export const getProductById = async (req, res) => {
   //     "size": 40,
   //     "stock": 2
   //   },
-  res.json(product);
 };
 
 // POST -> crea un nuevo producto
@@ -65,12 +82,14 @@ export const createProduct = async (req, res) => {
   if (!name || !description || !price || !sizes) {
     return res
       .status(400)
-      .send({ message: "Nombre, descripción, precio y talles son requeridos." });
+      .send({
+        message: "Nombre, descripción, precio y talles son requeridos.",
+      });
   }
 
   const existing = await Product.findOne({ where: { name: name } });
   if (existing) {
-  return res.status(400).json({ message: "Producto ya existe" });
+    return res.status(400).json({ message: "Producto ya existe" });
   }
 
   try {

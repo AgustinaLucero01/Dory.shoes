@@ -40,7 +40,7 @@ export const registerUser = async (req, res) => {
     return res.status(400).send({ message: result.message });
   }
 
-  const { name, email, password, role, phone, address, zipCode, dateOfBirth } =
+  const { name, email, password, role, phone, address, zipCode } =
     req.body;
 
   // Busca si ya existe un usuario con ese email
@@ -68,7 +68,6 @@ export const registerUser = async (req, res) => {
     role,
     address,
     zipCode,
-    dateOfBirth,
     active: 1
   });
 
@@ -186,7 +185,7 @@ const validateLoginUser = (req) => {
 // PUT -> Modifica los datos del usuario
 export const updateUser = async (req, res) => {
   const { id } = req.params;
-  const { name, email, password, phone, address, zipCode, dateOfBirth, role, active } =
+  const { name, email, password, phone, address, zipCode, role, active } =
     req.body;
 
   try {
@@ -204,7 +203,6 @@ export const updateUser = async (req, res) => {
       phone,
       address,
       zipCode,
-      dateOfBirth,
       role,
       active
     };
