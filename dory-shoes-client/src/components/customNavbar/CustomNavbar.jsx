@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useContext} from "react";
 import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import { FaUser, FaShoppingCart, FaSearch } from "react-icons/fa";
 import "./Navbar.css";
 import ProductSearch from "../productSearch/ProductSearch";
 import { useNavigate } from "react-router-dom";
+import { CartContext } from "../Service/CartContext/CartContext";
+import Cart from "../Cart/Cart";
 
 const CustomNavbar = (carritoCantidad) => {
+  const { allProduct, countProduct, total } = useContext(CartContext);
   // manejamos el estado de "expanded" para definir si la navbar está abierta o no
   const [expanded, setExpanded] = useState(false);
+  const [active, setActive] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -100,7 +104,10 @@ const CustomNavbar = (carritoCantidad) => {
         <div className="header-icons">
           <FaSearch className="icon" onClick={toggleSearch} />
           <FaUser className="icon" />
-          <FaShoppingCart className="icon" />
+         <div className="count-product">
+            <span id="count-product"  onClick={() => setActive(!active)}> {Number(countProduct) || 0}</span>
+            </div>
+            {active && <Cart />}
         </div>
       </Container>
     </Navbar>
