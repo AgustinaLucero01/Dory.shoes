@@ -31,7 +31,7 @@
 
 .container-cart-products{
     position: absolute;
-    top: 250px;
+    top: 150px;
     right: 0;
     background-color: #fff;
     width: 400px;
@@ -108,5 +108,3 @@
 .hidden-cart{
     display: none;
 }
-
-
