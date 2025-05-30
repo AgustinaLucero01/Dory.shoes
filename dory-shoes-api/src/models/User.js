@@ -39,10 +39,6 @@ export const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    dateOfBirth: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
     active: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
