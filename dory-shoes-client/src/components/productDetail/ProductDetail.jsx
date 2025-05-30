@@ -24,7 +24,7 @@ function ProductDetail() {
 
   const [product, setProduct] = useState();
   const [selectedSize, setSelectedSize] = useState(null);
-  const [favorites, setFavorites] = useState([]);
+  const [favourite, setFavourite] = useState();
   const [cart, setCart] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showModalProduct, setShowModalProduct] = useState(false);
@@ -35,57 +35,115 @@ function ProductDetail() {
 
   const fetchProducto = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/products/${id}`);
+      //Sacar el query del URL cuando agreguemos JWT
+      const response = await fetch(
+        `http://localhost:3000/products/${id}?userId=2`
+      );
       if (!response.ok) {
         navigate("/");
         throw new Error("Producto no encontrado");
       }
       const data = await response.json();
       setProduct(data);
+      setFavourite(data.favourite);
     } catch (err) {
       console.log(err.message);
     }
   };
 
-  const handleAddToCart = () => {
-    if (selectedSize) {
-      const existingIndex = Allproduct.findIndex(
-        (item) => item.id === product.id && item.size === selectedSize
-      );
-      if (existingIndex !== -1) {
-        // Si ya existe un producto con ese ID y talle, sumamos cantidad
-        const updatedCart = [...Allproduct];
-        updatedCart[existingIndex].quantity += 1;
-        setAllproducts(updatedCart);
-      } else {
-        // Si no existe ese producto+talle, lo agregamos nuevo
-        const newItem = { ...product, size: selectedSize, quantity: 1 };
-        setAllproducts([...Allproduct, newItem]);
-      }
-      setTotal(total + Number(product.price));
-      setCountProduct(countProduct + 1);
-      // alert("Producto agregado al carrito");
-      toast.success("✔️ producto agregado al carriro", {
+  const handleAddToCart = async () => {
+    if (!selectedSize) {
+      toast.error("Seleccione un talle para continuar", {
         position: "top-right",
         autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
         theme: "light",
         transition: Bounce,
       });
-    } else {
-      alert("Por favor, selecciona un talle");
+      return;
+    }
+    try {
+      const response = await fetch(
+        `http://localhost:3000/cart/${product.id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cartId: 2, // Cambiar con el id del carrito que corresponde (con JWT)
+            quantity: 1,
+            size: selectedSize,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("No se pudo agregar el producto al carrito");
+      }
+
+      const data = await response.json();
+
+      toast.success("✔️ Producto agregado al carrito", {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "light",
+        transition: Bounce,
+      });
+    } catch (err) {
+      console.error(err.message);
+      toast.error("❌ Error al agregar producto al carrito", {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
   const toggleFavorite = () => {
-    if (favorites.includes(product.id)) {
-      setFavorites(favorites.filter((favId) => favId !== product.id));
+    if (favourite) {
+      deleteFavourite();
     } else {
-      setFavorites([...favorites, product.id]);
+      addFavourite();
+    }
+  };
+
+  const addFavourite = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/addFavourite`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: 2, // Modificar cuando agreguemos JWT
+          productId: product.id,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Error al agregar favorito");
+
+      const newFavourite = await response.json();
+      setFavourite(newFavourite);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
+  const deleteFavourite = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/deleteFavourite/${favourite.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (!response.ok) throw new Error("Error al eliminar favorito");
+
+      setFavourite(null);
+    } catch (err) {
+      console.log(err.message);
     }
   };
 
@@ -128,8 +186,7 @@ function ProductDetail() {
       <button onClick={() => window.history.back()}>Volver</button>
       <button onClick={handleAddToCart}>Agregar al carrito</button>
       <button onClick={toggleFavorite}>
-        {favorites.includes(product?.id) ? <AiFillHeart /> : <AiOutlineHeart />}{" "}
-        Favorito
+        {favourite ? <AiFillHeart /> : <AiOutlineHeart />} Favorito
       </button>
 
       <ModalImage

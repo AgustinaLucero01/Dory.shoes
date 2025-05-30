@@ -3,7 +3,7 @@
     text-align: center;
     background-color: #fff;
     /* modificar el margin para que aplique a toda la app */
-    margin-top: 30vh !important;
+    /* margin-top: 30vh !important; */
     margin-bottom: 5vh;
     padding: 15px;
 }

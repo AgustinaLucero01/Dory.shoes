@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { Container, Button } from "react-bootstrap";
 import "./Register.css";
 import { validatePassword } from "./validations.js";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import ConfirmModal from "../ui/ConfirmModal.jsx";
 
 const Registro = ({ role, isEdit }) => {
@@ -10,6 +10,9 @@ const Registro = ({ role, isEdit }) => {
 
   const [user, setUser] = useState();
   const [showModal, setShowModal] = useState(false);
+
+  const location = useLocation();
+  const from = location.state?.from || "/"; //
 
   const toggleModal = () => {
     setShowModal(!showModal);
@@ -21,17 +24,17 @@ const Registro = ({ role, isEdit }) => {
     }
   }, [id]);
 
-   useEffect(() => {
-     if (user) {
-       setName(user.name || "");
-       setEmail(user.email || "");
-       setPhone(user.phone || "");
-       setAddress(user.address || "");
-       setZipCode(user.zipCode || "");
-       setPassword("Password1");
-       setNewPassword("Password1");
-     }
-   }, [user]);
+  useEffect(() => {
+    if (user) {
+      setName(user.name || "");
+      setEmail(user.email || "");
+      setPhone(user.phone || "");
+      setAddress(user.address || "");
+      setZipCode(user.zipCode || "");
+      setPassword("Password1");
+      setNewPassword("Password1");
+    }
+  }, [user]);
 
   //fetch para traer los datos del usuario (id enviado por ruta)
   const fetchUser = async () => {
@@ -76,11 +79,7 @@ const Registro = ({ role, isEdit }) => {
 
   const navigate = useNavigate();
   const handleRouter = () => {
-    if (role === "admin") {
-      navigate("/dashboard");
-    } else {
-      navigate("/login");
-    }
+    navigate(from);
   };
 
   const handleDelete = async () => {
@@ -149,7 +148,7 @@ const Registro = ({ role, isEdit }) => {
       return;
     }
 
-    if (!phone.length || phone.length <= 10) {
+    if (!phone.length || phone.length < 10) {
       setErrors({ ...errors, phone: true });
       if (!hasError) phoneRef.current.focus();
       hasError = true;
@@ -211,12 +210,11 @@ const Registro = ({ role, isEdit }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
-      if (role === "admin" && !isEdit) {
-        navigate("/dashboard");
-      } else {
-        navigate("/", {state: { showWelcomeToast: true} });
+      //ORGANIZAR LAS RUTAS: Registro, edición de datos, creación de admin
+      if (from == "/") {
+        navigate("/", { state: { showWelcomeToast: true } });
       }
+      navigate(from);
     } catch (err) {
       console.log("Error al enviar el formulario.");
     }
@@ -225,7 +223,7 @@ const Registro = ({ role, isEdit }) => {
   return (
     <Container
       className="d-flex justify-content-center align-items-center"
-      style={{ minHeight: "100vh" }}
+      style={{ marginTop: from == "/register" ? "30vh" : "0" }}
     >
       <div className="Registro-box">
         {isEdit ? <h2>Modificá tus datos</h2> : <h2>Registro</h2>}

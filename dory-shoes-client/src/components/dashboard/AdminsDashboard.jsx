@@ -56,7 +56,7 @@ const AdminsDashboard = ({ openConfirmModal }) => {
   };
 
   const handleRegisterForm = (id) => {
-    navigate(`agregar-admin`);
+    navigate("agregar-admin", { state: { from: "/dashboard" } });
   };
   return (
     <Row className="mb-4">
