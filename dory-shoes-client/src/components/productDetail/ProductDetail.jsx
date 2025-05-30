@@ -1,11 +1,24 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
 import ProductData from "../../data/products.json";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import "./ProductDetail.css";
 import ModalImage from "../ui/ModalImage";
 import ModalProduct from "../ui/ModalProduct";
+import { CartContext } from "../Service/CartContext/CartContext";
+import { toast, Bounce, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function ProductDetail() {
+  const {
+    Allproduct,
+    setAllproducts,
+    total,
+    setTotal,
+    countProduct,
+    setCountProduct,
+  } = useContext(CartContext);
+
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -36,19 +49,33 @@ function ProductDetail() {
 
   const handleAddToCart = () => {
     if (selectedSize) {
-      const existingIndex = cart.findIndex(
+      const existingIndex = Allproduct.findIndex(
         (item) => item.id === product.id && item.size === selectedSize
       );
-
       if (existingIndex !== -1) {
-        const updatedCart = [...cart];
+        // Si ya existe un producto con ese ID y talle, sumamos cantidad
+        const updatedCart = [...Allproduct];
         updatedCart[existingIndex].quantity += 1;
-        setCart(updatedCart);
+        setAllproducts(updatedCart);
       } else {
+        // Si no existe ese producto+talle, lo agregamos nuevo
         const newItem = { ...product, size: selectedSize, quantity: 1 };
-        setCart([...cart, newItem]);
+        setAllproducts([...Allproduct, newItem]);
       }
-      alert("Producto agregado al carrito");
+      setTotal(total + Number(product.price));
+      setCountProduct(countProduct + 1);
+      // alert("Producto agregado al carrito");
+      toast.success("✔️ producto agregado al carriro", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
     } else {
       alert("Por favor, selecciona un talle");
     }
@@ -64,6 +91,7 @@ function ProductDetail() {
 
   return (
     <div className="product-detail">
+      <ToastContainer />
       <img
         src={product?.imageUrl}
         alt={product?.name}
