@@ -1,8 +1,30 @@
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import {toast, ToastContainer, Bounce } from "react-toastify";
+import {useLocation } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./home.css";
 
 const Home = () => {
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state?.showWelcomeToast) {
+      toast(`👢 Bienvenido ${location.state?.userName || "invitado"} a la tienda!`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
   const categorias = [
     { nombre: "Zapatillas", imagen: "/images/Zapatillas/zapatilla4.jpg" },
     { nombre: "Botas", imagen: "/images/Botas/bota2.jpg" },
@@ -12,7 +34,7 @@ const Home = () => {
 
   return (
     <div className="home-container">
-
+      <ToastContainer />
       <div className="barra-envios">Envíos express por Oca a todo el país </div>
       {/* Carrusel Bootstrap */}
       <div

@@ -14,6 +14,10 @@
 
 }
 
+.Toastify__toast-container--top-right{
+  top:150px !important;
+}
+
   
 .barra-envios {
   position: fixed;
