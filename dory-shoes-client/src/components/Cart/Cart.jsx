@@ -3,6 +3,9 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useContext } from "react";
 import {useNavigate} from "react-router-dom";
 import { CartContext } from "../Service/CartContext/CartContext";
+import { toast, Bounce } from "react-toastify";
+import { useAuth } from "../Service/usercontext/UserContext.jsx";
+import "react-toastify/dist/ReactToastify.css";
 import "./cart.css";
 
 const Cart = () => {
@@ -18,14 +21,26 @@ const Cart = () => {
   const [active, setActive] = useState(false);
 
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const onDeleteProduct = (product) => {
     const result = Allproduct.filter(
       (item) => !(item.id === product.id && item.size === product.size)
     );
     setAllproducts(result);
-    setTotal(total - product.precio * product.quantity);
+    setTotal(total - product.price * product.quantity);
     setCountProduct(countProduct - product.quantity);
+     toast.success("🗑️ Producto eliminado",{
+        position: "top-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
   };
 
 
@@ -36,8 +51,18 @@ const Cart = () => {
   }
 
   const handlenav = () => {
+    if (!user) {
+      toast.error("⚠️ Debes iniciar sesión para finalizar la compra", {
+        position: "top-right",
+        autoClose: 3000,
+        theme: "light",
+        transition: Bounce,
+      });
+      return;
+    }
+
     navigate("/shopping");
-  }
+  };
 
 
 
@@ -53,16 +78,16 @@ const Cart = () => {
           <>
             <div className='row-product'>
               {Allproduct.map(product => (
-                <div className='cart-product' key={product.id}> {/* key es para que cada producto se renderice una vez */}
+                <div className='cart-product' key={`${product.id}-${product.size}`}> {/* key es para que cada producto se renderice una vez */}
                   <div className='info-cart-product'>
                     <span className='cantidad-producto-carrito'>
                       {product.quantity}
                     </span>
                     <p className='titulo-producto-carrito'>
-                      {product.nombre}
+                      {product.name}
                     </p>
                     <span className='precio-producto-carrito'>
-                      ${product.precio}
+                      ${product.price}
                     </span>
                   </div>
                   <button onClick={() => onDeleteProduct(product)}>Eliminar</button>
