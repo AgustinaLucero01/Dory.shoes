@@ -6,13 +6,13 @@ export const CartContext = createContext();
 const CartProvider = ({ children }) => {
   const [total, setTotal] = useState(()=> {
     const savedTotal = localStorage.getItem('cartTotal');
-    return savedTotal ? JSON.parse(savedTotal) : 0;
+    return savedTotal ? Number(JSON.parse(savedTotal)) : 0;
 
 });
 
   const [countProduct, setCountProduct] = useState(() =>{
     const saved= localStorage.getItem('countProduct');
-    return saved ? JSON.parse(saved) : 0 ;
+    return saved ? Number(JSON.parse(saved)) : 0 ;
   });
 
 
