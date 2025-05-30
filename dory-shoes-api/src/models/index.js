@@ -17,9 +17,9 @@ import { UserFavourite } from "./UserFavourite.js";
 Cart.hasMany(CartProduct, { foreignKey: "cartId" });
 Cart.belongsTo(User, { foreignKey: "userId" });
 CartProduct.belongsTo(Cart, { foreignKey: "cartId" });
-CartProduct.belongsTo(Product, { foreignKey: "productId" });
-Product.hasMany(CartProduct, {
-  foreignKey: "productId",
+CartProduct.belongsTo(ProductSize, { foreignKey: "productSizeId" });
+ProductSize.hasMany(CartProduct, {
+  foreignKey: "productSizeId",
   onDelete: "CASCADE",
   hooks: true,
 });

@@ -7,6 +7,6 @@ router.post("/addFavourite", addFavourite);
 
 router.delete("/deleteFavourite/:id", deleteFavourite);
 
-router.get("/showFavourites", showAllUserFavourites);
+router.get("/showFavourites/:id", showAllUserFavourites);
 
 export default router;

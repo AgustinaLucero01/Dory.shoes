@@ -1,6 +1,7 @@
 import { Cart } from "../models/Cart.js";
 import { CartProduct } from "../models/CartProduct.js";
 import { Product } from "../models/Product.js";
+import {ProductSize} from "../models/ProductSize.js"
 
 //GET -> Mostrar los productos relacionados con un carrito
 export const showAllProductsFromCart = async (req, res) => {
@@ -32,42 +33,67 @@ export const showAllProductsFromCart = async (req, res) => {
 // POST -> Agrega un producto nuevo al carrito
 export const addProductToCart = async (req, res) => {
   const { productId } = req.params;
-  const { cartId, quantity } = req.body;
+  const { cartId, quantity, size } = req.body;
 
-  //Verifica que el body haya traído los ID
-  if (!cartId || !productId || !quantity) {
-    return res
-      .status(400)
-      .send({ message: "No se encontraron los datos necesarios." });
+  // Verifica que el body haya traído los datos necesarios
+  if (!cartId || !productId || !quantity || !size) {
+    return res.status(400).send({
+      message: "No se encontraron los datos necesarios.",
+    });
   }
 
-  //Verificar que exista el carrito
+  // Verificar que exista el carrito
   const cart = await Cart.findByPk(cartId);
 
-  //Verificar que exista el producto
+  // Verificar que exista el producto
   const product = await Product.findByPk(productId);
 
-  if (!cart || !product) {
-    return res
-      .status(400)
-      .send({ message: "El carrito o producto seleccionado no existe." });
+  // Buscar el ProductSize correspondiente
+  const productSize = await ProductSize.findOne({
+    where: {
+      productId: productId,
+      size: size,
+    },
+  });
+
+  if (!cart || !product || !productSize) {
+    return res.status(400).send({
+      message: "El carrito o producto seleccionado no existe.",
+    });
   }
 
-  //Verificar que la cantidad sea mayor o igual a 1
+  // Verificar que la cantidad sea válida
   if (quantity < 1) {
-    return res
-      .status(400)
-      .send({ message: "La cantidad debe ser mayor o igual a 1." });
+    return res.status(400).send({
+      message: "La cantidad debe ser mayor o igual a 1.",
+    });
   }
 
+  // Buscar si ya existe el producto con ese talle en el carrito
+  const existingCartProduct = await CartProduct.findOne({
+    where: {
+      cartId,
+      productSizeId: productSize.id,
+    },
+  });
+
+  //Si ya existe, modificamos la cantidad en lugar de agregar una nueva instancia
+  if (existingCartProduct) {
+    existingCartProduct.quantity += quantity;
+    await existingCartProduct.save();
+    return res.status(200).send(existingCartProduct);
+  }
+
+  // Si no existe, creamos uno nuevo
   const newCartProduct = await CartProduct.create({
     cartId,
-    productId,
+    productSizeId: productSize.id,
     quantity,
   });
 
-  return res.send(newCartProduct);
+  return res.status(201).send(newCartProduct);
 };
+
 
 // DELETE -> Borra la instancia de CartProduct asociada con el carrito correspondiente
 export const dropProductFromCart = async (req, res) => {

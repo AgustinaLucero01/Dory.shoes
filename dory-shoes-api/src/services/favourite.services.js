@@ -63,12 +63,12 @@ export const deleteFavourite = async (req, res) => {
 // GET -> Trae todos los productos favoritos de un usuario
 export const showAllUserFavourites = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
 
     if (!id) {
-      return res
-        .status(404)
-        .send({ message: "Debe ingresar un id de producto en favoritos." });
+      return res.status(404).send({
+        message: "Debe ingresar un id de usuario.",
+      });
     }
 
     const user = await User.findByPk(id);
@@ -81,6 +81,12 @@ export const showAllUserFavourites = async (req, res) => {
 
     const favouriteProducts = await UserFavourite.findAll({
       where: { userId: id },
+      include: [
+        {
+          model: Product,
+          attributes: ["name", "imageUrl"],
+        },
+      ],
     });
 
     res.json(favouriteProducts);
@@ -89,3 +95,10 @@ export const showAllUserFavourites = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+// Va a devolver un atributo:
+// "product": {
+//       "id": 3,
+//       "name": "Zapatilla Urbana",
+//       "imageUrl": "https://misitio.com/imagenes/zapa.jpg"
+//     }
+

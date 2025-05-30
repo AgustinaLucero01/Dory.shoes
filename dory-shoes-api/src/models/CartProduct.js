@@ -14,7 +14,7 @@ export const CartProduct = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    productId: {
+    productSizeId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
