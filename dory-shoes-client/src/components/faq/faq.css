@@ -1,0 +1,68 @@
+.container {
+    background-image: url(../../../public/images/4905d55729aba5cfea95acde495b23fa.jpg);
+    background-attachment: fixed;
+    margin-bottom: 20px;
+}
+
+.faq{
+    height: 10px;
+    width: 30%;
+    border-radius: 10px;
+    background-color: #545454;
+   margin-left: 35%;
+   margin-top: 40px;
+}
+.information{
+    margin-top: 50px;
+}
+
+.faq-container {
+    text-align: center;
+}
+
+.faq-container h1 {
+    margin-top: 250px;
+}
+
+.means-of-payment {
+    margin-top: 70px;
+    color: #545454;
+}
+
+
+.Method p {
+    font-size: 30px;
+    margin-top: 30px;
+}
+
+.Method .icon {
+    font-size: 50px;
+    color: #df8384;
+}
+
+.Shipping {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 30px;
+}
+
+.info-shipping {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* espacio entre el ícono y el texto */
+  cursor: pointer;
+  cursor: pointer;
+}
+
+.icon-shipping {
+  font-size: 3rem;
+  color: #df8384;
+}
