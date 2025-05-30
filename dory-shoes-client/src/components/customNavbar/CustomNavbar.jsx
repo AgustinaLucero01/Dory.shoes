@@ -1,11 +1,15 @@
-import React, { useState, useContext} from "react";
+import React, { useState, useContext } from "react";
 import { Navbar, Nav, NavDropdown, Container } from "react-bootstrap";
 import { FaUser, FaShoppingCart, FaSearch } from "react-icons/fa";
 import "./Navbar.css";
 import ProductSearch from "../productSearch/ProductSearch";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../Service/CartContext/CartContext";
+import { useAuth } from "./../Service/usercontext/UserContext.jsx";
 import Cart from "../Cart/Cart";
+import { Link } from "react-router-dom";
+import Dashboard from "../dashboard/Dashboard.jsx";
+
 
 const CustomNavbar = (carritoCantidad) => {
   const { allProduct, countProduct, total } = useContext(CartContext);
@@ -14,8 +18,9 @@ const CustomNavbar = (carritoCantidad) => {
   const [active, setActive] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const { user } = useAuth()
   const navigate = useNavigate();
+  console.log("Usuario autenticado:", user);
   //encodeURIComponent: Convierte los caracteres especiales en una forma segura para la URL.
   const handleSearchRedirect = () => {
     if (searchTerm.trim()) {
@@ -82,6 +87,11 @@ const CustomNavbar = (carritoCantidad) => {
             <Nav.Link href="#contacto" onClick={handleClose}>
               Contacto
             </Nav.Link>
+            {user && user.role === "admin" && (
+              <Link to="/Dashboard" className="nav-link" onClick={handleClose} >
+                Dashboard
+              </Link>
+            )}
           </Nav>
         </Navbar.Collapse>
 
@@ -104,10 +114,10 @@ const CustomNavbar = (carritoCantidad) => {
         <div className="header-icons">
           <FaSearch className="icon" onClick={toggleSearch} />
           <FaUser className="icon" />
-         <div className="count-product">
-            <span id="count-product"  onClick={() => setActive(!active)}> {Number(countProduct) || 0}</span>
-            </div>
-            {active && <Cart />}
+          <div className="count-product">
+            <span id="count-product" onClick={() => setActive(!active)}> {Number(countProduct) || 0}</span>
+          </div>
+          {active && <Cart />}
         </div>
       </Container>
     </Navbar>

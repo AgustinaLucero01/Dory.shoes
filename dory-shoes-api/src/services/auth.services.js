@@ -149,7 +149,7 @@ export const loginUser = async (req, res) => {
 
     const token = jwt.sign({ email }, secretKey, { expiresIn: "1h" });
 
-    return res.json(token);
+    return res.json({token, name:user.name});
   } catch (error) {
     console.error("Error en loginUser:", error);
     return res.status(500).send({ message: error });

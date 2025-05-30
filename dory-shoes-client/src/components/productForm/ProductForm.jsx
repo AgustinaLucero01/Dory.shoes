@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import "./ProductForm.css";
 
+
 const ProductForm = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -108,7 +109,7 @@ const ProductForm = () => {
       const result = await response.json();
 
       if (response.ok) {
-        navigate("/dashboard");
+        navigate("/dashboard" ,{state: {AddedProduct:true}});
       } else {
         console.log(result.message || "Ocurrió un error.");
       }
