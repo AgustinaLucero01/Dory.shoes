@@ -215,7 +215,7 @@ const Registro = ({ role, isEdit }) => {
       if (role === "admin" && !isEdit) {
         navigate("/dashboard");
       } else {
-        navigate("/");
+        navigate("/", {state: { showWelcomeToast: true} });
       }
     } catch (err) {
       console.log("Error al enviar el formulario.");
