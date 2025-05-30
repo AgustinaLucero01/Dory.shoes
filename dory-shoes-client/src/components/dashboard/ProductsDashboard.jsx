@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Table } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import "./Dashboard.css";
+import {toast, ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import ProductSearch from "../productSearch/ProductSearch";
 
@@ -40,6 +42,17 @@ const ProductsDashboard = ({ openConfirmModal }) => {
       });
       if (res.ok) {
         fetchProducts();
+        toast.success(`👢 Producto eliminado con exito`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
       } else {
         console.error("Error al eliminar el producto");
       }

@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Table, Alert } from "react-bootstrap";
 import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AdminsDashboard = ({ openConfirmModal }) => {
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [admins, setAdmins] = useState([]);
+  
 
   useEffect(() => {
     fetchAdmins();
@@ -20,18 +23,29 @@ const AdminsDashboard = ({ openConfirmModal }) => {
   };
 
   const eliminateAdmin = async (id) => {
-  try {
-    await fetch(`http://localhost:3000/deleteUser/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    fetchAdmins();
-  } catch (err) {
-    console.error(err);
-  }
-};
+    try {
+      await fetch(`http://localhost:3000/deleteUser/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      fetchAdmins();
+      toast.success(`👤 Administrador eliminado con exito`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleShowDeleteModal = (id) => {
     openConfirmModal({
