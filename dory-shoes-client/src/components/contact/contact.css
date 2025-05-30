@@ -1,0 +1,39 @@
+.contacto-container {
+margin-top: 300px !important ;
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 2rem;
+  text-align: center;
+  background-color: #fff8f6;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.contacto-titulo {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #b46494;
+  font-weight: bold;
+}
+
+.contacto-texto {
+  font-size: 1.1rem;
+  color: #444;
+  margin-bottom: 1rem;
+}
+
+.contacto-lista {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.contacto-lista li {
+  margin: 0.5rem 0;
+}
+
+.contacto-lista a {
+  color: #b46494;
+  text-decoration: none;
+}
