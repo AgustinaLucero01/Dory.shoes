@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useContext } from "react";
 import {useNavigate} from "react-router-dom";
-import { CartContext } from "../Service/CartContext/CartContext";
+import { CartContext } from "../Service/CartContext/CartContext.jsx";
 import { toast, Bounce } from "react-toastify";
 import { useAuth } from "../Service/usercontext/UserContext.jsx";
 import "react-toastify/dist/ReactToastify.css";
@@ -73,7 +73,7 @@ const Cart = () => {
 
       </div>
 
-      <div className={`container-cart-products ${active ? '' : 'hidden-cart'}`}>
+      {/*<div className={`container-cart-products ${active ? '' : 'hidden-cart'}`}>*/}
         {Allproduct.length ? (
           <>
             <div className='row-product'>
