@@ -3,12 +3,14 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Shopping.css";
 import { CartContext } from "../Service/cartContext/CartContext";
+import PurchaseSuccessModal from "../ui/PurchaseSuccessModal";
+
 
 const Shopping = () => {
   const navigate = useNavigate();
   //traemos el estado el carrito
   const { products } = useContext(CartContext);
-
+  const [showModal, setShowModal] = useState(false);
   const total = products.reduce((acc, product) => {
   const price = parseFloat(product.productSize.product.price);
   const quantity = parseInt(product.quantity);
@@ -17,6 +19,11 @@ const Shopping = () => {
 
   const handleBack = () => {
     navigate("/");
+  };
+
+   const handleContinue = (e) => {
+    e.preventDefault();
+    setShowModal(true);
   };
 
   return (
@@ -91,7 +98,10 @@ const Shopping = () => {
           </div>
         </div>
       </div>
+       {/* MODAL */}
+      <PurchaseSuccessModal show={showModal} onClose={() => setShowModal(false)} />
     </div>
+   
   );
 };
 export default Shopping;
