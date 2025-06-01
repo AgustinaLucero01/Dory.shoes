@@ -58,7 +58,7 @@ const EditProfile = () => {
           <button onClick={handleBackHome} style={{height:"45px", width:"150px", marginLeft:"15px", backgroundColor:"black" }}>Volver</button>
         </div>
         <div>
-          <button onClick={handleCloseUser} style={{height:"45px", width:"150px", marginLeft:"15px", backgroundColor:"red"}}>cerrar secion</button>
+          <button onClick={handleCloseUser} style={{height:"45px", width:"150px", marginLeft:"15px", backgroundColor:"red"}}>cerrar sesion</button>
         </div>
         <div style={{ flex:1 , textAlign: "center" }}>
           <h2 style={{ paddingBottom: "2rem" }}>Editar Perfil</h2>
