@@ -96,6 +96,7 @@ const ProductForm = () => {
 
     const method = isEdit ? "PUT" : "POST";
     const url = isEdit ? `/products/${id}` : "/createProduct";
+    const state = isEdit ? {state: {UpdatedProduct:true}} : {state: {AddedProduct:true}};
     try {
       const response = await fetch(`http://localhost:3000${url}`, {
         method,
@@ -109,7 +110,7 @@ const ProductForm = () => {
       const result = await response.json();
 
       if (response.ok) {
-        navigate("/dashboard" ,{state: {AddedProduct:true}});
+        navigate("/dashboard" ,state);
       } else {
         console.log(result.message || "Ocurrió un error.");
       }
@@ -119,7 +120,7 @@ const ProductForm = () => {
   };
 
   return (
-    <Container className="form-container">
+    <Container style={{ maxWidth:"50%"}}>
       <Card>
         <Card.Body>
           <Card.Title className="mb-4 text-center">

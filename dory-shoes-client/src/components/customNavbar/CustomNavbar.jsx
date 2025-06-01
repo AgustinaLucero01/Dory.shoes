@@ -103,9 +103,9 @@ const CustomNavbar = (carritoCantidad) => {
               Contacto
             </Nav.Link>
             {token && (role === "admin" || role === "superAdmin") && (
-              <Link to="/Dashboard" className="nav-link" onClick={handleClose}>
+              <Nav.Link as={Link} to="/dashboard" onClick={handleClose}>
                 Dashboard
-              </Link>
+              </Nav.Link>
             )}
           </Nav>
         </Navbar.Collapse>
@@ -134,19 +134,17 @@ const CustomNavbar = (carritoCantidad) => {
             style={{ cursor: "pointer" }}
             onClick={() => {
               if (token) {
-                //Modificar con JWT
                 navigate(`/editProfile/${id}`);
               } else {
                 navigate("/login");
               }
-              navigate("/login");
             }}
           />
           <FaShoppingCart className="icon" onClick={() => setActive(!active)} />
-          <div className="count-product" >
+          <div className="count-product">
             <span id="count-product">{Number(countProduct) || 0}</span>
           </div>
-          {active && <Cart isActive={true}/>}
+          {active && <Cart isActive={true} />}
         </div>
       </Container>
     </Navbar>

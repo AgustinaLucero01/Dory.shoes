@@ -10,7 +10,7 @@ const Home = () => {
   const location = useLocation();
   useEffect(() => {
     if (location.state?.showWelcomeToast) {
-      toast(`👢 Bienvenido ${location.state?.userName || "invitado"} a la tienda!`, {
+      toast(`👢 Bienvenido/a ${location.state?.userName || "invitado"} a la tienda!`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

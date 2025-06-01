@@ -211,10 +211,13 @@ const Registro = ({ role, isEdit }) => {
         body: JSON.stringify(formData),
       });
       //ORGANIZAR LAS RUTAS: Registro, edición de datos, creación de admin
+      
       if (from == "/") {
         navigate("/", { state: { showWelcomeToast: true } });
       }
-      navigate(from);
+      if (from == "/login") {
+        navigate("/login", { state: { showConfirmRegister: true } });
+      }
     } catch (err) {
       console.log("Error al enviar el formulario.");
     }
@@ -224,7 +227,7 @@ const Registro = ({ role, isEdit }) => {
     <Container
       className="d-flex justify-content-center align-items-center"
       // style={{ marginTop: from == "/register" ? "30vh" : "0" }}
-      style={{marginTop: "0vh"}}
+      style={{marginTop: "30vh"}}
     >
       <div className="Registro-box">
         {isEdit ? <h2>Modificá tus datos</h2> : <h2>Registro</h2>}

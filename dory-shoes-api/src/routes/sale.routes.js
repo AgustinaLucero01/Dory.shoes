@@ -8,7 +8,7 @@ import { verifyToken } from "../services/auth.services.js";
 
 const router = Router();
 
-router.post("/newSale", createSale);
+router.post("/newSale", verifyToken, createSale);
 
 router.get("/sales", showAllSales);
 

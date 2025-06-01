@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Register from "../Register/Register";
-import { useAuth } from "../services/auth/usercontext/UserContext";
+import { useAuth } from "../Service/auth/usercontext/UserContext";
 import { use } from "react";
 
 const EditProfile = () => {
   const { id } = useParams();
   const [favourites, setFavourites] = useState([]);
   const {handleLogout}=useAuth()
+  const navigate = useNavigate();
 
 
   const handleCloseUser=()=>{
@@ -53,17 +54,9 @@ const EditProfile = () => {
       className="edit-profile-container"
       style={{ marginTop: "30vh", paddingRight: "2em" }}
     >
-      <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
-        <div>
-          <button onClick={handleBackHome} style={{height:"45px", width:"150px", marginLeft:"15px", backgroundColor:"black" }}>Volver</button>
-        </div>
-        <div>
-          <button onClick={handleCloseUser} style={{height:"45px", width:"150px", marginLeft:"15px", backgroundColor:"red"}}>cerrar sesion</button>
-        </div>
-        <div style={{ flex:1 , textAlign: "center" }}>
+      <div style={{ flex:1 , textAlign: "center" }}>
           <h2 style={{ paddingBottom: "2rem" }}>Editar Perfil</h2>
         </div>
-      </div>
       <div
         style={{
           display: "flex",
@@ -79,7 +72,7 @@ const EditProfile = () => {
 
         {/* Columna derecha: favoritos */}
         <div style={{ flex: "1 1 400px", minWidth: "300px" }}>
-          <h3>Tus productos favoritos</h3>
+          <h3>Tus productos favoritos ❤</h3>
           {favourites.length === 0 ? (
             <p>No tenés productos en favoritos.</p>
           ) : (
@@ -135,6 +128,15 @@ const EditProfile = () => {
             </ul>
           )}
         </div>
+        <div style={{ display: "flex", justifyContent: "center", width: "100%", marginBottom:"15px" }}>
+        <div>
+          <button onClick={handleBackHome} style={{height:"45px", width:"150px", marginLeft:"15px", backgroundColor:"black" }}>Volver</button>
+        </div>
+        <div>
+          <button onClick={handleCloseUser} style={{height:"45px", width:"150px", marginLeft:"15px", backgroundColor:"red"}}>Cerrar sesión</button>
+        </div>
+        
+      </div>
       </div>
     </div>
   );

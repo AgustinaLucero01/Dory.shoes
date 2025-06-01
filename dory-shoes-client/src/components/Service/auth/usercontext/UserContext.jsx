@@ -20,12 +20,17 @@ export const UserProvider = ({ children }) => {
 
   // Guarda el token y actualiza el estado
   const handleLogin = (token) => {
-    localStorage.setItem("dory-shoes-token", token);
-    const tokenValue = isTokenValid(storedToken) ? storedToken : null;
+  localStorage.setItem("dory-shoes-token", token);
+  const decodedToken = isTokenValid(token) ? jwtDecode(token) : null;
+
+  if (decodedToken) {
     setRole(decodedToken.role);
     setId(decodedToken.id);
     setToken(token);
-  };
+  } else {
+    handleLogout(); // opcional, por si el token es inválido
+  }
+};
 
   // Elimina el token y actualiza el estado
   const handleLogout = () => {

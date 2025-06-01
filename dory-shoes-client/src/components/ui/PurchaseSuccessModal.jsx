@@ -1,6 +1,7 @@
 
 
 import { useEffect, useRef } from "react";
+import { Modal } from 'bootstrap';
 
 function PurchaseSuccessModal({ show, onClose }) {
   const modalRef = useRef(null);
@@ -8,7 +9,7 @@ function PurchaseSuccessModal({ show, onClose }) {
 
   useEffect(() => {
     if (modalRef.current) {
-      bsModalRef.current = new bootstrap.Modal(modalRef.current);
+      bsModalRef.current = new Modal(modalRef.current);
     }
   }, []);
 

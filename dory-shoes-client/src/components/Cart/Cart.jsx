@@ -10,16 +10,14 @@ import "./cart.css";
 const Cart = (isActive) => {
   const { countProduct, products, setProducts, setCountProduct, cartId } = useContext(CartContext);
 
-  const [allProducts, setAllProducts] = useState(products);
   const [total, setTotal] = useState();
-  const [countProducts, setCountProducts] = useState(countProduct);
   const [active, setActive] = useState(isActive);
 
   const navigate = useNavigate();
   const { token } = useAuth();
 
   useEffect(() => {
-  const totalCalculado = products.reduce((acc, product) => {
+  const totalCalculado = products?.reduce((acc, product) => {
     const precio = product.productSize.product.price;
     const cantidad = product.quantity;
     return acc + precio * cantidad;
@@ -96,7 +94,7 @@ const Cart = (isActive) => {
 
   return (
     <div className={`container-cart-products ${active ? "" : "hidden-cart"}`}>
-      {products.length ? (
+      {products?.length ? (
         <>
           <div className="row-product">
             {products.map((product) => (

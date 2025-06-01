@@ -5,11 +5,13 @@ body{
 
 .Login-Box{
   display: flex;
+  margin-top: 12vh !important;
+  margin-bottom: 6vh;
 }
 
 .img-login img{
   width: 100%;
-  height: 1120px;
+  /* height: 1120px; */
 }
 
 .user-login img{
@@ -18,7 +20,7 @@ body{
 /* formulario */
 .user-login{
   text-align: center;
-  height: 800px;
+  /* height: 800px; */
   width: 700px;
   border: solid 1px #C8C2C2;
   border-radius: 15px;
@@ -59,7 +61,7 @@ body{
 
 .input-user{
   position: absolute;
-  top: 30.9%;
+  top: 52.5%;
   left: 40px;
   transform: translateY(-50%);
   color: #888;
@@ -70,7 +72,7 @@ body{
 
 .lock-user{
   position: absolute;
-  top: 40%;
+  top: 68%;
   left: 40px;
   transform: translateY(-50%);
   color: #888;
@@ -133,4 +135,8 @@ body{
   color: red;
   font-size: 14px;
   margin-top: 5px;
+}
+
+.Toastify__toast-container--top-right{
+  top:200px !important;
 }

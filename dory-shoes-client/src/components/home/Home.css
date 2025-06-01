@@ -10,7 +10,7 @@
   box-sizing: border-box; /* Evita que el padding sume al ancho */
   overflow-x: hidden; /* Previene que cause scroll lateral */
   flex-grow: 1; /* El contenido principal crece para llenar el espacio disponible */
-  margin-top: 20vh !important;
+  margin-top: 24vh !important;
 
 }
 

@@ -1,15 +1,16 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "./Login.css";
 // import img from "public/images/Login-register/imgen-login.jpg"
 // import Logo from "public/images/Login-register/LogoLogin.jpeg"
 import { FaUser } from "react-icons/fa";
 import { CiLock } from "react-icons/ci";
 import { FaArrowRight } from "react-icons/fa";
-import { FaGoogle } from "react-icons/fa";
-import { FaFacebook } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { useAuth } from "../Service/auth/usercontext/UserContext";
+import {toast, ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useLocation } from "react-router-dom";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -18,6 +19,27 @@ const Login = () => {
 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log("Location state:", location.state);
+    console.log(location.state?.showConfirmRegister);
+  if (location.state?.showConfirmRegister) {
+    toast(`👢 Usuario registrado con éxito. Inicie sesión para continuar`, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
+    window.history.replaceState({}, document.title);
+  }
+}, [location]);
 
   const navigate = useNavigate();
 
@@ -87,12 +109,7 @@ const Login = () => {
 
   return (
     <div className="Login-Box">
-      <div className="img-login">
-        <img
-          src="/images/Login-register/imgen-login.jpg"
-          alt="imgen-login.jpg"
-        />
-      </div>
+      
 
       <div className="user-login">
         <img
@@ -105,7 +122,7 @@ const Login = () => {
         <form className="from-user" action="" onSubmit={handleSubmbit}>
           <FaUser className="input-user" />
           <input
-            className={error.email && "border border-danger"}
+            className={error.email ? "border border-danger" : ""}
             type="email"
             placeholder="Ingresa tu email"
             ref={emailRef}
@@ -116,7 +133,7 @@ const Login = () => {
 
           <CiLock className="lock-user" />
           <input
-            className={error.password && "border border-danger"}
+            className={error.password ? "border border-danger" : ""}
             type="password"
             placeholder="Ingresa tu contraseña"
             ref={passwordRef}
@@ -134,15 +151,8 @@ const Login = () => {
             </button>
           </div>
         </form>
-        <div className="information">
-          <h4>También puedes ingresar con estas redes sociales</h4>
-          <div className="red-social">
-            <FaGoogle className="icon" />
-            <FaFacebook className="icon" />
-            <FaInstagram className="icon" />
-          </div>
-        </div>
       </div>
+       <ToastContainer />
     </div>
   );
 };

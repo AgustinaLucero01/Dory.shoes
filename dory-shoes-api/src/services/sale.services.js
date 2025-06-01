@@ -2,16 +2,17 @@ import { Sale } from "../models/Sale.js";
 import { Cart } from "../models/Cart.js";
 import { User } from "../models/User.js";
 import { CartProduct } from "../models/CartProduct.js";
+import { ProductSize } from "../models/ProductSize.js"
 
 // POST -> crea una nueva venta y vacía el carrito del usuario
 export const createSale = async (req, res) => {
   try {
-    const { userId, amount } = req.body;
+    const { userId, amount, products } = req.body;
 
-    if (!userId || !amount) {
+    if (!userId || !amount || !products) {
       return res
         .status(400)
-        .send({ message: "Se espera un id de carrito y un monto a pagar." });
+        .send({ message: "Se espera un id de carrito, los productos comprados y un monto a pagar." });
     }
     const user = await User.findByPk(userId);
 
@@ -38,6 +39,28 @@ export const createSale = async (req, res) => {
     await CartProduct.destroy({
       where: { cartId: cart.id },
     });
+
+    for (const item of products) {
+      const productSizeId = item.productSizeId;
+      const quantity = item.quantity;
+
+      const productSize = await ProductSize.findByPk(productSizeId);
+
+      if (!productSize) {
+        return res.status(400).json({ error: `Talle con ID ${productSizeId} no encontrado.` });
+      }
+
+      // Verificar stock suficiente
+      if (productSize.stock < quantity) {
+        return res.status(400).json({ error: `Stock insuficiente para el talle ${productSize.size}.` });
+      }
+
+      // Descontar stock
+      productSize.stock -= quantity;
+
+
+        await productSize.save();
+    }
 
     return res.status(200).json({
       message: "Venta realizada con éxito. Carrito vaciado.",

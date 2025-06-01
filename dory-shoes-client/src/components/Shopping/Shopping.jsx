@@ -1,29 +1,50 @@
-//Sacar el envío o contactar al dueño
+
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Shopping.css";
 import { CartContext } from "../Service/cartContext/CartContext";
 import PurchaseSuccessModal from "../ui/PurchaseSuccessModal";
+import { useAuth } from "../Service/auth/usercontext/UserContext";
 
 
 const Shopping = () => {
   const navigate = useNavigate();
+
+  const { id, token } = useAuth();
   //traemos el estado el carrito
-  const { products } = useContext(CartContext);
+  const { products, setProducts, countProduct, setCountProduct } = useContext(CartContext);
   const [showModal, setShowModal] = useState(false);
   const total = products.reduce((acc, product) => {
-  const price = parseFloat(product.productSize.product.price);
-  const quantity = parseInt(product.quantity);
-  return acc + price * quantity;
-}, 0);
+    const price = parseFloat(product.productSize.product.price);
+    const quantity = parseInt(product.quantity);
+    return acc + price * quantity;
+    }, 0);
 
   const handleBack = () => {
     navigate("/");
   };
 
-   const handleContinue = (e) => {
+   const handleContinue = async(e) => {
     e.preventDefault();
-    setShowModal(true);
+
+    const response = await fetch(`http://localhost:3000/newSale`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: id,
+          amount: total,
+          products
+        }),
+      });
+      if (response.ok) {
+        setProducts([]);
+        setCountProduct(0);
+        setShowModal(true);
+        navigate("/")
+      }
   };
 
   return (
@@ -37,31 +58,31 @@ const Shopping = () => {
         </div>
       </div>
       <div className="shopping">
-        <div className="form-container">
-          <div class="form-group">
+        <form onSubmit={handleContinue} className="form-container">
+          <div className="form-group">
             <label>Nombre:</label>
             <input type="text" />
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <label>Apellido:</label>
             <input type="text" />
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <label>Numero de telefono:</label>
             <input type="text" />
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <label>Codigo Postal:</label>
             <input type="text" />
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <label>Direccion:</label>
             <input type="text" />
           </div>
           <div className="form-button">
             <button type="submit">continuar</button>
           </div>
-        </div>
+        </form>
 
         <div className="purchase-summary">
           <h1>Resumen de compra</h1>

@@ -6,8 +6,8 @@ import App from './App.jsx';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 // Importar tus contextos
-import CartProvider from './components/services/cartContext/CartContext';
-import { UserProvider } from './components/services/auth/usercontext/UserContext.jsx';
+import CartProvider from './components/Service/cartContext/CartContext.jsx';
+import { UserProvider } from './components/Service/auth/usercontext/UserContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

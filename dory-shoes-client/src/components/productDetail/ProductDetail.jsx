@@ -4,7 +4,7 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import "./ProductDetail.css";
 import ModalImage from "../ui/ModalImage";
 import ModalProduct from "../ui/ModalProduct";
-import { CartContext } from "../services/cartContext/CartContext";
+import { CartContext } from "../Service/cartContext/CartContext";
 import { toast, Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../Service/auth/usercontext/UserContext";

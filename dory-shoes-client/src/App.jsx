@@ -22,7 +22,7 @@ import Cart from "./components/cart/Cart";
 import Protected from "./components/protected/Protected";
 import PrivateRoute from "./components/privateRoute/PrivateRoute";
 import Unauthorized from "./components/errors/Unauthorized";
-import Shopping from "./components/shopping/Shopping";
+import Shopping from "./components/Shopping/Shopping";
 
 const App = () => {
   return (
@@ -41,6 +41,7 @@ const App = () => {
         <Route path="/faq" element={<Faq />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<Login />} />
 
         <Route element={<Protected />}>
           <Route path="/editProfile/:id" element={<EditProfile />} />
@@ -54,7 +55,7 @@ const App = () => {
 
       
 
-      <Route path="/login" element={<Login />} />
+      
     </Routes>
   );
 };
