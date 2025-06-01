@@ -13,7 +13,6 @@ import { UserFavourite } from "./UserFavourite.js";
 // ---------------- RELACIONES ---------------- //
 
 // Cart - CartProduct
-// Cart - CartProduct
 Cart.hasMany(CartProduct, { foreignKey: "cartId" });
 Cart.belongsTo(User, { foreignKey: "userId" });
 CartProduct.belongsTo(Cart, { foreignKey: "cartId" });

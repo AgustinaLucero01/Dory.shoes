@@ -1,30 +1,26 @@
 import { Cart } from "../models/Cart.js";
 import { CartProduct } from "../models/CartProduct.js";
 import { Product } from "../models/Product.js";
-import {ProductSize} from "../models/ProductSize.js"
+import { ProductSize } from "../models/ProductSize.js";
 
 //GET -> Mostrar los productos relacionados con un carrito
 export const showAllProductsFromCart = async (req, res) => {
-  const { cartId } = req.body;
+  const cart = await getCartByUser(req.user.id);
 
-  //Verificar que exista el carrito
-  const cart = await Cart.findByPk(cartId);
-
-  if (!cart ) {
+  if (!cart) {
     return res
       .status(404)
-      .send({ message: "El carrito seleccionado no existe." });
+      .json({ message: "No se encontró un carrito para este usuario." });
   }
 
   const cartProducts = await CartProduct.findAll({
-    where: {cartId}
+    where: { cartId: cart.id },
   });
 
-  //¿Es necesario?
   if (!cartProducts.length) {
     return res
       .status(404)
-      .send({ message: "No hay productos en este carrito." });
+      .json({ message: "No hay productos en este carrito." });
   }
 
   res.json(cartProducts);
@@ -33,17 +29,22 @@ export const showAllProductsFromCart = async (req, res) => {
 // POST -> Agrega un producto nuevo al carrito
 export const addProductToCart = async (req, res) => {
   const { productId } = req.params;
-  const { cartId, quantity, size } = req.body;
+  const { quantity, size } = req.body;
+
+  const cart = await getCartByUser(req.user.id);
+
+  if (!cart) {
+    return res
+      .status(404)
+      .json({ message: "No se encontró un carrito para este usuario." });
+  }
 
   // Verifica que el body haya traído los datos necesarios
-  if (!cartId || !productId || !quantity || !size) {
+  if (!productId || !quantity || !size) {
     return res.status(400).send({
       message: "No se encontraron los datos necesarios.",
     });
   }
-
-  // Verificar que exista el carrito
-  const cart = await Cart.findByPk(cartId);
 
   // Verificar que exista el producto
   const product = await Product.findByPk(productId);
@@ -56,9 +57,9 @@ export const addProductToCart = async (req, res) => {
     },
   });
 
-  if (!cart || !product || !productSize) {
+  if (!product || !productSize) {
     return res.status(400).send({
-      message: "El carrito o producto seleccionado no existe.",
+      message: "El producto seleccionado no existe.",
     });
   }
 
@@ -72,7 +73,7 @@ export const addProductToCart = async (req, res) => {
   // Buscar si ya existe el producto con ese talle en el carrito
   const existingCartProduct = await CartProduct.findOne({
     where: {
-      cartId,
+      cartId: cart.id,
       productSizeId: productSize.id,
     },
   });
@@ -81,19 +82,35 @@ export const addProductToCart = async (req, res) => {
   if (existingCartProduct) {
     existingCartProduct.quantity += quantity;
     await existingCartProduct.save();
-    return res.status(200).send(existingCartProduct);
+    const result = await existingCartProduct.findByPk(newCartProduct.id, {
+      include: [
+        {
+          model: ProductSize,
+          include: [Product],
+        },
+      ],
+    });
+    return res.status(200).send(result);
   }
 
   // Si no existe, creamos uno nuevo
   const newCartProduct = await CartProduct.create({
-    cartId,
+    cartId: cart.id,
     productSizeId: productSize.id,
     quantity,
   });
 
-  return res.status(201).send(newCartProduct);
-};
+  const result = await CartProduct.findByPk(newCartProduct.id, {
+      include: [
+        {
+          model: ProductSize,
+          include: [Product],
+        },
+      ],
+    });
 
+    return res.status(201).json(result);
+};
 
 // DELETE -> Borra la instancia de CartProduct asociada con el carrito correspondiente
 export const dropProductFromCart = async (req, res) => {
@@ -146,3 +163,65 @@ export const modifyQuantity = async (req, res) => {
 
   res.send(cartProduct);
 };
+
+//GET -> Muestra el carrito que se está usando en base al usuario que inició sesión
+// Incluye todos los productos que están en el carrito
+export const getCartDetails = async (req, res) => {
+  try {
+    const cart = await Cart.findOne({
+      where: { userId: req.user.id },
+      include: [
+        {
+          model: CartProduct,
+          include: [
+            {
+              model: ProductSize,
+              include: [Product],
+            },
+          ],
+        },
+      ],
+    });
+
+    if (!cart) {
+      return res.status(404).json({
+        message: "No se encontró un carrito para este usuario.",
+      });
+    }
+
+    // Calcular total de productos sumando quantity de cada CartProduct
+    const totalProducts = cart.cartProducts.reduce((total, cp) => total + cp.quantity, 0);
+
+    // Responder con el carrito + el total
+    res.json({
+      ...cart.toJSON(),
+      totalProducts,
+    });
+
+  } catch (error) {
+    console.error("Error al obtener el carrito:", error);
+    res.status(500).json({ error });
+  }
+};
+
+
+export const getCartByUser = async (userId) => {
+  const cart = await Cart.findOne({ where: { userId } });
+  return cart;
+};
+
+export const dropAllProductsFromCart = async (req, res) => {
+  const { cartId } = req.body;
+
+  try {
+    await CartProduct.destroy({
+      where: { cartId },
+    });
+
+    return res.status(200).json({ message: "Carrito vaciado." });
+  } catch (error) {
+    console.error("Error al vaciar el carrito:", error);
+    return res.status(500).json({ message: "Error al vaciar el carrito." });
+  }
+};
+

@@ -5,6 +5,8 @@ import {
   addProductToCart,
   dropProductFromCart,
   modifyQuantity,
+  getCartDetails,
+  dropAllProductsFromCart,
 } from "../services/cart.services.js";
 import { verifyToken } from "../services/auth.services.js";
 
@@ -14,12 +16,16 @@ import { verifyToken } from "../services/auth.services.js";
 
 const router = Router();
 
-router.get("/cart", showAllProductsFromCart);
+router.get("/cartProducts", verifyToken, showAllProductsFromCart);
 
-router.post("/cart/:productId", addProductToCart);
+router.get("/cart", verifyToken, getCartDetails);
 
-router.delete("/cart", dropProductFromCart);
+router.post("/cart/:productId", verifyToken, addProductToCart);
 
-router.put("/cart", modifyQuantity);
+router.delete("/cart", verifyToken, dropProductFromCart);
+
+router.delete("/allCart", verifyToken, dropAllProductsFromCart)
+
+router.put("/cart",verifyToken, modifyQuantity);
 
 export default router;

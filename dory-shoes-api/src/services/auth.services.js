@@ -22,6 +22,9 @@ export const verifyToken = (req, res, next) => {
     //Clave secreta = guardar en .env
     const payload = jwt.verify(token, `programacion3-2025`);
 
+    // Guardo el usuario en la request (sirve para el contexto del carrito)
+    req.user = payload;
+
     //next: continuar con la siguiente consulta
     next();
   } catch (error) {
@@ -31,55 +34,70 @@ export const verifyToken = (req, res, next) => {
   }
 };
 
+//Middleware para verificar rol del usuario ingresado
+// Permite pasar uno o más roles válidos para acceder a una ruta
+export const authorizeRole = (...rolesPermitidos) => {
+  return (req, res, next) => {
+    const rol = req.user.role;
+
+    if (!rolesPermitidos.includes(rol)) {
+      return res.status(403).json({ message: "Acceso prohibido. Rol no autorizado." });
+    }
+
+    next();
+  };
+};
+
 // POST -> Registra un nuevo usuario en la BBDD
 export const registerUser = async (req, res) => {
   try {
     const result = validateRegisterUser(req.body);
 
-  if (result.error) {
-    return res.status(400).send({ message: result.message });
-  }
+    if (result.error) {
+      return res.status(400).send({ message: result.message });
+    }
 
-  const { name, email, password, role, phone, address, zipCode } =
-    req.body;
+    const { name, email, password, role, phone, address, zipCode } = req.body;
 
-  // Busca si ya existe un usuario con ese email
-  const user = await User.findOne({
-    where: { email },
-  });
+    // Busca si ya existe un usuario con ese email
+    const user = await User.findOne({
+      where: { email },
+    });
 
-  if (user)
-    return res.status(400).send({ message: "Este email ya está registrado." });
+    if (user)
+      return res
+        .status(400)
+        .send({ message: "Este email ya está registrado." });
 
-  // Configura 10 rondas de salt
-  const saltRounds = 10;
+    // Configura 10 rondas de salt
+    const saltRounds = 10;
 
-  // Genera un salt único
-  const salt = await bcrypt.genSalt(saltRounds);
+    // Genera un salt único
+    const salt = await bcrypt.genSalt(saltRounds);
 
-  // Hashea la contraseña con el salt
-  const hashedPassword = await bcrypt.hash(password, salt);
+    // Hashea la contraseña con el salt
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-  const newUser = await User.create({
-    name,
-    email,
-    password: hashedPassword,
-    phone,
-    role,
-    address,
-    zipCode,
-    active: 1
-  });
+    const newUser = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      phone,
+      role,
+      address,
+      zipCode,
+      active: 1,
+    });
 
-  //Creamos la instancia del carrito que el usuario va a usar para comprar
-  const newCart = await Cart.create({
-    userId: newUser.id,
-  });
+    //Creamos la instancia del carrito que el usuario va a usar para comprar
+    const newCart = await Cart.create({
+      userId: newUser.id,
+    });
 
-  //Devolvemos los id de las instancias creadas
-  res.json({ userId: newUser.id, cartId: newCart.id });
+    //Devolvemos los id de las instancias creadas
+    res.json({ userId: newUser.id, cartId: newCart.id });
   } catch (err) {
-    res.json({message: `Error al crear usuario: ${err.message}`})
+    res.json({ message: `Error al crear usuario: ${err.message}` });
   }
 };
 
@@ -134,7 +152,9 @@ export const loginUser = async (req, res) => {
     if (!user) return res.status(401).send({ message: "Usuario no existente" });
 
     if (!user.active) {
-      return res.status(401).send({ message: "El usuario ingresado está inactivo" });
+      return res
+        .status(401)
+        .send({ message: "El usuario ingresado está inactivo" });
     }
 
     const comparison = await bcrypt.compare(password, user.password);
@@ -147,9 +167,9 @@ export const loginUser = async (req, res) => {
     // Guardar en .env
     const secretKey = "programacion3-2025";
 
-    const token = jwt.sign({ email }, secretKey, { expiresIn: "1h" });
+    const token = jwt.sign({ id: user.id, email, role: user.role }, secretKey, { expiresIn: "1h" });
 
-    return res.json({token, name:user.name});
+    return res.json({ token });
   } catch (error) {
     console.error("Error en loginUser:", error);
     return res.status(500).send({ message: error });
@@ -204,7 +224,7 @@ export const updateUser = async (req, res) => {
       address,
       zipCode,
       role,
-      active
+      active,
     };
 
     // Solo si se envió una nueva contraseña, la hasheamos
@@ -251,8 +271,8 @@ export const getUserByPk = async (req, res) => {
     return res.status(404).send({ message: "Usuario no encontrado." });
   }
   if (!user.active) {
-      return res.status(400).json({ message: "El usuario está inactivo." });
-    }
+    return res.status(400).json({ message: "El usuario está inactivo." });
+  }
   res.json(user);
 };
 
@@ -268,14 +288,16 @@ export const deleteUser = async (req, res) => {
 
     await user.update({ active: false });
 
-    return res.status(200).json({ message: "Usuario desactivado correctamente." });
+    return res
+      .status(200)
+      .json({ message: "Usuario desactivado correctamente." });
   } catch (error) {
     console.error("Error al desactivar el usuario:", error);
     return res.status(500).json({ message: error });
   }
 };
 
-export const getAllUsers = async (req,res)=> {
+export const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll();
     if (!users) {

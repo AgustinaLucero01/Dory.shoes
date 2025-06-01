@@ -2,3 +2,7 @@
 * {
     font-family: Oswald;
 }
+
+body, html {
+  overflow-x: hidden;
+}

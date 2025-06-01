@@ -1,23 +1,23 @@
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
-import ProductData from "../../data/products.json";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import "./ProductDetail.css";
 import ModalImage from "../ui/ModalImage";
 import ModalProduct from "../ui/ModalProduct";
-import { CartContext } from "../Service/CartContext/CartContext";
+import { CartContext } from "../services/cartContext/CartContext";
 import { toast, Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../Service/auth/usercontext/UserContext";
 
 function ProductDetail() {
   const {
-    Allproduct,
-    setAllproducts,
-    total,
-    setTotal,
+    products,
+    setProducts,
     countProduct,
-    setCountProduct,
+    setCountProduct
   } = useContext(CartContext);
+
+  const { token } = useAuth();
 
   const navigate = useNavigate();
   const { id } = useParams();
@@ -25,7 +25,6 @@ function ProductDetail() {
   const [product, setProduct] = useState();
   const [selectedSize, setSelectedSize] = useState(null);
   const [favourite, setFavourite] = useState();
-  const [cart, setCart] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showModalProduct, setShowModalProduct] = useState(false);
 
@@ -61,27 +60,36 @@ function ProductDetail() {
       });
       return;
     }
+
+    if (!token) {
+      toast.error("Debe iniciar sesión para comenzar a comprar", {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "light",
+        transition: Bounce,
+      });
+      return;
+    }
     try {
-      const response = await fetch(
-        `http://localhost:3000/cart/${product.id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            cartId: 2, // Cambiar con el id del carrito que corresponde (con JWT)
-            quantity: 1,
-            size: selectedSize,
-          }),
-        }
-      );
+      const response = await fetch(`http://localhost:3000/cart/${product.id}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          quantity: 1,
+          size: selectedSize,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error("No se pudo agregar el producto al carrito");
       }
 
       const data = await response.json();
+      setProducts((prevProducts) => [...prevProducts, data]);
+      setCountProduct((prevCount) => prevCount + 1);
 
       toast.success("✔️ Producto agregado al carrito", {
         position: "top-right",

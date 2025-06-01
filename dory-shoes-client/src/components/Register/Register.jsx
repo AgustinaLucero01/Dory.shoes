@@ -223,7 +223,8 @@ const Registro = ({ role, isEdit }) => {
   return (
     <Container
       className="d-flex justify-content-center align-items-center"
-      style={{ marginTop: from == "/register" ? "30vh" : "0" }}
+      // style={{ marginTop: from == "/register" ? "30vh" : "0" }}
+      style={{marginTop: "0vh"}}
     >
       <div className="Registro-box">
         {isEdit ? <h2>Modificá tus datos</h2> : <h2>Registro</h2>}
