@@ -1,11 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Register from "../Register/Register";
+import { useAuth } from "../services/auth/usercontext/UserContext";
+import { use } from "react";
 
 const EditProfile = () => {
   const { id } = useParams();
   const [favourites, setFavourites] = useState([]);
+  const {handleLogout}=useAuth()
 
+
+  const handleCloseUser=()=>{
+    handleLogout()
+    navigate("/")
+  }
+
+  const handleBackHome=()=>{
+    navigate("/")
+  }
   // Obtener favoritos del usuario
   useEffect(() => {
     fetchFavourites();
@@ -41,9 +53,17 @@ const EditProfile = () => {
       className="edit-profile-container"
       style={{ marginTop: "30vh", paddingRight: "2em" }}
     >
-      <h2 style={{ textAlign: "center", paddingBottom: "2rem" }}>
-        Editar Perfil
-      </h2>
+      <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+        <div>
+          <button onClick={handleBackHome} style={{height:"45px", width:"150px", marginLeft:"15px", backgroundColor:"black" }}>Volver</button>
+        </div>
+        <div>
+          <button onClick={handleCloseUser} style={{height:"45px", width:"150px", marginLeft:"15px", backgroundColor:"red"}}>cerrar secion</button>
+        </div>
+        <div style={{ flex:1 , textAlign: "center" }}>
+          <h2 style={{ paddingBottom: "2rem" }}>Editar Perfil</h2>
+        </div>
+      </div>
       <div
         style={{
           display: "flex",

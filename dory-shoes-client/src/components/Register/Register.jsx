@@ -303,7 +303,7 @@ const Registro = ({ role, isEdit }) => {
           )}
 
           <Button type="submit">Enviar</Button>
-          <Button onClick={handleRouter}>Regresar</Button>
+         {!isEdit && <Button onClick={handleRouter}>Regresar</Button>}
           {isEdit && <Button onClick={toggleModal}>Eliminar cuenta</Button>}
         </form>
       </div>
