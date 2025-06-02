@@ -1,6 +1,6 @@
 # 👟 Dory Shoes – E-commerce de Calzado
 
-Dory Shoes es una tienda online de calzado, desarrollada como parte del Trabajo Práctico Integrador (TPI) de la materia **Programación III** de la Tecnicatura Universitaria en Programación. UTN Rosario
+Dory Shoes es una tienda online de calzado, desarrollada como parte del Trabajo Práctico Integrador (TPI) de la materia **Programación III** de la Tecnicatura Universitaria en Programación. UTN Rosario 2025 comision: 2TUP2
 
 ## Tecnologías utilizadas
 
