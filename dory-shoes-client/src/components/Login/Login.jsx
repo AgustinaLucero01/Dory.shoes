@@ -113,7 +113,7 @@ const Login = () => {
 
       <div className="user-login">
         <img
-          src="/images/Login-register/LogoLogin.jpeg"
+          src="public\images\logoLogin.jpg"
           alt="Logo de login"
           onClick={handleNavigateHome}
         />
