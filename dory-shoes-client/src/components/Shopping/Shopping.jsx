@@ -49,14 +49,7 @@ const Shopping = () => {
 
   return (
     <div className="shopping-container">
-      <div className="options">
-        <div className="contact">
-          <p>contactate con el cliente</p>
-        </div>
-        <div className="envio">
-          <p>Envio a domicilio</p>
-        </div>
-      </div>
+      
       <div className="shopping">
         <form onSubmit={handleContinue} className="form-container">
           <div className="form-group">
