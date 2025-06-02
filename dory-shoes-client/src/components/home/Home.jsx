@@ -35,7 +35,7 @@ const Home = () => {
   return (
     <div className="home-container">
       <ToastContainer />
-      <div className="barra-envios">Envíos express por Oca a todo el país </div>
+      {/*<div className="barra-envios">Envíos express por Oca a todo el país </div>
       {/* Carrusel Bootstrap */}
       <div
         id="carouselExample"
