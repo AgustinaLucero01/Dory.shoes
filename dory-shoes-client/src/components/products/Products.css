@@ -1,0 +1,34 @@
+.products-container {
+    margin-top: 21.5vh !important; 
+    
+    display: flex;
+    
+
+    }
+  
+.btn-ver-detalle {
+  background-color: #303030;
+  color: white;
+  border: none;
+}
+
+.btn-ver-detalle:hover {
+  background-color: #505050; /* un gris un poco más claro al pasar el mouse */
+}
+
+.card-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+ 
+   
+  
+    border: 1px solid #e0e0e0;
+
+ 
+    
+}

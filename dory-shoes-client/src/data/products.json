@@ -1,0 +1,275 @@
+[
+    {
+      "id": 1,
+      "nombre": "Borcego negro caña baja",
+      "precio": 15.000,
+      "categoria": "Botas",
+      "imagen": "/images/Botas/bota1.jpg",
+      "size": {
+        "35": 2,
+        "36": 5,
+        "37": 3,
+        "38": 4,
+        "39": 1,
+        "40": 0
+      }
+    },
+
+    {
+      "id": 2,
+      "nombre": "Borcego caña media",
+      "precio": 18.500,
+      "categoria": "Botas",
+      "imagen": "/images/Botas/bota2.jpg",
+     
+      "size": {
+        "35": 1,
+        "36": 2,
+        "37": 0,
+        "38": 3,
+        "39": 2,
+        "40": 5
+      }
+    },
+
+    {
+        "id": 3,
+        "nombre": "Bota alta camel",
+        "precio": 18.500,
+        "categoria": "Botas",
+        "imagen": "/images/Botas/bota3.jpg",
+       
+        "size": {
+          "35": 1,
+          "36": 2,
+          "37": 1,
+          "38": 3,
+          "39": 2,
+          "40": 0
+        }
+      },
+
+      {
+        "id": 4,
+        "nombre": "Bota alta negra",
+        "precio": 19.500,
+        "categoria": "Botas",
+        "imagen": "/images/Botas/bota4.jpg",
+       
+        "size": {
+          "35": 1,
+          "36": 2,
+          "37": 3,
+          "38": 4,
+          "39": 2,
+          "40": 1
+        }
+      },
+
+      {
+        "id": 5,
+        "nombre": "Zapatilla Gazelle negra",
+        "precio": 15.500,
+        "categoria": "Zapatillas",
+        "imagen": "/images/Zapatillas/zapatilla1.jpg",
+       
+        "size": {
+          "35": 1,
+          "36": 2,
+          "37": 0,
+          "38": 3,
+          "39": 2,
+          "40": 5
+        }
+      },
+
+      {
+        "id": 6,
+        "nombre": "Zapatilla Gazelle chocolate",
+        "precio": 15.500,
+        "categoria": "Zapatillas",
+        "imagen": "/images/Zapatillas/zapatilla2.jpg",
+       
+        "size": {
+          "35": 1,
+          "36": 1,
+          "37": 0,
+          "38": 1,
+          "39": 2,
+          "40": 0
+        }
+      },
+
+      {
+        "id": 7,
+        "nombre": "New Balance off white",
+        "precio": 20.500,
+        "categoria": "Zapatillas",
+        "imagen": "/images/Zapatillas/zapatilla3.jpg",
+       
+        "size": {
+          "35": 1,
+          "36": 4,
+          "37": 2,
+          "38": 3,
+          "39": 2,
+          "40": 1
+        }
+      },
+
+      {
+        "id": 8,
+        "nombre": "New Balance black",
+        "precio": 20.500,
+        "categoria": "Zapatillas",
+        "imagen": "/images/Zapatillas/zapatilla4.jpg",
+       
+        "size": {
+          "35": 1,
+          "36": 5,
+          "37": 2,
+          "38": 6,
+          "39": 4,
+          "40": 2
+        }
+      },
+
+      {
+        "id": 9,
+        "nombre": "Pantufla beige",
+        "precio": 12.500,
+        "categoria": "Pantuflas",
+        "imagen": "/images/Pantuflas/pantu1.jpg",
+       
+        "size": {
+          "35": 1,
+          "36": 2,
+          "37": 5,
+          "38": 8,
+          "39": 5,
+          "40": 5
+        }
+      },
+
+      {
+        "id": 10,
+        "nombre": "Pantufla bold black",
+        "precio": 15.500,
+        "categoria": "Pantuflas",
+        "imagen": "/images/Pantuflas/pantu2.jpg",
+       
+        "size": {
+          "35": 3,
+          "36": 2,
+          "37": 5,
+          "38": 6,
+          "39": 0,
+          "40": 0
+        }
+      },
+
+      {
+        "id": 11,
+        "nombre": "Pantufla bold camel",
+        "precio": 15.500,
+        "categoria": "Pantuflas",
+        "imagen": "/images/Pantuflas/pantu3.jpg",
+       
+        "size": {
+          "35": 1,
+          "36": 2,
+          "37": 4,
+          "38": 3,
+          "39": 0,
+          "40": 0
+        }
+      },
+
+      {
+        "id": 12,
+        "nombre": "Pantufla gris",
+        "precio": 12.500,
+        "categoria": "Pantuflas",
+        "imagen": "/images/Pantuflas/pantu4.jpg",
+       
+        "size": {
+          "35": 1,
+          "36": 2,
+          "37": 5,
+          "38": 3,
+          "39": 2,
+          "40": 5
+        }
+      },
+
+      {
+        "id": 13,
+        "nombre": "Zapato flat chocolate",
+        "precio": 15.000,
+        "categoria": "Zapatos",
+        "imagen": "/images/Zapatos/zapato1.jpg",
+       
+        "size": {
+          "35": 1,
+          "36": 2,
+          "37": 1,
+          "38": 3,
+          "39": 2,
+          "40": 0
+        }
+      },
+
+      {
+        "id": 14,
+        "nombre": "zapato flat negro",
+        "precio": 16.000,
+        "categoria":"Zapatos",
+        "imagen":"/images/Zapatos/zapato2.jpg",
+
+         "size": {
+                  "35": 1,
+                  "36": 2,
+                  "37": 0,
+                  "38": 3,
+                  "39": 2,
+                  "40": 5
+                }
+            },      
+        
+      {
+        "id": 15,
+        "nombre": "Zapato cerrado",
+        "precio": 16.000,
+        "categoria": "Zapatos",
+        "imagen": "/images/Zapatos/zapato3.jpg",
+       
+        "size": {
+            "35": 1,
+            "36": 6,
+            "37": 4,
+            "38": 4,
+            "39": 2,
+            "40": 1
+        }
+      },
+
+      {
+        "id": 16,
+        "nombre": "Zapato guillermina",
+        "precio": 16.000,
+        "categoria": "Zapatos",
+        "imagen": "/images/Zapatos/zapato4.jpg",
+       
+        "size": {
+          "35": 1,
+          "36": 6,
+          "37": 4,
+          "38": 4,
+          "39": 2,
+          "40": 1
+        }
+      }
+  ]
+
+  
+

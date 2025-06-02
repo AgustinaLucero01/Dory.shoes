@@ -1,4 +1,4 @@
-import { DataTypes, NOW } from "sequelize";
+import { DataTypes } from "sequelize";
 import { sequelize } from "../db.js";
 
 export const Sale = sequelize.define(
@@ -9,7 +9,7 @@ export const Sale = sequelize.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    cartId: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },

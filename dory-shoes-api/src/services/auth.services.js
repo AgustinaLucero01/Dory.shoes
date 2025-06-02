@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
+import { Cart } from "../models/Cart.js";
 import {
   validateString,
   validateEmail,
@@ -21,6 +22,9 @@ export const verifyToken = (req, res, next) => {
     //Clave secreta = guardar en .env
     const payload = jwt.verify(token, `programacion3-2025`);
 
+    // Guardo el usuario en la request (sirve para el contexto del carrito)
+    req.user = payload;
+
     //next: continuar con la siguiente consulta
     next();
   } catch (error) {
@@ -30,47 +34,71 @@ export const verifyToken = (req, res, next) => {
   }
 };
 
+//Middleware para verificar rol del usuario ingresado
+// Permite pasar uno o más roles válidos para acceder a una ruta
+export const authorizeRole = (...rolesPermitidos) => {
+  return (req, res, next) => {
+    const rol = req.user.role;
+
+    if (!rolesPermitidos.includes(rol)) {
+      return res.status(403).json({ message: "Acceso prohibido. Rol no autorizado." });
+    }
+
+    next();
+  };
+};
+
 // POST -> Registra un nuevo usuario en la BBDD
-// Falta agregar la creación del carrito
 export const registerUser = async (req, res) => {
+  try {
+    const result = validateRegisterUser(req.body);
 
-  const result = validateRegisterUser(req.body);
+    if (result.error) {
+      return res.status(400).send({ message: result.message });
+    }
 
-  if (result.error) {
-    return res.status(400).send({ message: result.message });
+    const { name, email, password, role, phone, address, zipCode } = req.body;
+
+    // Busca si ya existe un usuario con ese email
+    const user = await User.findOne({
+      where: { email },
+    });
+
+    if (user)
+      return res
+        .status(400)
+        .send({ message: "Este email ya está registrado." });
+
+    // Configura 10 rondas de salt
+    const saltRounds = 10;
+
+    // Genera un salt único
+    const salt = await bcrypt.genSalt(saltRounds);
+
+    // Hashea la contraseña con el salt
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      phone,
+      role,
+      address,
+      zipCode,
+      active: 1,
+    });
+
+    //Creamos la instancia del carrito que el usuario va a usar para comprar
+    const newCart = await Cart.create({
+      userId: newUser.id,
+    });
+
+    //Devolvemos los id de las instancias creadas
+    res.json({ userId: newUser.id, cartId: newCart.id });
+  } catch (err) {
+    res.json({ message: `Error al crear usuario: ${err.message}` });
   }
-
-  const { name, email, password, phone, address, zipCode, dateOfBirth } =
-    req.body;
-
-  // Busca si ya existe un usuario con ese email
-  const user = await User.findOne({
-    where: { email },
-  });
-
-  if (user)
-    return res.status(400).send({ message: "Este email ya está registrado." });
-
-  // Configura 10 rondas de salt
-  const saltRounds = 10;
-
-  // Genera un salt único
-  const salt = await bcrypt.genSalt(saltRounds);
-
-  // Hashea la contraseña con el salt
-  const hashedPassword = await bcrypt.hash(password, salt);
-
-  const newUser = await User.create({
-    name,
-    email,
-    password: hashedPassword,
-    phone,
-    address,
-    zipCode,
-    dateOfBirth,
-  });
-
-  res.json(newUser.id);
 };
 
 // Función para validar los datos ingresados por el usuario en el Login
@@ -96,7 +124,7 @@ const validateRegisterUser = (req) => {
     };
   }
 
-  if (!password || !validatePassword(password, 7, null, true, true)) {
+  if (!password || !validatePassword(password, 5, null, true, true)) {
     return {
       error: true,
       message: "Contraseña inválida.",
@@ -106,11 +134,9 @@ const validateRegisterUser = (req) => {
   return result;
 };
 
-
 // POST -> Autentica al usuario que quiere iniciar sesión
 export const loginUser = async (req, res) => {
   try {
-
     const result = validateLoginUser(req.body);
 
     if (result.error) {
@@ -125,6 +151,12 @@ export const loginUser = async (req, res) => {
 
     if (!user) return res.status(401).send({ message: "Usuario no existente" });
 
+    if (!user.active) {
+      return res
+        .status(401)
+        .send({ message: "El usuario ingresado está inactivo" });
+    }
+
     const comparison = await bcrypt.compare(password, user.password);
 
     if (!comparison)
@@ -135,12 +167,12 @@ export const loginUser = async (req, res) => {
     // Guardar en .env
     const secretKey = "programacion3-2025";
 
-    const token = jwt.sign({ email }, secretKey, { expiresIn: "1h" });
+    const token = jwt.sign({ id: user.id, email, role: user.role }, secretKey, { expiresIn: "1h" });
 
-    return res.json(token);
+    return res.json({ token, name:user.name});
   } catch (error) {
     console.error("Error en loginUser:", error);
-    return res.status(500).send({ message: "Error interno del servidor" });
+    return res.status(500).send({ message: error });
   }
 };
 
@@ -170,4 +202,111 @@ const validateLoginUser = (req) => {
   return result;
 };
 
+// PUT -> Modifica los datos del usuario
+export const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { name, email, password, phone, address, zipCode, role, active } =
+    req.body;
 
+  try {
+    const user = await User.findOne({ where: { id } });
+
+    if (!user) {
+      return res
+        .status(400)
+        .send({ message: "Este usuario no está registrado." });
+    }
+
+    const fieldsToUpdate = {
+      name,
+      email,
+      phone,
+      address,
+      zipCode,
+      role,
+      active,
+    };
+
+    // Solo si se envió una nueva contraseña, la hasheamos
+    if (password && password.trim() !== "") {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      fieldsToUpdate.password = hashedPassword;
+    }
+
+    // Actualizamos el usuario
+    await user.update(fieldsToUpdate);
+
+    res.json({ message: "Usuario actualizado correctamente", userId: user.id });
+  } catch (error) {
+    console.error("Error al actualizar el usuario:", error);
+    res.send({ message: error.message });
+  }
+};
+
+export const getAllAdmins = async (req, res) => {
+  try {
+    const admins = await User.findAll({
+      where: {
+        role: "admin",
+        active: 1,
+      },
+    });
+    if (!admins) {
+      res.status(400).json({ message: "No hay usuarios para mostrar" });
+    }
+
+    res.json(admins);
+  } catch (error) {
+    console.error("Error al obtener usuarios con rol de administrador:", error);
+    res.json({ message: error });
+  }
+};
+
+export const getUserByPk = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findByPk(id);
+
+  if (!user) {
+    return res.status(404).send({ message: "Usuario no encontrado." });
+  }
+  if (!user.active) {
+    return res.status(400).json({ message: "El usuario está inactivo." });
+  }
+  res.json(user);
+};
+
+export const deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await User.findOne({ where: { id, active: 1 } });
+
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado." });
+    }
+
+    await user.update({ active: false });
+
+    return res
+      .status(200)
+      .json({ message: "Usuario desactivado correctamente." });
+  } catch (error) {
+    console.error("Error al desactivar el usuario:", error);
+    return res.status(500).json({ message: error });
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.findAll();
+    if (!users) {
+      res.status(400).json({ message: "No hay usuarios para mostrar" });
+    }
+
+    res.json(users);
+  } catch (error) {
+    console.error("Error al obtener usuarios con rol de administrador:", error);
+    res.json({ message: error });
+  }
+};

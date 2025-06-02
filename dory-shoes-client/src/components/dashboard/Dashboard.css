@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+.dashboard-container {
+    margin-top: 29.5vh !important;
+    font-family: Oswald;
+}
+
+.add-button {
+    background-color: rgb(128, 124, 124);
+    margin-bottom: 12px !important;
+    border: 1px solid #ccc !important;
+}
+
+.add-button:hover{
+    background-color: #c6c4c4;
+}
+
+.edit-button {
+    background-color: #6D9DC5;
+    margin-right: 5px;
+    margin-bottom: 12px !important;
+    border: 1px solid #ccc !important;
+}
+
+.edit-button:hover{
+    background-color: #5C8DB6;
+}

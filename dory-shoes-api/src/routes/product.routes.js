@@ -3,24 +3,25 @@ import { Router } from "express";
 import {
     createProduct,
     deleteProduct,
-    getAllProducts,
+    getAvailableProducts,
     getProductById,
     updateProduct,
   } from "../services/product.services.js";
-  import { verifyToken } from "../services/auth.services.js"
+  import { verifyToken, authorizeRole } from "../services/auth.services.js"
 
 // Rutas para hacer consultas sobre productos
+//Falta volver a agregar verifyToken
 
 const router = Router();
 
-router.get("/products", verifyToken, getAllProducts);
+router.get("/products", getAvailableProducts);
 
-router.get("/products/:id", verifyToken, getProductById);
+router.get("/products/:id", verifyToken,getProductById);
 
-router.post("/createProduct", verifyToken, createProduct);
+router.post("/createProduct",  createProduct);
 
-router.put("/products/:id", verifyToken, updateProduct);
+router.put("/products/:id", updateProduct);
 
-router.delete("/products/:id", verifyToken, deleteProduct);
+router.delete("/products/:id", deleteProduct);
 
 export default router;
