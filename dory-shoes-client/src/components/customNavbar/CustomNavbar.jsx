@@ -4,7 +4,7 @@ import { FaUser, FaShoppingCart, FaSearch } from "react-icons/fa";
 import "./Navbar.css";
 import ProductSearch from "../productSearch/ProductSearch";
 import { useNavigate } from "react-router-dom";
-import { CartContext } from "../Service/cartContext/CartContext.jsx";
+import { CartContext } from "../Service/CartContext/CartContext.jsx";
 import { useAuth } from "./../Service/auth/usercontext/UserContext.jsx";
 import Cart from "../Cart/Cart.jsx";
 import { Link } from "react-router-dom";
@@ -135,7 +135,7 @@ const CustomNavbar = () => {
             style={{ cursor: "pointer" }}
             onClick={() => {
               if (token) {
-                navigate(`/editProfile/${id}`);
+                navigate(`/editProfile`);
               } else {
                 navigate("/login");
               }

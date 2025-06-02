@@ -12,13 +12,13 @@ import {
 import "./ProductForm.css";
 import { useAuth } from "../Service/auth/usercontext/UserContext";
 
-
 const ProductForm = () => {
-  const {token} = useAuth();
+  const { token } = useAuth();
   const navigate = useNavigate();
   const { id } = useParams();
   //Si recibimos un id por parámetro, estamos editando un producto
   const isEdit = Boolean(id);
+  const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
     name: "",
@@ -36,13 +36,12 @@ const ProductForm = () => {
     },
   });
 
-
   const CATEGORIES = ["botas", "zapatillas", "zapatos", "pantuflas"];
 
   useEffect(() => {
     if (isEdit) {
       fetch(`http://localhost:3000/products/${id}`, {
-        headers: {Authorization: `Bearer ${token}`}
+        headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => res.json())
         .then((data) => {
@@ -93,18 +92,39 @@ const ProductForm = () => {
         [name]: value,
       }));
     }
+    if (errors[name]) {
+      setErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // Validación manual de campos obligatorios
+    const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = true;
+    if (!formData.description.trim()) newErrors.description = true;
+    if (!formData.price) newErrors.price = true;
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
 
     const method = isEdit ? "PUT" : "POST";
     const url = isEdit ? `/products/${id}` : "/createProduct";
-    const state = isEdit ? {state: {UpdatedProduct:true}} : {state: {AddedProduct:true}};
+    const state = isEdit
+      ? { state: { UpdatedProduct: true } }
+      : { state: { AddedProduct: true } };
     try {
       const response = await fetch(`http://localhost:3000${url}`, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           ...formData,
           price: parseFloat(formData.price),
@@ -114,7 +134,7 @@ const ProductForm = () => {
       const result = await response.json();
 
       if (response.ok) {
-        navigate("/dashboard" ,state);
+        navigate("/dashboard", state);
       } else {
         console.log(result.message || "Ocurrió un error.");
       }
@@ -124,7 +144,7 @@ const ProductForm = () => {
   };
 
   return (
-    <Container style={{ maxWidth:"50%"}}>
+    <Container style={{ maxWidth: "50%" }}>
       <Card>
         <Card.Body>
           <Card.Title className="mb-4 text-center">
@@ -139,8 +159,11 @@ const ProductForm = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                required
+                isInvalid={errors.name}
               />
+              <Form.Control.Feedback type="invalid">
+                Este campo es obligatorio.
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formDescription">
@@ -151,8 +174,11 @@ const ProductForm = () => {
                 rows={3}
                 value={formData.description}
                 onChange={handleChange}
-                required
+                isInvalid={errors.description}
               />
+              <Form.Control.Feedback type="invalid">
+                Este campo es obligatorio.
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formPrice">
@@ -162,8 +188,11 @@ const ProductForm = () => {
                 name="price"
                 value={formData.price}
                 onChange={handleChange}
-                required
+                isInvalid={errors.price}
               />
+              <Form.Control.Feedback type="invalid">
+                Este campo es obligatorio.
+              </Form.Control.Feedback>
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formImage">

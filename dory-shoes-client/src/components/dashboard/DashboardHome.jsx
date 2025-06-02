@@ -4,11 +4,10 @@ import "./Dashboard.css";
 import ConfirmModal from "../ui/ConfirmModal";
 import ProductsDashboard from "./ProductsDashboard";
 import AdminsDashboard from "./AdminsDashboard";
+import { useAuth } from "../Service/auth/usercontext/UserContext";
 
 const DashboardHome = ({}) => {
-  const user = {
-    role: "superAdmin",
-  };
+  const {role} = useAuth();
 
   const [totalAmount, setTotalAmount] = useState(0);
   const [sales, setSales] = useState({ cantidad: 0, monto: 0 });
@@ -59,7 +58,7 @@ const DashboardHome = ({}) => {
           </Card>
         </Col>
       </Row>
-      {user?.role === "superAdmin" && (
+      {role === "superAdmin" && (
         <AdminsDashboard openConfirmModal={openConfirmModal} />
       )}
 

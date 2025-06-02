@@ -29,10 +29,31 @@ export const getAvailableProducts = async (req, res) => {
   }
 };
 
+export const getProducts = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      //JOIN de SQL con Sequelize
+      include: {
+        model: ProductSize,
+        attributes: [], // no queremos traer los talles ni sus datos
+      },
+      group: ["Product.id"],
+    });
+    if (!products) {
+      res.status(400).json({ message: "No hay productos para mostrar" });
+    }
+
+    res.json(products);
+  } catch (error) {
+    console.error("Error al obtener productos con stock:", error);
+    res.json({ message: error });
+  }
+};
+
 // GET -> devuelve un producto especifico y los talles disponibles
 export const getProductById = async (req, res) => {
   const { id } = req.params;
-  const userId = req.user.id;
+  const userId = req.user?.id;
   // const userId = req.user.id; CAMBIAR CUANDO APLIQUEMOS JWT
   const product = await Product.findByPk(id, {
     include: [

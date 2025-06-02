@@ -85,7 +85,7 @@ export const showAllUserFavourites = async (req, res) => {
       include: [
         {
           model: Product,
-          attributes: ["name", "imageUrl"],
+          attributes: ["id", "name", "imageUrl"],
         },
       ],
     });

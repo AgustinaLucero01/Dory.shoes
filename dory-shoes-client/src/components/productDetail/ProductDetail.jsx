@@ -4,7 +4,7 @@ import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 import "./ProductDetail.css";
 import ModalImage from "../ui/ModalImage";
 import ModalProduct from "../ui/ModalProduct";
-import { CartContext } from "../Service/cartContext/CartContext";
+import { CartContext } from "../Service/CartContext/CartContext";
 import { toast, Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../Service/auth/usercontext/UserContext";
@@ -26,14 +26,16 @@ function ProductDetail() {
 
   useEffect(() => {
     fetchProducto();
-  }, [id]);
+  }, []);
 
   const fetchProducto = async () => {
     try {
       //Sacar el query del URL cuando agreguemos JWT
       const response = await fetch(
-        `http://localhost:3000/products/${productId}`, {
-          headers: {Authorization: `Bearer ${token}`,}
+        `http://localhost:3000/products/${productId}`,
+        {
+          method: "GET",
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
         }
       );
       if (!response.ok) {
@@ -49,8 +51,8 @@ function ProductDetail() {
   };
 
   const handleAddToCart = async () => {
-    if (!selectedSize) {
-      toast.error("Seleccione un talle para continuar", {
+    if (!token) {
+      toast.error("Debe iniciar sesión para comenzar a comprar", {
         position: "top-right",
         autoClose: 5000,
         theme: "light",
@@ -58,9 +60,8 @@ function ProductDetail() {
       });
       return;
     }
-
-    if (!token) {
-      toast.error("Debe iniciar sesión para comenzar a comprar", {
+    if (!selectedSize) {
+      toast.error("Seleccione un talle para continuar", {
         position: "top-right",
         autoClose: 5000,
         theme: "light",

@@ -7,15 +7,18 @@ import { CiLock } from "react-icons/ci";
 import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router";
 import { useAuth } from "../Service/auth/usercontext/UserContext";
-import {toast, ToastContainer, Bounce } from "react-toastify";
+import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocation } from "react-router-dom";
-
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState({ email: false, password: false });
+  const [error, setError] = useState({
+    email: false,
+    password: false
+  });
+  const [authenticationError, setAuthenticationError] = useState({active: false, message: ""})
 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -23,23 +26,21 @@ const Login = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("Location state:", location.state);
-    console.log(location.state?.showConfirmRegister);
-  if (location.state?.showConfirmRegister) {
-    toast(`👢 Usuario registrado con éxito. Inicie sesión para continuar`, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-      transition: Bounce,
-    });
-    window.history.replaceState({}, document.title);
-  }
-}, [location]);
+    if (location.state?.showConfirmRegister) {
+      toast(`👢 Usuario registrado con éxito. Inicie sesión para continuar`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const navigate = useNavigate();
 
@@ -55,10 +56,12 @@ const Login = () => {
   const handleOnchange = (event) => {
     setEmail(event.target.value);
     setError({ ...error, email: false });
+    setAuthenticationError({active: false})
   };
   const handlePasswordOnchange = (event) => {
     setPassword(event.target.value);
     setError({ ...error, password: false });
+    setAuthenticationError({active: false})
   };
 
   const handleSubmbit = async (event) => {
@@ -81,7 +84,8 @@ const Login = () => {
     }
     if (hasError) return;
 
-    setError({ email: false, password: false });
+    setError({ email: false, password: false});
+    setAuthenticationError({active:false})
 
     try {
       const res = await fetch("http://localhost:3000/login", {
@@ -103,7 +107,7 @@ const Login = () => {
       navigate("/", { state: { showWelcomeToast: true, userName: data.name } });
     } catch (err) {
       console.error(err.message);
-      alert(err.message);
+      setAuthenticationError({active: true, message: err.message});
     }
   };
 
@@ -117,28 +121,36 @@ const Login = () => {
         />
         <h1>¡Bienvenido!</h1>
         <h4>Inicia sesión para continuar</h4>
-        <form className="from-user" action="" onSubmit={handleSubmbit}>
-          <FaUser className="input-user" />
-          <input
-            className={error.email ? "border border-danger" : ""}
-            type="email"
-            placeholder="Ingresa tu email"
-            ref={emailRef}
-            value={email}
-            onChange={handleOnchange}
-          />
+        <form className="form-user" onSubmit={handleSubmbit}>
+          <div className="input-group">
+            <FaUser className="input-icon" />
+            <input
+              className={error.email ? "border border-danger" : ""}
+              type="email"
+              placeholder="Ingresa tu email"
+              ref={emailRef}
+              value={email}
+              onChange={handleOnchange}
+            />
+          </div>
           {error.email && <p className="error-text">Completa el campo</p>}
 
-          <CiLock className="lock-user" />
-          <input
-            className={error.password ? "border border-danger" : ""}
-            type="password"
-            placeholder="Ingresa tu contraseña"
-            ref={passwordRef}
-            value={password}
-            onChange={handlePasswordOnchange}
-          />
+          <div className="input-group">
+            <CiLock className="input-icon" />
+            <input
+              className={error.password ? "border border-danger" : ""}
+              type="password"
+              placeholder="Ingresa tu contraseña"
+              ref={passwordRef}
+              value={password}
+              onChange={handlePasswordOnchange}
+            />
+          </div>
           {error.password && <p className="error-text">Completa el campo</p>}
+          {authenticationError.active && (
+            <p className="error-text">{authenticationError.message}</p>
+          )}
+
           <div className="submit">
             <div>
               <p onClick={handleRouter}>¿No tienes cuenta? Regístrate</p>
@@ -149,7 +161,7 @@ const Login = () => {
           </div>
         </form>
       </div>
-       <ToastContainer />
+      <ToastContainer />
     </div>
   );
 };

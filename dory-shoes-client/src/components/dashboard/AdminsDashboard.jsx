@@ -4,19 +4,23 @@ import "./Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../Service/auth/usercontext/UserContext";
 
 const AdminsDashboard = ({ openConfirmModal }) => {
   const navigate = useNavigate();
 
+  const { token } = useAuth();
+
   const [admins, setAdmins] = useState([]);
-  
 
   useEffect(() => {
     fetchAdmins();
   }, []);
 
   const fetchAdmins = async () => {
-    fetch("http://localhost:3000/getAdmins")
+    fetch("http://localhost:3000/getAdmins", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
       .then((data) => setAdmins([...data]))
       .catch((err) => console.log(err));
@@ -27,6 +31,7 @@ const AdminsDashboard = ({ openConfirmModal }) => {
       await fetch(`http://localhost:3000/deleteUser/${id}`, {
         method: "PUT",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });

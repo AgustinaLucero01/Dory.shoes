@@ -26,7 +26,9 @@ const CartProvider = ({ children }) => {
         console.error("Error al obtener el carrito:", error);
       }
     };
-    fetchCart();
+    if (token) {
+      fetchCart();
+    }
   }, []);
 
   {

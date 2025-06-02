@@ -7,7 +7,7 @@ const Footer = () => {
       <div>
         <div className="social-links">
           <a
-            href="https://www.instagram.com/tu_cuenta_instagram"
+            href="https://www.instagram.com/dory.shoes"
             target="_blank"
             rel="noopener noreferrer"
             className="text-dark"
@@ -15,7 +15,7 @@ const Footer = () => {
             <i className="bi bi-instagram fs-4"></i>
           </a>
           <a
-            href="https://www.facebook.com/tu_cuenta_facebook"
+            href="https://www.facebook.com"
             target="_blank"
             rel="noopener noreferrer"
             className="text-dark"

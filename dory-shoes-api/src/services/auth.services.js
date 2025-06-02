@@ -41,11 +41,34 @@ export const authorizeRole = (...rolesPermitidos) => {
     const rol = req.user.role;
 
     if (!rolesPermitidos.includes(rol)) {
-      return res.status(403).json({ message: "Acceso prohibido. Rol no autorizado." });
+      return res
+        .status(403)
+        .json({ message: "Acceso prohibido. Rol no autorizado." });
     }
 
-    next();
-  };
+    next();
+  };
+};
+
+//Middleware para rutas mixtas: se usan con usuarios registrados y con invitados
+export const optionalAuth = (req, res, next) => {
+  const header = req.header("Authorization") || "";
+  const token = header.split(" ")[1];
+
+  if (!token) {
+    // Si no hay token, simplemente continúa sin agregar req.user
+    return next();
+  }
+
+  try {
+    const payload = jwt.verify(token, "programacion3-2025");
+    req.user = payload;
+  } catch (error) {
+    // Si el token es inválido, también continúa como usuario anónimo
+    console.warn("Token inválido, accediendo como usuario no autenticado");
+  }
+
+  next();
 };
 
 // POST -> Registra un nuevo usuario en la BBDD
@@ -167,9 +190,11 @@ export const loginUser = async (req, res) => {
     // Guardar en .env
     const secretKey = "programacion3-2025";
 
-    const token = jwt.sign({ id: user.id, email, role: user.role }, secretKey, { expiresIn: "1h" });
+    const token = jwt.sign({ id: user.id, email, role: user.role }, secretKey, {
+      expiresIn: "1h",
+    });
 
-    return res.json({ token, name:user.name});
+    return res.json({ token, name: user.name });
   } catch (error) {
     console.error("Error en loginUser:", error);
     return res.status(500).send({ message: error });
@@ -192,19 +217,14 @@ const validateLoginUser = (req) => {
     };
   }
 
-  if (!password || !validatePassword(password, 7, null, true, true)) {
-    return {
-      error: true,
-      message: "Contraseña inválida.",
-    };
-  }
+
 
   return result;
 };
 
 // PUT -> Modifica los datos del usuario
 export const updateUser = async (req, res) => {
-  const { id } = req.params;
+  const  id  = req.user.id;
   const { name, email, password, phone, address, zipCode, role, active } =
     req.body;
 
@@ -263,8 +283,8 @@ export const getAllAdmins = async (req, res) => {
   }
 };
 
-export const getUserByPk = async (req, res) => {
-  const { id } = req.params;
+export const getUserById = async (req, res) => {
+  const id = req.user.id;
   const user = await User.findByPk(id);
 
   if (!user) {

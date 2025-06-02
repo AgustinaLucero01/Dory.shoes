@@ -6,6 +6,7 @@ import {toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import ProductSearch from "../productSearch/ProductSearch";
+import { useAuth } from "../Service/auth/usercontext/UserContext";
 
 const ProductsDashboard = ({ openConfirmModal }) => {
   const [products, setProducts] = useState([]);
@@ -13,12 +14,16 @@ const ProductsDashboard = ({ openConfirmModal }) => {
 
   const navigate = useNavigate();
 
+  const {token} = useAuth();
+
   useEffect(() => {
     fetchProducts();
   }, []);
 
   const fetchProducts = async () => {
-    fetch("http://localhost:3000/products")
+    fetch("http://localhost:3000/allProducts", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
       .then((data) => setProducts([...data]))
       .catch((err) => console.log(err));
@@ -37,6 +42,7 @@ const ProductsDashboard = ({ openConfirmModal }) => {
       const res = await fetch(`http://localhost:3000/products/${id}`, {
         method: "DELETE",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       });

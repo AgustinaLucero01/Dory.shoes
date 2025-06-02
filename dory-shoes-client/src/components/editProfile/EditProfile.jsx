@@ -6,7 +6,7 @@ import { toast, Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const EditProfile = () => {
-  const { id } = useParams();
+  const { id } = useAuth();
   const [favourites, setFavourites] = useState([]);
   const {handleLogout}=useAuth()
   const navigate = useNavigate();
@@ -40,6 +40,7 @@ const EditProfile = () => {
     try {
       const res = await fetch(`http://localhost:3000/deleteFavourite/${id}`, {
         method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) throw new Error("No se pudo eliminar el favorito.");
@@ -116,7 +117,7 @@ const EditProfile = () => {
                         borderRadius: "6px",
                       }}
                     />
-                    <span>{fav.product?.name}</span>
+                    <span style={{ cursor: "pointer", textDecoration: "underline" }} onClick={() => navigate(`/product/${fav.product?.id}`)}>{fav.product?.name}</span>
                   </div>
                   <button
                     onClick={() => handleDeleteFavourite(fav.id)}

@@ -7,10 +7,10 @@ import ConfirmModal from "../ui/ConfirmModal.jsx";
 import { useAuth } from "../Service/auth/usercontext/UserContext.jsx";
 
 const Registro = ({ isEdit }) => {
-  const { id, role, handleLogout } = useAuth();
+  const { id, role, handleLogout, token } = useAuth();
 
   const [user, setUser] = useState();
-  
+
   const [showModal, setShowModal] = useState(false);
 
   const location = useLocation();
@@ -23,7 +23,7 @@ const Registro = ({ isEdit }) => {
   };
 
   useEffect(() => {
-    if (from == "/") {
+    if (isEdit) {
       fetchUser();
     }
   }, [id]);
@@ -40,10 +40,12 @@ const Registro = ({ isEdit }) => {
     }
   }, [user]);
 
-  //fetch para traer los datos del usuario (id enviado por ruta)
+  //fetch para traer los datos del usuario
   const fetchUser = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/getUser/${id}`);
+      const response = await fetch(`http://localhost:3000/getUser`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (!response.ok) {
         navigate("/");
         throw new Error("Usuario no encontrado");
@@ -90,7 +92,10 @@ const Registro = ({ isEdit }) => {
     try {
       await fetch(`http://localhost:3000/deleteUser/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       });
       setShowModal(false);
       handleLogout();
@@ -207,12 +212,15 @@ const Registro = ({ isEdit }) => {
         };
     const method = isEdit ? "PUT" : "POST";
     const url = isEdit ? `/updateUser/${id}` : "/register";
+    const headers = isEdit
+      ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
+      : { "Content-Type": "application/json" };
 
     try {
       console.log(formData);
       await fetch(`http://localhost:3000${url}`, {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify(formData),
       });
 
