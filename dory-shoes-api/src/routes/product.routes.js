@@ -16,9 +16,9 @@ const router = Router();
 
 router.get("/products", getAvailableProducts);
 
-router.get("/products/:id", getProductById);
+router.get("/products/:id", verifyToken,getProductById);
 
-router.post("/createProduct", authorizeRole("admin", "superAdmin"), createProduct);
+router.post("/createProduct",  createProduct);
 
 router.put("/products/:id", updateProduct);
 

@@ -10,17 +10,13 @@ import "react-toastify/dist/ReactToastify.css";
 import { useAuth } from "../Service/auth/usercontext/UserContext";
 
 function ProductDetail() {
-  const {
-    products,
-    setProducts,
-    countProduct,
-    setCountProduct
-  } = useContext(CartContext);
+  const { products, setProducts, countProduct, setCountProduct } =
+    useContext(CartContext);
 
-  const { token } = useAuth();
+  const { id, token } = useAuth();
 
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { productId } = useParams();
 
   const [product, setProduct] = useState();
   const [selectedSize, setSelectedSize] = useState(null);
@@ -36,7 +32,9 @@ function ProductDetail() {
     try {
       //Sacar el query del URL cuando agreguemos JWT
       const response = await fetch(
-        `http://localhost:3000/products/${id}?userId=2`
+        `http://localhost:3000/products/${productId}`, {
+          headers: {Authorization: `Bearer ${token}`,}
+        }
       );
       if (!response.ok) {
         navigate("/");
@@ -109,10 +107,19 @@ function ProductDetail() {
   };
 
   const toggleFavorite = () => {
-    if (favourite) {
-      deleteFavourite();
+    if (token) {
+      if (favourite) {
+        deleteFavourite();
+      } else {
+        addFavourite();
+      }
     } else {
-      addFavourite();
+      toast.error("Debe iniciar sesión para guardar productos en favoritos.", {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "light",
+        transition: Bounce,
+      });
     }
   };
 
@@ -121,10 +128,10 @@ function ProductDetail() {
       const response = await fetch(`http://localhost:3000/addFavourite`, {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userId: 2, // Modificar cuando agreguemos JWT
           productId: product.id,
         }),
       });
@@ -133,6 +140,12 @@ function ProductDetail() {
 
       const newFavourite = await response.json();
       setFavourite(newFavourite);
+      toast.success("❤️ Producto agregado a favoritos", {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "light",
+        transition: Bounce,
+      });
     } catch (err) {
       console.log(err.message);
     }
@@ -150,6 +163,12 @@ function ProductDetail() {
       if (!response.ok) throw new Error("Error al eliminar favorito");
 
       setFavourite(null);
+      toast.error("💔 Producto eliminado de favoritos", {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "light",
+        transition: Bounce,
+      });
     } catch (err) {
       console.log(err.message);
     }

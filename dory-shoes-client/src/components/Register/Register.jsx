@@ -4,22 +4,26 @@ import "./Register.css";
 import { validatePassword } from "./validations.js";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import ConfirmModal from "../ui/ConfirmModal.jsx";
+import { useAuth } from "../Service/auth/usercontext/UserContext.jsx";
 
-const Registro = ({ role, isEdit }) => {
-  const { id } = useParams();
+const Registro = ({ isEdit }) => {
+  const { id, role, handleLogout } = useAuth();
 
   const [user, setUser] = useState();
+  
   const [showModal, setShowModal] = useState(false);
 
   const location = useLocation();
   const from = location.state?.from || "/"; //
+
+  const roleToSubmit = from === "/login" ? "user" : "admin";
 
   const toggleModal = () => {
     setShowModal(!showModal);
   };
 
   useEffect(() => {
-    if (id) {
+    if (from == "/") {
       fetchUser();
     }
   }, [id]);
@@ -89,6 +93,7 @@ const Registro = ({ role, isEdit }) => {
         headers: { "Content-Type": "application/json" },
       });
       setShowModal(false);
+      handleLogout();
       navigate("/");
     } catch (err) {
       console.log("Error al eliminar el usuario:", err);
@@ -195,39 +200,43 @@ const Registro = ({ role, isEdit }) => {
           name,
           email,
           password,
-          role,
+          role: roleToSubmit,
           phone,
           address,
           zipCode,
         };
     const method = isEdit ? "PUT" : "POST";
     const url = isEdit ? `/updateUser/${id}` : "/register";
-    //FUNCIONA, FALTA TOAST
+
     try {
-      console.log(url, method);
+      console.log(formData);
       await fetch(`http://localhost:3000${url}`, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-      //ORGANIZAR LAS RUTAS: Registro, edición de datos, creación de admin
-      
-      if (from == "/") {
+
+      if (from == "/" && !isEdit) {
         navigate("/", { state: { showWelcomeToast: true } });
       }
       if (from == "/login") {
         navigate("/login", { state: { showConfirmRegister: true } });
       }
+      if (from == "/" && isEdit) {
+        navigate("/", { state: { showConfirmEdit: true } });
+      }
+      if (from == "/dashboard") {
+        navigate("/dashboard", { state: { showConfirmNewAdmin: true } });
+      }
     } catch (err) {
-      console.log("Error al enviar el formulario.");
+      console.log(`Error al enviar el formulario:${err}`);
     }
   };
 
   return (
     <Container
       className="d-flex justify-content-center align-items-center"
-      // style={{ marginTop: from == "/register" ? "30vh" : "0" }}
-      style={{marginTop: "30vh"}}
+      style={{ marginTop: from == "/login" ? "30vh" : "0" }}
     >
       <div className="Registro-box">
         {isEdit ? <h2>Modificá tus datos</h2> : <h2>Registro</h2>}
@@ -306,7 +315,7 @@ const Registro = ({ role, isEdit }) => {
           )}
 
           <Button type="submit">Enviar</Button>
-         {!isEdit && <Button onClick={handleRouter}>Regresar</Button>}
+          {!isEdit && <Button onClick={handleRouter}>Regresar</Button>}
           {isEdit && <Button onClick={toggleModal}>Eliminar cuenta</Button>}
         </form>
       </div>

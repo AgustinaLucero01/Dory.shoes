@@ -5,7 +5,8 @@ import { User } from "../models/User.js";
 // POST -> Agrega a un producto entre los favoritos del usuario
 export const addFavourite = async (req, res) => {
   try {
-    const { userId, productId } = req.body;
+    const userId = req.user.id;
+    const { productId } = req.body;
 
     if (!productId || !userId) {
       return res

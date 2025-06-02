@@ -1,12 +1,14 @@
 body{
   background-color: #fff;
+  justify-content: center;
+  width: 100%;
 }
-
 
 .Login-Box{
   display: flex;
   margin-top: 12vh !important;
   margin-bottom: 6vh;
+  
 }
 
 .img-login img{
@@ -16,6 +18,7 @@ body{
 
 .user-login img{
   cursor: pointer;
+
 }
 /* formulario */
 .user-login{
@@ -25,10 +28,11 @@ body{
   border: solid 1px #C8C2C2;
   border-radius: 15px;
   box-shadow: 0 4px #515151;
-  margin-left: 200px;
+  margin-left: 390px;
   margin-top: 160px;
   color: black;
   position: relative;
+  padding-bottom: 10px;
 }
 
 
@@ -61,7 +65,7 @@ body{
 
 .input-user{
   position: absolute;
-  top: 52.5%;
+  top: 68%;
   left: 40px;
   transform: translateY(-50%);
   color: #888;
@@ -72,7 +76,7 @@ body{
 
 .lock-user{
   position: absolute;
-  top: 68%;
+  top: 81%;
   left: 40px;
   transform: translateY(-50%);
   color: #888;

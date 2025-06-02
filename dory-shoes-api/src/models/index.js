@@ -32,16 +32,16 @@ Product.hasMany(ProductSize, {
 ProductSize.belongsTo(Product, { foreignKey: "productId" });
 
 // Product - UserFavourite
-Product.hasMany(UserFavourite, { foreignKey: "productId"});
-UserFavourite.belongsTo(Product, { foreignKey: "productId" });
-
-// User - UserFavourite
 Product.hasMany(UserFavourite, {
   foreignKey: "productId",
   onDelete: "CASCADE",
   hooks: true,
 });
 UserFavourite.belongsTo(Product, { foreignKey: "productId" });
+
+// User - UserFavourite
+User.hasMany(UserFavourite, { foreignKey: "userId" });
+UserFavourite.belongsTo(User, { foreignKey: "userId" });
 
 // User - Sale
 User.hasMany(Sale, { foreignKey: "userId"});

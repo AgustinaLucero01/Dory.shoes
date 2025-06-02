@@ -32,7 +32,7 @@ export const getAvailableProducts = async (req, res) => {
 // GET -> devuelve un producto especifico y los talles disponibles
 export const getProductById = async (req, res) => {
   const { id } = req.params;
-  const { userId } = req.query;
+  const userId = req.user.id;
   // const userId = req.user.id; CAMBIAR CUANDO APLIQUEMOS JWT
   const product = await Product.findByPk(id, {
     include: [

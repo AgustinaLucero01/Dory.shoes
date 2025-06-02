@@ -109,11 +109,9 @@ const Login = () => {
 
   return (
     <div className="Login-Box">
-      
-
       <div className="user-login">
         <img
-          src="public\images\logoLogin.jpg"
+          src="images\logoLogin.jpg"
           alt="Logo de login"
           onClick={handleNavigateHome}
         />
@@ -144,7 +142,6 @@ const Login = () => {
           <div className="submit">
             <div>
               <p onClick={handleRouter}>¿No tienes cuenta? Regístrate</p>
-              <p>¿Olvidaste tu contraseña?</p>
             </div>
             <button>
               <FaArrowRight className="arrow-user" />

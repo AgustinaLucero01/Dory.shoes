@@ -10,7 +10,7 @@ import Layout from "./components/layout/Layout";
 import Home from "./components/home/Home";
 import Products from "./components/products/Products";
 import ProductDetail from "./components/productDetail/ProductDetail";
-import Register from "./components/register/Register";
+import Register from "./components/Register/Register";
 import Login from "./components/Login/Login";
 import Dashboard from "./components/dashboard/Dashboard";
 import NotFound from "./components/errors/NotFound";
@@ -18,7 +18,7 @@ import EditProfile from "./components/editProfile/EditProfile";
 import Faq from "./components/faq/Faq";
 import About from "./components/about/About";
 import Contact from "./components/contact/Contact";
-import Cart from "./components/cart/Cart";
+import Cart from "./components/Cart/Cart";
 import Protected from "./components/protected/Protected";
 import PrivateRoute from "./components/privateRoute/PrivateRoute";
 import Unauthorized from "./components/errors/Unauthorized";
@@ -31,10 +31,10 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/categoria/:categoria" element={<Products />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/product/:productId" element={<ProductDetail />} />
         <Route
           path="/register"
-          element={<Register role={"user"} isEdit={false} />}
+          element={<Register isEdit={false} />}
         />
         <Route path="*" element={<NotFound />} />
         <Route path="/unauthorized" element={<Unauthorized />}></Route>

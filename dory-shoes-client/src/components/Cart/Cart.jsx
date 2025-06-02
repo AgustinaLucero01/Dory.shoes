@@ -7,11 +7,11 @@ import { useAuth } from "../Service/auth/usercontext/UserContext.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import "./cart.css";
 
-const Cart = (isActive) => {
+const Cart = ({ isActive, onActive }) => {
   const { countProduct, products, setProducts, setCountProduct, cartId } = useContext(CartContext);
 
   const [total, setTotal] = useState();
-  const [active, setActive] = useState(isActive);
+  
 
   const navigate = useNavigate();
   const { token } = useAuth();
@@ -53,6 +53,7 @@ const Cart = (isActive) => {
         (product) => product.id !== productId
       );
       setProducts(updatedProducts);
+      setCountProduct((prevCount) => prevCount - 1);
     }
   };
 
@@ -88,12 +89,12 @@ const Cart = (isActive) => {
       });
       return;
     }
-
+    onActive(false)
     navigate("/shopping");
   };
 
   return (
-    <div className={`container-cart-products ${active ? "" : "hidden-cart"}`}>
+    <div className={`container-cart-products ${isActive ? "" : "hidden-cart"}`}>
       {products?.length ? (
         <>
           <div className="row-product">

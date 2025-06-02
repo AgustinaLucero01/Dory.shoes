@@ -41,6 +41,22 @@ const Dashboard = ({}) => {
       });
       window.history.replaceState({}, document.title);
     }
+
+    if (location.state?.showConfirmNewAdmin) {
+      toast.success(`✅ Se agregó un nuevo admin con éxito`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      window.history.replaceState({}, document.title); // Limpia el state
+    }
+    
   }, [location.state]);
 
   return (
@@ -55,7 +71,7 @@ const Dashboard = ({}) => {
         <Route index element={<DashboardHome />}></Route>
         <Route path="crear-producto" element={<ProductForm />} />
         <Route path="editar-producto/:id" element={<ProductForm />} />
-        <Route path="agregar-admin" element={<Register role={"admin"} />} />
+        <Route path="agregar-admin" element={<Register isEdit={false} />} />
       </Routes>
     </div>
   );

@@ -23,6 +23,20 @@ const Home = () => {
       });
       window.history.replaceState({}, document.title);
     }
+    if (location.state?.showConfirmEdit) {
+      toast(`👢 Usuario modificado con éxito!`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      window.history.replaceState({}, document.title);
+    }
   }, [location.state]);
 
   const categorias = [

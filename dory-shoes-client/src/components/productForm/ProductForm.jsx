@@ -10,9 +10,11 @@ import {
   Alert,
 } from "react-bootstrap";
 import "./ProductForm.css";
+import { useAuth } from "../Service/auth/usercontext/UserContext";
 
 
 const ProductForm = () => {
+  const {token} = useAuth();
   const navigate = useNavigate();
   const { id } = useParams();
   //Si recibimos un id por parámetro, estamos editando un producto
@@ -39,7 +41,9 @@ const ProductForm = () => {
 
   useEffect(() => {
     if (isEdit) {
-      fetch(`http://localhost:3000/products/${id}`)
+      fetch(`http://localhost:3000/products/${id}`, {
+        headers: {Authorization: `Bearer ${token}`}
+      })
         .then((res) => res.json())
         .then((data) => {
           const sizesObj = {

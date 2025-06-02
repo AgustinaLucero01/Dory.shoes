@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Register from "../Register/Register";
 import { useAuth } from "../Service/auth/usercontext/UserContext";
-import { use } from "react";
+import { toast, Bounce, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EditProfile = () => {
   const { id } = useParams();
@@ -44,6 +45,12 @@ const EditProfile = () => {
       if (!res.ok) throw new Error("No se pudo eliminar el favorito.");
 
       fetchFavourites();
+      toast.error("💔 Producto eliminado de favoritos", {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "light",
+        transition: Bounce,
+      });
     } catch (err) {
       console.log(err.message);
     }
@@ -54,6 +61,7 @@ const EditProfile = () => {
       className="edit-profile-container"
       style={{ marginTop: "30vh", paddingRight: "2em" }}
     >
+      <ToastContainer />
       <div style={{ flex:1 , textAlign: "center" }}>
           <h2 style={{ paddingBottom: "2rem" }}>Editar Perfil</h2>
         </div>

@@ -82,7 +82,8 @@ export const addProductToCart = async (req, res) => {
   if (existingCartProduct) {
     existingCartProduct.quantity += quantity;
     await existingCartProduct.save();
-    const result = await existingCartProduct.findByPk(newCartProduct.id, {
+
+    const result = await CartProduct.findByPk(existingCartProduct.id, {
       include: [
         {
           model: ProductSize,
@@ -90,6 +91,7 @@ export const addProductToCart = async (req, res) => {
         },
       ],
     });
+
     return res.status(200).send(result);
   }
 
@@ -101,15 +103,15 @@ export const addProductToCart = async (req, res) => {
   });
 
   const result = await CartProduct.findByPk(newCartProduct.id, {
-      include: [
-        {
-          model: ProductSize,
-          include: [Product],
-        },
-      ],
-    });
+    include: [
+      {
+        model: ProductSize,
+        include: [Product],
+      },
+    ],
+  });
 
-    return res.status(201).json(result);
+  return res.status(201).json(result);
 };
 
 // DELETE -> Borra la instancia de CartProduct asociada con el carrito correspondiente
@@ -190,20 +192,21 @@ export const getCartDetails = async (req, res) => {
     }
 
     // Calcular total de productos sumando quantity de cada CartProduct
-    const totalProducts = cart.cartProducts.reduce((total, cp) => total + cp.quantity, 0);
+    const totalProducts = cart.cartProducts.reduce(
+      (total, cp) => total + cp.quantity,
+      0
+    );
 
     // Responder con el carrito + el total
     res.json({
       ...cart.toJSON(),
       totalProducts,
     });
-
   } catch (error) {
     console.error("Error al obtener el carrito:", error);
     res.status(500).json({ error });
   }
 };
-
 
 export const getCartByUser = async (userId) => {
   const cart = await Cart.findOne({ where: { userId } });
@@ -224,4 +227,3 @@ export const dropAllProductsFromCart = async (req, res) => {
     return res.status(500).json({ message: "Error al vaciar el carrito." });
   }
 };
-

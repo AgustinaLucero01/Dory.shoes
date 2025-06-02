@@ -9,7 +9,7 @@ import { useAuth } from "./../Service/auth/usercontext/UserContext.jsx";
 import Cart from "../Cart/Cart.jsx";
 import { Link } from "react-router-dom";
 
-const CustomNavbar = (carritoCantidad) => {
+const CustomNavbar = () => {
   const { id, token, role } = useAuth();
   const { products, countProduct } = useContext(CartContext);
   // manejamos el estado de "expanded" para definir si la navbar está abierta o no
@@ -33,6 +33,7 @@ const CustomNavbar = (carritoCantidad) => {
 
   const handleClose = () => {
     setExpanded(false);
+    setActive(false)
   };
 
   const toggleSearch = () => {
@@ -144,7 +145,7 @@ const CustomNavbar = (carritoCantidad) => {
           <div className="count-product">
             <span id="count-product">{Number(countProduct) || 0}</span>
           </div>
-          {active && <Cart isActive={true} />}
+          {active && <Cart isActive={active} onActive={setActive} />}
         </div>
       </Container>
     </Navbar>
