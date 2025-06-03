@@ -4,6 +4,8 @@ import { useNavigate} from "react-router-dom";
 import "./Dashboard.css";
 import {toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { MdEdit } from "react-icons/md";
+import { BsFillTrash3Fill } from "react-icons/bs";
 
 import ProductSearch from "../productSearch/ProductSearch";
 import { useAuth } from "../Service/auth/usercontext/UserContext";
@@ -114,18 +116,16 @@ const ProductsDashboard = ({ openConfirmModal }) => {
                 <td>${product.price}</td>
                 <td>
                   <Button
-                    variant="primary"
                     className="edit-button me-2"
                     onClick={() => handleProductForm(product.id)}
                   >
-                    Editar
+                    <MdEdit />
                   </Button>
                   <Button
-                    variant="danger"
                     className="edit-button"
                     onClick={() => handleShowDeleteModal(product.id)}
                   >
-                    Eliminar
+                    <BsFillTrash3Fill />
                   </Button>
                 </td>
               </tr>

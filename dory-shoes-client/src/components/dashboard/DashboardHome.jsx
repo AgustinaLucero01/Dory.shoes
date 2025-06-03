@@ -7,7 +7,7 @@ import UsersDashboard from "./UsersDashboard";
 import { useAuth } from "../Service/auth/usercontext/UserContext";
 
 const DashboardHome = () => {
-  const { role } = useAuth();
+  const { role, token } = useAuth();
 
   const [totalAmount, setTotalAmount] = useState(0);
   const [sales, setSales] = useState({ cantidad: 0, monto: 0 });
@@ -26,7 +26,9 @@ const DashboardHome = () => {
 
   const fetchSales = async () => {
     try {
-      const res = await fetch("http://localhost:3000/sales");
+      const res = await fetch("http://localhost:3000/sales", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await res.json();
       setSales(data.sales);
       setTotalAmount(data.totalAmount);
@@ -67,13 +69,17 @@ const DashboardHome = () => {
           <Col>
             <div className="tab-selector">
               <div
-                className={`tab-option ${activeTab === "usuarios" ? "active" : ""}`}
+                className={`tab-option ${
+                  activeTab === "usuarios" ? "active" : ""
+                }`}
                 onClick={() => setActiveTab("usuarios")}
               >
                 Usuarios
               </div>
               <div
-                className={`tab-option ${activeTab === "productos" ? "active" : ""}`}
+                className={`tab-option ${
+                  activeTab === "productos" ? "active" : ""
+                }`}
                 onClick={() => setActiveTab("productos")}
               >
                 Productos
@@ -102,7 +108,7 @@ const DashboardHome = () => {
         }}
         title={modalConfig.title}
         message={modalConfig.message}
-        confirmText="Sí, eliminar"
+        confirmText="Sí, estoy segura/o"
         cancelText="Cancelar"
       />
     </Container>

@@ -32,7 +32,7 @@ const Shopping = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/getUser`, {
+      const response = await fetch(`http://localhost:3000/getUser/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) {
@@ -115,14 +115,9 @@ const Shopping = () => {
                 </div>
                 <div className="inf-summary-text">
                   <h2>{product.productSize.product.name}</h2>
-                  <span>Talle: {product.productSize.size}</span>
+                  <p>Talle: {product.productSize.size}</p>
                   <p>Precio unitario: ${product.productSize.product.price}</p>
                   <p>Cantidad: {product.quantity}</p>
-                  <p>
-                    Total: $
-                    {parseInt(product.productSize.product.price) *
-                      parseInt(product.quantity)}
-                  </p>
                 </div>
               </div>
             ))
@@ -130,7 +125,7 @@ const Shopping = () => {
             <p>No hay productos en el carrito</p>
           )}
 
-          <span> <b>Total</b>: ${total}</span>
+          <span className="cart-total"> <b>Total:</b>${total}</span>
           <div className="btn-summary">
             <button onClick={handleBack}>Seguir comprando</button>
           </div>

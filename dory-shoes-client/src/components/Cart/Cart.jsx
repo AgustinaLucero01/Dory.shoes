@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { CartContext } from "../Service/cartContext/CartContext.jsx";
+import { CartContext } from "../Service/CartContext/CartContext.jsx";
 import { toast, Bounce } from "react-toastify";
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { useAuth } from "../Service/auth/usercontext/UserContext.jsx";

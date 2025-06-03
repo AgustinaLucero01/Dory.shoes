@@ -23,8 +23,10 @@ import Protected from "./components/protected/Protected";
 import PrivateRoute from "./components/privateRoute/PrivateRoute";
 import Unauthorized from "./components/errors/Unauthorized";
 import Shopping from "./components/Shopping/Shopping";
+import useScrollToTop from "./hooks/useScrollToTop";
 
 const App = () => {
+  useScrollToTop();
   return (
     <Routes>
       <Route element={<Layout />}>

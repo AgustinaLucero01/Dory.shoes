@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Register from "../Register/Register";
 import { useAuth } from "../Service/auth/usercontext/UserContext";
 import { toast, Bounce, ToastContainer } from "react-toastify";
@@ -17,13 +17,6 @@ const EditProfile = () => {
 
   const handleCloseUser = () => {
     handleLogout();
-    toast.error("Ha cerrado sesión", {
-        position: "top-right",
-        autoClose: 5000,
-        theme: "light",
-        transition: Bounce,
-      });
-    navigate("/");
   };
 
   const toggleModal = () => {
@@ -71,7 +64,7 @@ const EditProfile = () => {
 
   const handleDeleteUser = async () => {
     try {
-      await fetch(`http://localhost:3000/deleteUser`, {
+      await fetch(`http://localhost:3000/deleteUser/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -80,7 +73,6 @@ const EditProfile = () => {
       });
       setShowModal(false);
       handleLogout();
-      navigate("/");
     } catch (err) {
       console.log("Error al eliminar el usuario:", err);
     }
@@ -109,12 +101,12 @@ const EditProfile = () => {
           <Register role={"user"} isEdit={true} />
         </div>
 
-        {/* Columna derecha: favoritos */}
+        {/* Columna derecha: favoritos y acciones de cuenta */}
 
         <div style={{ flex: "1 1 400px", minWidth: "300px" }}>
           <div
             style={{
-              border: "1px solid #ccc",
+              border: "1px solid rgb(157, 157, 157)",
               borderRadius: "10px",
               padding: "1.5rem",
               display: "flex",
@@ -123,7 +115,7 @@ const EditProfile = () => {
               gap: "1rem",
               maxWidth: "500px",
               width: "100%",
-              marginBottom: "20px"
+              marginBottom: "20px",
             }}
           >
             <h4 style={{ margin: 0 }}>Acciones de cuenta</h4>
@@ -173,7 +165,7 @@ const EditProfile = () => {
                     justifyContent: "space-between",
                     alignItems: "center",
                     gap: "1rem",
-                    width: "600px"
+                    width: "600px",
                   }}
                 >
                   <div
@@ -212,7 +204,7 @@ const EditProfile = () => {
                       cursor: "pointer",
                     }}
                   >
-                    <BsFillTrash3Fill/>
+                    <BsFillTrash3Fill />
                   </button>
                 </li>
               ))}

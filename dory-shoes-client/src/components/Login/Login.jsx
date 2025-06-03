@@ -1,7 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./Login.css";
-// import img from "public/images/Login-register/imgen-login.jpg"
-// import Logo from "public/images/Login-register/LogoLogin.jpeg"
 import { FaUser } from "react-icons/fa";
 import { CiLock } from "react-icons/ci";
 import { FaArrowRight } from "react-icons/fa";
@@ -115,7 +113,7 @@ const Login = () => {
     <div className="Login-Box">
       <div className="user-login">
         <img
-          src="images\logoLogin.jpg"
+          src="/images/logoLogin.jpg"
           alt="Logo de login"
           onClick={handleNavigateHome}
         />
@@ -148,7 +146,7 @@ const Login = () => {
           </div>
           {error.password && <p className="error-text">Completa el campo</p>}
           {authenticationError.active && (
-            <p className="error-text">{authenticationError.message}</p>
+            <p className="error-text">Email y/o contraseña incorrectos</p>
           )}
 
           <div className="submit">

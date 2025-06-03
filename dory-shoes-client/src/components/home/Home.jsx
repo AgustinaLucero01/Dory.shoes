@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import {toast, ToastContainer, Bounce } from "react-toastify";
-import {useLocation } from "react-router-dom";
+import { toast, ToastContainer, Bounce } from "react-toastify";
+import { useLocation } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./home.css";
@@ -9,21 +9,30 @@ import "./home.css";
 const Home = () => {
   const location = useLocation();
   useEffect(() => {
+    if (location.state?.message) {
+      const type = location.state?.type || "info";
+      toast[type](location.state.message);
+    }
     if (location.state?.showWelcomeToast) {
-      toast(`👢 Bienvenido/a a la tienda, ${location.state?.userName || "invitado"}`, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "light",
-        transition: Bounce,
-      });
+      toast(
+        `👢 Bienvenido/a a la tienda, ${
+          location.state?.userName || "invitado"
+        }`,
+        {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "light",
+          transition: Bounce,
+        }
+      );
       window.history.replaceState({}, document.title);
     }
     if (location.state?.showConfirmEdit) {
-      toast(`👢 Usuario modificado con éxito`, {
+      toast["info"](`Usuario modificado con éxito`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -42,7 +51,7 @@ const Home = () => {
     { nombre: "Zapatillas", imagen: "/images/Zapatillas/zapatilla4.jpg" },
     { nombre: "Botas", imagen: "/images/Botas/bota2.jpg" },
     { nombre: "Zapatos", imagen: "/images/Zapatos/zapato3.jpg" },
-    { nombre: "Pantuflas", imagen: "/images/Pantuflas/pantu2.jpg" }
+    { nombre: "Pantuflas", imagen: "/images/Pantuflas/pantu2.jpg" },
   ];
 
   return (
@@ -65,11 +74,7 @@ const Home = () => {
                 alt={`Producto ${i + 1}`}
               />
             </div>
-
-
           ))}
-
-
         </div>
 
         <button
@@ -92,7 +97,6 @@ const Home = () => {
 
       <div className="linea-gris"></div>
 
-    
       <div className="categorias-grid">
         {categorias.map((cat, i) => (
           <Link to={`/categoria/${cat.nombre.toLowerCase()}`} key={i}>
@@ -112,5 +116,3 @@ const Home = () => {
 };
 
 export default Home;
-
-

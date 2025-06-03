@@ -9,7 +9,8 @@ const CartProvider = ({ children }) => {
   const [countProduct, setCountProduct] = useState();
   const [products, setProducts] = useState([]);
   const [cartId, setCartId] = useState();
-  //Leer carrito desde backend al cargar la app usando fech:
+
+  //Leer carrito desde backend al cargar la app usando fetch
   useEffect(() => {
     const fetchCart = async () => {
       try {
@@ -17,7 +18,7 @@ const CartProvider = ({ children }) => {
           headers: {
           Authorization: `Bearer ${token}`},
         },
-        ); // sin https si es local
+        );
         const data = await response.json();
         setProducts(data.cartProducts);
         setCountProduct(data.totalProducts);
@@ -29,22 +30,8 @@ const CartProvider = ({ children }) => {
     if (token) {
       fetchCart();
     }
-  }, []);
+  }, [token]);
 
-  {
-    /* useEffect para guardar los datos en el localStorage cuando cambien*/
-  }
-  {
-    /* useEffect es una función que se ejecuta cuando se ejecuta la función anterior*/
-  }
-  // useEffect(()=>{
-  //   localStorage.setItem('countProduct', JSON.stringify(countProduct));
-  //   localStorage.setItem('cartProducts', JSON.stringify(products));
-  // },[countProduct, products])
-
-  {
-    /* value es el valor que se pasa a todos los componentes hijos */
-  }
   return (
     <CartContext.Provider
       value={{

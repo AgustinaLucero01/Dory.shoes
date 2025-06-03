@@ -6,7 +6,7 @@ const router = Router();
 
 router.post("/addFavourite", verifyToken, addFavourite);
 
-router.delete("/deleteFavourite/:id", deleteFavourite);
+router.delete("/deleteFavourite/:id", verifyToken, deleteFavourite);
 
 router.get("/showFavourites", verifyToken, showAllUserFavourites);
 

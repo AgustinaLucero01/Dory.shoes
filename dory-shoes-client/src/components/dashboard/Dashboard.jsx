@@ -42,8 +42,8 @@ const Dashboard = ({}) => {
       window.history.replaceState({}, document.title);
     }
 
-    if (location.state?.showConfirmNewAdmin) {
-      toast.success(`✅ Se agregó un nuevo admin con éxito`, {
+    if (location.state?.showConfirmEdit) {
+      toast.success(`✅ Los datos del usuario se modificaron con éxito`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

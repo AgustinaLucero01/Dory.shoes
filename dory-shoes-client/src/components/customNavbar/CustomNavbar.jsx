@@ -33,11 +33,11 @@ const CustomNavbar = () => {
 
   const handleClose = () => {
     setExpanded(false);
-    setActive(false)
+    setActive(false);
   };
 
   const toggleSearch = () => {
-    handleClose()
+    handleClose();
     setShowSearch(!showSearch);
   };
 
@@ -114,7 +114,7 @@ const CustomNavbar = () => {
 
         <Navbar.Brand as={Link} to="/" onClick={handleClose}>
           <img
-            src="../../../images/DoryShoes-Logo.jpg"
+            src="/images/DoryShoes-Logo.jpg"
             className="d-inline-block align-top"
             alt="Logo de Dory Shoes"
           />
@@ -136,18 +136,25 @@ const CustomNavbar = () => {
             style={{ cursor: "pointer" }}
             onClick={() => {
               if (token) {
-                handleClose()
+                handleClose();
                 navigate(`/editProfile/${id}`);
               } else {
-                handleClose()
+                handleClose();
                 navigate("/login");
               }
             }}
           />
-          <FaShoppingCart className="icon" onClick={() => setActive(!active)} />
-          <div className="count-product">
-            <span id="count-product">{Number(countProduct) || 0}</span>
-          </div>
+          {token && (
+            <FaShoppingCart
+              className="icon"
+              onClick={() => setActive(!active)}
+            />
+          )}
+          {token && (
+            <div className="count-product">
+              <span id="count-product">{Number(countProduct) || 0}</span>
+            </div>
+          )}
           {active && <Cart isActive={active} onActive={setActive} />}
         </div>
       </Container>

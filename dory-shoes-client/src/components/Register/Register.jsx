@@ -34,6 +34,7 @@ const Registro = ({ isEdit }) => {
       setZipCode(user.zipCode || "");
       setPassword("Password1");
       setNewPassword("Password1");
+      setActive(user.active || false);
     }
   }, [user]);
 
@@ -62,6 +63,7 @@ const Registro = ({ isEdit }) => {
   const [newPassword, setNewPassword] = useState("");
   const [address, setAddress] = useState("");
   const [zipCode, setZipCode] = useState("");
+  const [active, setActive] = useState(false);
 
   const nameRef = useRef(null);
   const emailRef = useRef(null);
@@ -122,6 +124,10 @@ const Registro = ({ isEdit }) => {
   const handleOnChangeNewPW = (event) => {
     setNewPassword(event.target.value);
     setErrors({ ...errors, newPassword: false });
+  };
+
+  const handleOnChangeActive = (event) => {
+    setActive(event.target.checked);
   };
 
   const handleSubmit = async (event) => {
@@ -185,6 +191,7 @@ const Registro = ({ isEdit }) => {
           phone,
           address,
           zipCode,
+          active
         }
       : {
           name,
@@ -208,17 +215,15 @@ const Registro = ({ isEdit }) => {
         body: JSON.stringify(formData),
       });
 
+      if (isEdit) {
+        navigate(from, { state: { showConfirmEdit: true } });
+      }
+
       if (from == "/" && !isEdit) {
         navigate("/", { state: { showWelcomeToast: true } });
       }
       if (from == "/login") {
         navigate("/login", { state: { showConfirmRegister: true } });
-      }
-      if (from == "/" && isEdit) {
-        navigate("/", { state: { showConfirmEdit: true } });
-      }
-      if (from == "/dashboard") {
-        navigate("/dashboard", { state: { showConfirmNewAdmin: true } });
       }
     } catch (err) {
       console.log(`Error al enviar el formulario:${err}`);
@@ -256,7 +261,7 @@ const Registro = ({ isEdit }) => {
           />
           {errors.email && <p className="error-text">Complete el campo</p>}
 
-          {isEdit && from == "/dashboard" && (
+          {from == "/dashboard" && (
             <select name="role" value={role} onChange={handleOnChangeRole}>
               {ROLES.map((role) => (
                 <option key={role.value} value={role.value}>
@@ -319,6 +324,17 @@ const Registro = ({ isEdit }) => {
           />
           {errors.newPassword && (
             <p className="error-text">Asegurate que la contraseña sea igual</p>
+          )}
+          {from == "/dashboard" && (
+            <label style={{ display: "block", marginTop: "10px" }}>
+              <input
+                style={{ maxHeight: "20px", maxWidth: "50px" }}
+                type="checkbox"
+                checked={active}
+                onChange={handleOnChangeActive}
+              />{" "}
+              Usuario activo
+            </label>
           )}
 
           <Button type="submit">Enviar</Button>

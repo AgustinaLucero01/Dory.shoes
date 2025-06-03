@@ -51,11 +51,11 @@ const Faq = () => {
                             <div className="info-shipping">
                                 <div className="title-with-icon" onClick={handleClick}>
                                     <SlEnvolopeLetter className="icon-shipping" />
-                                    <h2>¿Como comprar?</h2>
+                                    <h2>¿Cómo comprar?</h2>
                                 </div>
                                 {showBuy && (
                                     <p>
-                                        Si te gustó un producto de nuestra página,guardalo en el carrito. Al terminar la compra, se enviara un gmail con tus productos, el precio total y el contacto del vendedor para acordar el tipo de pago. </p>
+                                        Si te gustó un producto de nuestra página, guardalo en el carrito. Al terminar la compra, se enviará un mail con los detalles de la compra y el contacto del vendedor para acordar el tipo de pago. </p>
                                 )}
                             </div>
                         </div>
@@ -69,8 +69,8 @@ const Faq = () => {
                                 </div>
                                 {showEnvio && (
                                     <p>
-                                        Luego de haber hablado contigo, debemos agendar el envío y cuál será la forma que elegirás para realizarlo.
-                                        Puede ser por correo argentino o un lugar de encuentro.
+                                        Luego de habernos comunicado, debemos coordinar el envío y definir la forma que elegirás para realizarlo.
+                                        Puede ser por Correo Argentino o en un punto de retiro.
                                     </p>
                                 )}
                             </div>
@@ -85,7 +85,7 @@ const Faq = () => {
                                 </div>
                                 {showSeña && (
                                     <p>
-                                        Por ultimo se seña el producto con una cantidad de dinero acordado y se paga el restante al mes siguiente </p>
+                                        Por último se seña el producto con una cantidad de dinero acordado y se paga el restante al mes siguiente. </p>
                                 )}
                             </div>
                         </div>
@@ -95,12 +95,12 @@ const Faq = () => {
                             <div className="info-shipping">
                                 <div className="title-with-icon" onClick={handledev}>
                                     <TbShoe className="icon-shipping" />
-                                    <h2>¿Cómo es la politica de devolucion?</h2>
+                                    <h2>¿Cómo es la política de devolución?</h2>
                                 </div>
                                 {showdev && (
                                     <p>
-                                        Se pueden realizar cambios en caso de fallas en color,talle o modelo.
-                                        Siempre que el producto no este usado.
+                                        Se pueden realizar cambios en caso de fallas en color, talle o modelo.
+                                        Siempre que el producto no esté usado.
                                     </p>
                                 )}
                             </div>

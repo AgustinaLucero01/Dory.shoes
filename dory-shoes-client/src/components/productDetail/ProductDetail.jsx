@@ -159,6 +159,9 @@ function ProductDetail() {
         `http://localhost:3000/deleteFavourite/${favourite.id}`,
         {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 

@@ -15,6 +15,12 @@ const UsersDashboard = ({ openConfirmModal }) => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
+  const roleLabels = {
+    user: "Usuario",
+    admin: "Administrador",
+    superAdmin: "Super Administrador",
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
@@ -31,7 +37,7 @@ const UsersDashboard = ({ openConfirmModal }) => {
     }
   };
 
-  const eliminateAdmin = async (id) => {
+  const eliminateUser = async (id) => {
     try {
       await fetch(`http://localhost:3000/deleteUser/${id}`, {
         method: "PUT",
@@ -41,7 +47,7 @@ const UsersDashboard = ({ openConfirmModal }) => {
         },
       });
       fetchUsers();
-      toast.success(`👤 Administrador eliminado con éxito`, {
+      toast.success(`👤 Usuario desactivado con éxito`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -59,9 +65,9 @@ const UsersDashboard = ({ openConfirmModal }) => {
 
   const handleShowDeleteModal = (id) => {
     openConfirmModal({
-      title: "Eliminar administrador",
-      message: "¿Estás segura/o de que querés eliminar este administrador?",
-      onConfirm: () => eliminateAdmin(id),
+      title: "Desactivar usuario",
+      message: "¿Estás segura/o de que querés desactivar este usuario?",
+      onConfirm: () => eliminateUser(id),
     });
   };
 
@@ -100,15 +106,31 @@ const UsersDashboard = ({ openConfirmModal }) => {
                 <tr key={user.id}>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
-                  <td>{user.role}</td>
-                  <td>{user.active ? "Activo" : "Inactivo"}</td>
+                  <td>{roleLabels[user.role] || user.role}</td>
+                  <td>
+                    <span
+                      className={
+                        user.active ? "status-activo" : "status-inactivo"
+                      }
+                    >
+                      {user.active ? "Activo" : "Inactivo"}
+                    </span>
+                  </td>
                   <td className="d-flex gap-2 flex-wrap">
-                    <Button className="user-button" onClick={() => handleEditUser(user.id)}>                     
-                      <MdEdit/>
+                    <Button
+                      className="edit-button"
+                      onClick={() => handleEditUser(user.id)}
+                    >
+                      <MdEdit />
                     </Button>
-                    <Button className="user-button" onClick={() => handleShowDeleteModal(user.id)}>
-                      <BsFillTrash3Fill/>
-                    </Button>
+                    {user.active && (
+                      <Button
+                        className="edit-button"
+                        onClick={() => handleShowDeleteModal(user.id)}
+                      >
+                        <BsFillTrash3Fill />
+                      </Button>
+                    )}
                   </td>
                 </tr>
               ))}

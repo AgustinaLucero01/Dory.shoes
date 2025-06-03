@@ -94,13 +94,13 @@ export const getProductById = async (req, res) => {
 
 // POST -> crea un nuevo producto
 export const createProduct = async (req, res) => {
-  const { name, description, price, imageUrl, category, sizes } = req.body;
+  const { name, price, imageUrl, category, sizes } = req.body;
 
-  if (!name || !description || !price || !sizes) {
+  if (!name || !price || !sizes) {
     return res
       .status(400)
       .send({
-        message: "Nombre, descripción, precio y talles son requeridos.",
+        message: "Nombre, precio y talles son requeridos.",
       });
   }
 
@@ -112,7 +112,6 @@ export const createProduct = async (req, res) => {
   try {
     const newProduct = await Product.create({
       name,
-      description,
       price,
       imageUrl,
       category,
@@ -143,7 +142,7 @@ export const createProduct = async (req, res) => {
 // PUT -> Modificar datos de un producto especifico
 export const updateProduct = async (req, res) => {
   const { id } = req.params;
-  const { name, description, price, imageUrl, category, sizes } = req.body;
+  const { name, price, imageUrl, category, sizes } = req.body;
 
   const product = await Product.findByPk(id);
 
@@ -154,7 +153,6 @@ export const updateProduct = async (req, res) => {
   try {
     await product.update({
       name,
-      description,
       price,
       imageUrl,
       category,

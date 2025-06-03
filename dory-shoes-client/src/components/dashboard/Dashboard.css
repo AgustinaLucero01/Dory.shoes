@@ -14,16 +14,6 @@
     background-color: #c6c4c4;
 }
 
-.edit-button {
-    background-color: #6D9DC5;
-    margin-right: 5px;
-    margin-bottom: 12px !important;
-    border: 1px solid #ccc !important;
-}
-
-.edit-button:hover{
-    background-color: #5C8DB6;
-}
 
 .tab-selector {
   display: flex;
@@ -45,14 +35,32 @@
   background-color: #f8f9fa;
 }
 
-.user-button {
+.edit-button {
     background-color: transparent;
     color: black;
     border: none;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
 }
 
-.user-button:hover {
+.edit-button:hover {
     background-color: transparent;
     color: rgba(0, 0, 0, 0.281);
+}
+
+.status-activo {
+  background-color: #d0ebff; /* azul claro */
+  color: #0b5394;
+  padding: 5px 8px;
+  border-radius: 15px;
+  display: inline-block;
+
+}
+
+.status-inactivo {
+  background-color: #ffd6d6; /* rojo claro */
+  color: #990000;
+  padding: 4px 8px;
+  border-radius:15px;
+  display: inline-block;
+
 }

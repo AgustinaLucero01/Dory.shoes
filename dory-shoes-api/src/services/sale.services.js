@@ -4,7 +4,7 @@ import { User } from "../models/User.js";
 import { CartProduct } from "../models/CartProduct.js";
 import { ProductSize } from "../models/ProductSize.js"
 
-// POST -> crea una nueva venta y vacía el carrito del usuario
+// POST -> crea una nueva venta, modifica el stock y vacía el carrito del usuario
 export const createSale = async (req, res) => {
   try {
     const { userId, amount, products } = req.body;
@@ -40,6 +40,7 @@ export const createSale = async (req, res) => {
       where: { cartId: cart.id },
     });
 
+    // Para todos los productos comprados, modificamos el stock disponible
     for (const item of products) {
       const productSizeId = item.productSizeId;
       const quantity = item.quantity;
@@ -58,12 +59,11 @@ export const createSale = async (req, res) => {
       // Descontar stock
       productSize.stock -= quantity;
 
-
-        await productSize.save();
+      await productSize.save();
     }
 
     return res.status(200).json({
-      message: "Venta realizada con éxito. Carrito vaciado.",
+      message: "Venta realizada con éxito, carrito vaciado y stock actualizado.",
       sale: newSale,
     });
 
@@ -73,7 +73,7 @@ export const createSale = async (req, res) => {
   }
 };
 
-// GET -> todos los productos que están disponibles
+// GET -> todas las ventas realizadas y el total ganado (suma de todas las ventas)
 export const showAllSales = async (req, res) => {
   try {
     const sales = await Sale.findAll();

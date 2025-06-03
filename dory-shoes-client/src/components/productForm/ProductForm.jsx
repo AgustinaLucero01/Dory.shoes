@@ -22,7 +22,6 @@ const ProductForm = () => {
 
   const [formData, setFormData] = useState({
     name: "",
-    description: "",
     price: "",
     imageUrl: "",
     category: "botas",
@@ -60,7 +59,6 @@ const ProductForm = () => {
 
           setFormData({
             name: data.name,
-            description: data.description,
             price: data.price,
             imageUrl: data.imageUrl,
             category: data.category,
@@ -106,7 +104,6 @@ const ProductForm = () => {
     // Validación manual de campos obligatorios
     const newErrors = {};
     if (!formData.name.trim()) newErrors.name = true;
-    if (!formData.description.trim()) newErrors.description = true;
     if (!formData.price) newErrors.price = true;
 
     setErrors(newErrors);
@@ -160,21 +157,6 @@ const ProductForm = () => {
                 value={formData.name}
                 onChange={handleChange}
                 isInvalid={errors.name}
-              />
-              <Form.Control.Feedback type="invalid">
-                Este campo es obligatorio.
-              </Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formDescription">
-              <Form.Label>Descripción</Form.Label>
-              <Form.Control
-                as="textarea"
-                name="description"
-                rows={3}
-                value={formData.description}
-                onChange={handleChange}
-                isInvalid={errors.description}
               />
               <Form.Control.Feedback type="invalid">
                 Este campo es obligatorio.

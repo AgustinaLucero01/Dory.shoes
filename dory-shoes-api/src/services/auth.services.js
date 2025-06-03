@@ -273,7 +273,6 @@ export const updateUser = async (req, res) => {
   }
 };
 
-
 //GET -> Devuelve todos los datos de un usuario específico
 export const getUserById = async (req, res) => {
   const { id } = req.params;
@@ -282,15 +281,12 @@ export const getUserById = async (req, res) => {
   if (!user) {
     return res.status(404).send({ message: "Usuario no encontrado." });
   }
-  if (!user.active) {
-    return res.status(400).json({ message: "El usuario está inactivo." });
-  }
   res.json(user);
 };
 
 //PUT -> Modifica el atributo "active" del usuario, no lo elimina permanentemente
 export const deleteUser = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
 
   try {
     const user = await User.findOne({ where: { id, active: 1 } });
@@ -310,17 +306,28 @@ export const deleteUser = async (req, res) => {
   }
 };
 
-//GET -> Trae a todos los usuarios registrados, activos o no
+//GET -> Trae a todos los usuarios registrados, primero los activos y después los inactivos
 export const getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
-    if (!users) {
-      res.status(400).json({ message: "No hay usuarios para mostrar" });
+    const users = await User.findAll({
+      order: [["active", "DESC"]],
+    });
+
+    if (!users || users.length === 0) {
+      return res.status(400).json({ message: "No hay usuarios para mostrar" });
     }
 
     res.json(users);
   } catch (error) {
-    console.error("Error al obtener usuarios con rol de administrador:", error);
-    res.json({ message: error });
+    console.error("Error al obtener usuarios:", error);
+    res.status(500).json({ message: "Error del servidor" });
   }
+};
+
+export const dropUsers = async (req, res) => {
+  const users = await User.destroy({
+    where: { role: "user" },
+  });
+
+  return res.status(200).json({ message: "Usuarios eliminados." });
 };

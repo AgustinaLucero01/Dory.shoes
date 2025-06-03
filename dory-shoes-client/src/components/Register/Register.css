@@ -17,7 +17,7 @@
 
 .Registro-box input, select{
     height: 55px;
-    width: 470px;
+    width: 500px;
     cursor: pointer;
 }
 
@@ -45,3 +45,5 @@
     font-size: 14px;
     margin-top: 5px;
   }
+
+ 
