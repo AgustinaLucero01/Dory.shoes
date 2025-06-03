@@ -3,27 +3,28 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../Service/cartContext/CartContext.jsx";
 import { toast, Bounce } from "react-toastify";
+import { BsFillTrash3Fill } from "react-icons/bs";
 import { useAuth } from "../Service/auth/usercontext/UserContext.jsx";
 import "react-toastify/dist/ReactToastify.css";
 import "./cart.css";
 
 const Cart = ({ isActive, onActive }) => {
-  const { countProduct, products, setProducts, setCountProduct, cartId } = useContext(CartContext);
+  const { countProduct, products, setProducts, setCountProduct, cartId } =
+    useContext(CartContext);
 
   const [total, setTotal] = useState();
-  
 
   const navigate = useNavigate();
   const { token } = useAuth();
 
   useEffect(() => {
-  const totalCalculado = products?.reduce((acc, product) => {
-    const precio = product.productSize.product.price;
-    const cantidad = product.quantity;
-    return acc + precio * cantidad;
-  }, 0);
-  setTotal(totalCalculado);
-}, [products]);
+    const totalCalculado = products?.reduce((acc, product) => {
+      const precio = product.productSize.product.price;
+      const cantidad = product.quantity;
+      return acc + precio * cantidad;
+    }, 0);
+    setTotal(totalCalculado);
+  }, [products]);
 
   const onDeleteProduct = async (productId) => {
     const response = await fetch(`http://localhost:3000/cart`, {
@@ -37,12 +38,12 @@ const Cart = ({ isActive, onActive }) => {
       }),
     });
     if (response.ok) {
-      toast.success("🗑️ Producto eliminado", {
-        position: "top-left",
+      toast.error("🗑️ Producto eliminado", {
+        position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: false,
-        pauseOnHover: true,
+        pauseOnHover: false,
         draggable: true,
         progress: undefined,
         theme: "light",
@@ -57,7 +58,7 @@ const Cart = ({ isActive, onActive }) => {
     }
   };
 
-  const onclickCart = async() => {
+  const onclickCart = async () => {
     setProducts([]);
     setTotal(0);
     setCountProduct(0);
@@ -73,10 +74,9 @@ const Cart = ({ isActive, onActive }) => {
       }),
     });
 
-    if (response.ok){
-      console.log("Carrito vaciado")
+    if (response.ok) {
+      console.log("Carrito vaciado");
     }
-
   };
 
   const handlenav = () => {
@@ -89,7 +89,7 @@ const Cart = ({ isActive, onActive }) => {
       });
       return;
     }
-    onActive(false)
+    onActive(false);
     navigate("/shopping");
   };
 
@@ -97,31 +97,28 @@ const Cart = ({ isActive, onActive }) => {
     <div className={`container-cart-products ${isActive ? "" : "hidden-cart"}`}>
       {products?.length ? (
         <>
-          <div className="row-product">
-            {products.map((product) => (
-              <div className="cart-product" key={product.id}>
-                {" "}
-                {/* key es para que cada producto se renderice una vez */}
-                <div className="info-cart-product">
-                  <span className="cantidad-producto-carrito">
-                    {product.quantity}
-                  </span>
-                  <p className="titulo-producto-carrito">
-                    {product.productSize.product.name}({product.productSize.size})
-                  </p>
-                  <span className="precio-producto-carrito">
-                    ${product.productSize.product.price}
-                  </span>
-                </div>
-                <button onClick={() => onDeleteProduct(product.id)}>
-                  Eliminar
-                </button>
-              </div>
-            ))}
+          <div className="cart-header-row">
+            <span>Cant.</span>
+            <span>Producto</span>
+            <span>Precio</span>
+            <span>Acción</span>
           </div>
+
+          {products.map((product) => (
+            <div className="cart-product-row" key={product.id}>
+              <span>{product.quantity}</span>
+              <span>
+                {product.productSize.product.name} ({product.productSize.size})
+              </span>
+              <span>${product.productSize.product.price}</span>
+              <button onClick={() => onDeleteProduct(product.id)}>
+                <BsFillTrash3Fill />
+              </button>
+            </div>
+          ))}
+
           <div className="cart-total">
-            <h3>Total:</h3>
-            <span>${total}</span>
+            <h5><b>Total</b>: ${total}</h5>
           </div>
           <button className="btn-clear-all" onClick={onclickCart}>
             Vaciar carrito

@@ -71,7 +71,7 @@ const Dashboard = ({}) => {
         <Route index element={<DashboardHome />}></Route>
         <Route path="crear-producto" element={<ProductForm />} />
         <Route path="editar-producto/:id" element={<ProductForm />} />
-        <Route path="agregar-admin" element={<Register isEdit={false} />} />
+        <Route path="editar-usuario/:userId" element={<Register isEdit={true} />} />
       </Routes>
     </div>
   );

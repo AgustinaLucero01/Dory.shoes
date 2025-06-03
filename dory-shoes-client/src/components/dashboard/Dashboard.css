@@ -24,3 +24,35 @@
 .edit-button:hover{
     background-color: #5C8DB6;
 }
+
+.tab-selector {
+  display: flex;
+  border-bottom: 2px solid #ccc;
+}
+
+.tab-option {
+  flex: 1;
+  text-align: center;
+  padding: 18px 0;
+  cursor: pointer;
+  font-weight: bold;
+  border-top: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.tab-option.active {
+  border-top: 2px solid #000; /* Azul Bootstrap */
+  background-color: #f8f9fa;
+}
+
+.user-button {
+    background-color: transparent;
+    color: black;
+    border: none;
+    font-size: 1.3rem;
+}
+
+.user-button:hover {
+    background-color: transparent;
+    color: rgba(0, 0, 0, 0.281);
+}

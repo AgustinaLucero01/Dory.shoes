@@ -19,7 +19,7 @@ export const verifyToken = (req, res, next) => {
   }
 
   try {
-    //Clave secreta = guardar en .env
+    //Clave secreta
     const payload = jwt.verify(token, `programacion3-2025`);
 
     // Guardo el usuario en la request (sirve para el contexto del carrito)
@@ -51,6 +51,7 @@ export const authorizeRole = (...rolesPermitidos) => {
 };
 
 //Middleware para rutas mixtas: se usan con usuarios registrados y con invitados
+//Se usa para ProductDetail, ya que trae datos diferentes si el usuario está logueado o no
 export const optionalAuth = (req, res, next) => {
   const header = req.header("Authorization") || "";
   const token = header.split(" ")[1];
@@ -65,7 +66,7 @@ export const optionalAuth = (req, res, next) => {
     req.user = payload;
   } catch (error) {
     // Si el token es inválido, también continúa como usuario anónimo
-    console.warn("Token inválido, accediendo como usuario no autenticado");
+    console.log("Token inválido, accediendo como usuario no autenticado");
   }
 
   next();
@@ -74,6 +75,7 @@ export const optionalAuth = (req, res, next) => {
 // POST -> Registra un nuevo usuario en la BBDD
 export const registerUser = async (req, res) => {
   try {
+    // Valida los datos ingresados por el usuario
     const result = validateRegisterUser(req.body);
 
     if (result.error) {
@@ -87,10 +89,11 @@ export const registerUser = async (req, res) => {
       where: { email },
     });
 
-    if (user)
+    if (user) {
       return res
         .status(400)
         .send({ message: "Este email ya está registrado." });
+    }
 
     // Configura 10 rondas de salt
     const saltRounds = 10;
@@ -160,6 +163,7 @@ const validateRegisterUser = (req) => {
 // POST -> Autentica al usuario que quiere iniciar sesión
 export const loginUser = async (req, res) => {
   try {
+    //Valida los datos ingresados por el usuario
     const result = validateLoginUser(req.body);
 
     if (result.error) {
@@ -187,9 +191,10 @@ export const loginUser = async (req, res) => {
         .status(401)
         .send({ message: "Email y/o contraseña incorrecta" });
 
-    // Guardar en .env
+    //Esto debería incluirse en un .env
     const secretKey = "programacion3-2025";
 
+    //Mandamos datos en el JWT para usarlos en otros servicios
     const token = jwt.sign({ id: user.id, email, role: user.role }, secretKey, {
       expiresIn: "1h",
     });
@@ -217,15 +222,19 @@ const validateLoginUser = (req) => {
     };
   }
 
-
+  if (!password) {
+    return {
+      error: false,
+      message: "Contraseña inválida.",
+    };
+  }
 
   return result;
 };
 
 // PUT -> Modifica los datos del usuario
 export const updateUser = async (req, res) => {
-  const  id  = req.user.id;
-  const { name, email, password, phone, address, zipCode, role, active } =
+  const { id, name, email, password, phone, address, zipCode, role, active } =
     req.body;
 
   try {
@@ -264,27 +273,10 @@ export const updateUser = async (req, res) => {
   }
 };
 
-export const getAllAdmins = async (req, res) => {
-  try {
-    const admins = await User.findAll({
-      where: {
-        role: "admin",
-        active: 1,
-      },
-    });
-    if (!admins) {
-      res.status(400).json({ message: "No hay usuarios para mostrar" });
-    }
 
-    res.json(admins);
-  } catch (error) {
-    console.error("Error al obtener usuarios con rol de administrador:", error);
-    res.json({ message: error });
-  }
-};
-
+//GET -> Devuelve todos los datos de un usuario específico
 export const getUserById = async (req, res) => {
-  const id = req.user.id;
+  const { id } = req.params;
   const user = await User.findByPk(id);
 
   if (!user) {
@@ -296,8 +288,9 @@ export const getUserById = async (req, res) => {
   res.json(user);
 };
 
+//PUT -> Modifica el atributo "active" del usuario, no lo elimina permanentemente
 export const deleteUser = async (req, res) => {
-  const { id } = req.params;
+  const {id} = req.params;
 
   try {
     const user = await User.findOne({ where: { id, active: 1 } });
@@ -317,6 +310,7 @@ export const deleteUser = async (req, res) => {
   }
 };
 
+//GET -> Trae a todos los usuarios registrados, activos o no
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll();

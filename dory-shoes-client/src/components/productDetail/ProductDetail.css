@@ -1,6 +1,6 @@
 .product-detail {
   margin-top: 40px;
-  max-width: 800px;
+  min-width: 700px;
   margin: 40px auto;
   padding: 20px;
   border: 1px solid #ddd;

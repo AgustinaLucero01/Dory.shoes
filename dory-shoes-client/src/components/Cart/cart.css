@@ -1,48 +1,24 @@
-.icon-cart{
-    width: 40px;
-    height: 40px;
-    stroke: #000;
-}
-
 .icon-cart:hover{
     cursor: pointer;
 }
 
-
-.count-product{
-    position: absolute;
-    top: 30%;
-    right: 2.50%;
-
-    background-color: #000;
-    color: #fff;
-    width: 25px;
-    height: 25px;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-}
-
-#contador-productos{
-    font-size: 12px;
-}
-
 .container-cart-products{
     position: absolute;
-    top: 150px;
-    right: 0;
+    top: 125px;
+    right: 35px;
     background-color: #fff;
     width: 400px;
     z-index: 1;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.20);
     border-radius: 10px;
-     max-height: 300px; /* O la altura que quieras */
-  overflow-y: auto;  /* Scroll vertical cuando el contenido sobrepasa */
+    max-height: 300px;
+    overflow-y: auto;  /* Scroll vertical cuando el contenido sobrepasa */
+    padding: 12px;
+    
 }
 
-.container-cart-products p{
+.container-cart-products p {
+    margin-bottom: 0 !important;
     text-align: center;
 }
 
@@ -51,61 +27,43 @@
     align-items: center;
     justify-content: space-between;
     padding: 30px;
-
     border-bottom: 1px solid rgba(0, 0, 0, 0.20);
-
-}
-
-.info-cart-product{
-    display: flex;
-    justify-content: space-between;
-    flex: 0.8;
-}
-
-
-.titulo-producto-carrito{
-    font-size: 20px;
-}
-
-.precio-producto-carrito{
-    font-weight: 700;
-    font-size: 20px;
-    margin-left: 10px;
-}
-
-.cantidad-producto-carrito{
-    font-weight: 400;
-    font-size: 20px;
-}
-
-.icon-close{
-    width: 25px;
-    height: 25px;
-}
-
-.icon-close:hover{
-    stroke: red;
-    cursor: pointer;
+    padding-bottom: 5px;
 }
 
 .cart-total{
     display: flex;
-    justify-content: center;
+    justify-content: right;
     align-items: center;
     padding: 20px 0;
     gap: 20px;
 }
 
-.cart-total h3{
-    font-size: 20px;
-    font-weight: 700;
+.cart-header-row,
+.cart-product-row {
+  display: grid;
+  grid-template-columns: 1fr 2.4fr 1.3fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 10px;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
 }
 
-.total-pagar{
-    font-size: 20px;
-    font-weight: 900;
+.cart-header-row {
+  font-weight: bold;
 }
 
-.hidden-cart{
-    display: none;
+.cart-product-row button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: black;
+  font-size: 1.2rem;
+  padding-right: 1.5px;
+}
+
+.cart-product-row button:hover {
+  background: none;
+  color: rgba(0, 0, 0, 0.443);
 }

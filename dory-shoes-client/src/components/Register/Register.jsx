@@ -3,24 +3,20 @@ import { Container, Button } from "react-bootstrap";
 import "./Register.css";
 import { validatePassword } from "./validations.js";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import ConfirmModal from "../ui/ConfirmModal.jsx";
+
 import { useAuth } from "../Service/auth/usercontext/UserContext.jsx";
 
 const Registro = ({ isEdit }) => {
-  const { id, role, handleLogout, token } = useAuth();
+  const { id, token } = useAuth();
+
+  const { userId } = useParams();
 
   const [user, setUser] = useState();
 
-  const [showModal, setShowModal] = useState(false);
-
   const location = useLocation();
-  const from = location.state?.from || "/"; //
+  const from = location.state?.from || "/";
 
-  const roleToSubmit = from === "/login" ? "user" : "admin";
-
-  const toggleModal = () => {
-    setShowModal(!showModal);
-  };
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isEdit) {
@@ -32,6 +28,7 @@ const Registro = ({ isEdit }) => {
     if (user) {
       setName(user.name || "");
       setEmail(user.email || "");
+      setRole(user.role || "user");
       setPhone(user.phone || "");
       setAddress(user.address || "");
       setZipCode(user.zipCode || "");
@@ -43,7 +40,7 @@ const Registro = ({ isEdit }) => {
   //fetch para traer los datos del usuario
   const fetchUser = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/getUser`, {
+      const response = await fetch(`http://localhost:3000/getUser/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) {
@@ -59,6 +56,7 @@ const Registro = ({ isEdit }) => {
 
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [role, setRole] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -83,26 +81,8 @@ const Registro = ({ isEdit }) => {
     newPassword: false,
   });
 
-  const navigate = useNavigate();
   const handleRouter = () => {
     navigate(from);
-  };
-
-  const handleDelete = async () => {
-    try {
-      await fetch(`http://localhost:3000/deleteUser/${id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      setShowModal(false);
-      handleLogout();
-      navigate("/");
-    } catch (err) {
-      console.log("Error al eliminar el usuario:", err);
-    }
   };
 
   const handleOnChangeName = (event) => {
@@ -113,6 +93,10 @@ const Registro = ({ isEdit }) => {
   const handleOnChangeEmail = (event) => {
     setEmail(event.target.value);
     setErrors({ ...errors, email: false });
+  };
+
+  const handleOnChangeRole = (event) => {
+    setRole(event.target.value);
   };
 
   const handleOnChangePhone = (event) => {
@@ -194,6 +178,7 @@ const Registro = ({ isEdit }) => {
 
     const formData = isEdit
       ? {
+          id: user.id,
           name,
           email,
           role,
@@ -205,13 +190,12 @@ const Registro = ({ isEdit }) => {
           name,
           email,
           password,
-          role: roleToSubmit,
           phone,
           address,
           zipCode,
         };
     const method = isEdit ? "PUT" : "POST";
-    const url = isEdit ? `/updateUser/${id}` : "/register";
+    const url = isEdit ? `/updateUser` : "/register";
     const headers = isEdit
       ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
       : { "Content-Type": "application/json" };
@@ -241,13 +225,18 @@ const Registro = ({ isEdit }) => {
     }
   };
 
+  const ROLES = [
+    { label: "Administrador", value: "admin" },
+    { label: "Usuario", value: "user" },
+    { label: "Super Administrador", value: "superAdmin" },
+  ];
   return (
     <Container
       className="d-flex justify-content-center align-items-center"
       style={{ marginTop: from == "/login" ? "30vh" : "0" }}
     >
       <div className="Registro-box">
-        {isEdit ? <h2>Modificá tus datos</h2> : <h2>Registro</h2>}
+        {isEdit ? <h2>Modificá los datos</h2> : <h2>Registro</h2>}
         <form action="" onSubmit={handleSubmit}>
           <input
             type="text"
@@ -266,6 +255,16 @@ const Registro = ({ isEdit }) => {
             onChange={handleOnChangeEmail}
           />
           {errors.email && <p className="error-text">Complete el campo</p>}
+
+          {isEdit && from == "/dashboard" && (
+            <select name="role" value={role} onChange={handleOnChangeRole}>
+              {ROLES.map((role) => (
+                <option key={role.value} value={role.value}>
+                  {role.label}
+                </option>
+              ))}
+            </select>
+          )}
 
           <input
             type="number"
@@ -323,19 +322,9 @@ const Registro = ({ isEdit }) => {
           )}
 
           <Button type="submit">Enviar</Button>
-          {!isEdit && <Button onClick={handleRouter}>Regresar</Button>}
-          {isEdit && <Button onClick={toggleModal}>Eliminar cuenta</Button>}
+          <Button onClick={handleRouter}>Regresar</Button>
         </form>
       </div>
-      <ConfirmModal
-        show={showModal}
-        onHide={toggleModal}
-        onConfirm={handleDelete}
-        title={"Eliminar usuario"}
-        message={"¿Estás seguro de que deseas eliminar tu usuario?"}
-        confirmText="Sí, eliminar"
-        cancelText="Cancelar"
-      />
     </Container>
   );
 };

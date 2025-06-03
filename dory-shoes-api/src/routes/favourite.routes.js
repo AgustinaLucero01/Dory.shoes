@@ -8,6 +8,6 @@ router.post("/addFavourite", verifyToken, addFavourite);
 
 router.delete("/deleteFavourite/:id", deleteFavourite);
 
-router.get("/showFavourites/:id", showAllUserFavourites);
+router.get("/showFavourites", verifyToken, showAllUserFavourites);
 
 export default router;

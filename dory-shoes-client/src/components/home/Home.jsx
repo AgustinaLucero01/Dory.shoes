@@ -10,21 +10,20 @@ const Home = () => {
   const location = useLocation();
   useEffect(() => {
     if (location.state?.showWelcomeToast) {
-      toast(`👢 Bienvenido/a ${location.state?.userName || "invitado"} a la tienda!`, {
+      toast(`👢 Bienvenido/a a la tienda, ${location.state?.userName || "invitado"}`, {
         position: "top-right",
         autoClose: 5000,
-        hideProgressBar: false,
+        hideProgressBar: true,
         closeOnClick: false,
         pauseOnHover: true,
         draggable: true,
-        progress: undefined,
         theme: "light",
         transition: Bounce,
       });
       window.history.replaceState({}, document.title);
     }
     if (location.state?.showConfirmEdit) {
-      toast(`👢 Usuario modificado con éxito!`, {
+      toast(`👢 Usuario modificado con éxito`, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

@@ -3,7 +3,7 @@ import { Product } from "../models/Product.js";
 import { Op } from "sequelize";
 import { UserFavourite } from "../models/UserFavourite.js";
 
-// GET -> todos los productos que están disponibles
+// GET -> todos los productos que están disponibles (tienen stock en algún talle)
 export const getAvailableProducts = async (req, res) => {
   try {
     const products = await Product.findAll({
@@ -14,8 +14,9 @@ export const getAvailableProducts = async (req, res) => {
           //Op: operadores de Sequelize. Gte: greater than or equal
           stock: { [Op.gte]: 1 },
         },
-        attributes: [], // no queremos traer los talles ni sus datos
+        attributes: [],
       },
+      //Mostramos solo una vez cada producto sin importar los talles que haya disponibles
       group: ["Product.id"],
     });
     if (!products) {
@@ -29,13 +30,14 @@ export const getAvailableProducts = async (req, res) => {
   }
 };
 
+//GET -> Trae todos los productos, aunque no tengan stock (se usa en Dashboard)
 export const getProducts = async (req, res) => {
   try {
     const products = await Product.findAll({
       //JOIN de SQL con Sequelize
       include: {
         model: ProductSize,
-        attributes: [], // no queremos traer los talles ni sus datos
+        attributes: [],
       },
       group: ["Product.id"],
     });
@@ -54,7 +56,7 @@ export const getProducts = async (req, res) => {
 export const getProductById = async (req, res) => {
   const { id } = req.params;
   const userId = req.user?.id;
-  // const userId = req.user.id; CAMBIAR CUANDO APLIQUEMOS JWT
+  //Devuelve el producto y todos las instancias de ProductSize que tienen como FK al id de este producto
   const product = await Product.findByPk(id, {
     include: [
       {
@@ -71,6 +73,7 @@ export const getProductById = async (req, res) => {
 
   //Buscamos si el usuario logueado tiene este producto en favorito
   let favourite = null;
+  //Verificamos si este usuario está logueado porque se puede acceder a esta ruta como invitado
   if (userId) {
     favourite = await UserFavourite.findOne({
       where: {
@@ -80,20 +83,13 @@ export const getProductById = async (req, res) => {
     });
   }
   const productData = product.toJSON();
+  //Agregamos si el producto está en favorito o no
   productData.favourite = favourite;
 
   res.json(productData);
 
   // El json va tener todos los datos del producto con el Id ingresado y además un atributo
-  // extra con un array de talles disponibles llamado "ProductSizes" (nombre por defecto). Ejemplo:
-  // {
-  //     "size": 38,
-  //     "stock": 5
-  //   },
-  //   {
-  //     "size": 40,
-  //     "stock": 2
-  //   },
+  // extra con un array de talles disponibles llamado "ProductSizes" (nombre por defecto).
 };
 
 // POST -> crea un nuevo producto

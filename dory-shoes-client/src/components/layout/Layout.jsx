@@ -7,9 +7,7 @@ const Layout = () => {
   return (
     <div className="app-container d-flex flex-column min-vh-100">
       <CustomNavbar />
-      <main className="flex-fill">
-        <Outlet />
-      </main>
+      <Outlet />
       <Footer />
     </div>
   );

@@ -4,22 +4,32 @@ import Register from "../Register/Register";
 import { useAuth } from "../Service/auth/usercontext/UserContext";
 import { toast, Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ConfirmModal from "../ui/ConfirmModal.jsx";
+import { BsFillTrash3Fill } from "react-icons/bs";
 
 const EditProfile = () => {
-  const { id } = useAuth();
+  const { id, handleLogout, token } = useAuth();
+
   const [favourites, setFavourites] = useState([]);
-  const {handleLogout}=useAuth()
+  const [showModal, setShowModal] = useState(false);
+
   const navigate = useNavigate();
 
+  const handleCloseUser = () => {
+    handleLogout();
+    toast.error("Ha cerrado sesión", {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "light",
+        transition: Bounce,
+      });
+    navigate("/");
+  };
 
-  const handleCloseUser=()=>{
-    handleLogout()
-    navigate("/")
-  }
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
 
-  const handleBackHome=()=>{
-    navigate("/")
-  }
   // Obtener favoritos del usuario
   useEffect(() => {
     fetchFavourites();
@@ -27,7 +37,9 @@ const EditProfile = () => {
 
   const fetchFavourites = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/showFavourites/${id}`);
+      const res = await fetch(`http://localhost:3000/showFavourites`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await res.json();
       setFavourites(data);
     } catch (err) {
@@ -57,21 +69,39 @@ const EditProfile = () => {
     }
   };
 
+  const handleDeleteUser = async () => {
+    try {
+      await fetch(`http://localhost:3000/deleteUser`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      setShowModal(false);
+      handleLogout();
+      navigate("/");
+    } catch (err) {
+      console.log("Error al eliminar el usuario:", err);
+    }
+  };
+
   return (
     <div
       className="edit-profile-container"
       style={{ marginTop: "30vh", paddingRight: "2em" }}
     >
       <ToastContainer />
-      <div style={{ flex:1 , textAlign: "center" }}>
-          <h2 style={{ paddingBottom: "2rem" }}>Editar Perfil</h2>
-        </div>
+      <div style={{ flex: 1, textAlign: "center" }}>
+        <h2 style={{ paddingBottom: "2rem" }}>Editar Perfil</h2>
+      </div>
       <div
         style={{
           display: "flex",
           gap: "2rem",
           flexWrap: "wrap",
           alignItems: "flex-start",
+          marginBottom: "30px",
         }}
       >
         {/* Columna izquierda: edición */}
@@ -80,7 +110,52 @@ const EditProfile = () => {
         </div>
 
         {/* Columna derecha: favoritos */}
+
         <div style={{ flex: "1 1 400px", minWidth: "300px" }}>
+          <div
+            style={{
+              border: "1px solid #ccc",
+              borderRadius: "10px",
+              padding: "1.5rem",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "1rem",
+              maxWidth: "500px",
+              width: "100%",
+              marginBottom: "20px"
+            }}
+          >
+            <h4 style={{ margin: 0 }}>Acciones de cuenta</h4>
+            <button
+              onClick={toggleModal}
+              style={{
+                height: "40px",
+                width: "80%",
+                backgroundColor: "red",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+              }}
+            >
+              Eliminar usuario
+            </button>
+            <button
+              onClick={handleCloseUser}
+              style={{
+                height: "40px",
+                width: "80%",
+                backgroundColor: "black",
+                color: "white",
+                border: "none",
+                borderRadius: "6px",
+                cursor: "pointer",
+              }}
+            >
+              Cerrar sesión
+            </button>
+          </div>
           <h3>Tus productos favoritos ❤</h3>
           {favourites.length === 0 ? (
             <p>No tenés productos en favoritos.</p>
@@ -98,6 +173,7 @@ const EditProfile = () => {
                     justifyContent: "space-between",
                     alignItems: "center",
                     gap: "1rem",
+                    width: "600px"
                   }}
                 >
                   <div
@@ -117,36 +193,42 @@ const EditProfile = () => {
                         borderRadius: "6px",
                       }}
                     />
-                    <span style={{ cursor: "pointer", textDecoration: "underline" }} onClick={() => navigate(`/product/${fav.product?.id}`)}>{fav.product?.name}</span>
+                    <span
+                      style={{ cursor: "pointer", textDecoration: "underline" }}
+                      onClick={() => navigate(`/product/${fav.product?.id}`)}
+                    >
+                      {fav.product?.name}
+                    </span>
                   </div>
                   <button
                     onClick={() => handleDeleteFavourite(fav.id)}
                     style={{
-                      backgroundColor: "red",
-                      color: "white",
+                      backgroundColor: "transparent",
+                      color: "black",
                       border: "none",
+                      fontSize: "1.4rem",
                       padding: "0.5rem 1rem",
                       borderRadius: "4px",
                       cursor: "pointer",
                     }}
                   >
-                    Eliminar
+                    <BsFillTrash3Fill/>
                   </button>
                 </li>
               ))}
             </ul>
           )}
         </div>
-        <div style={{ display: "flex", justifyContent: "center", width: "100%", marginBottom:"15px" }}>
-        <div>
-          <button onClick={handleBackHome} style={{height:"45px", width:"150px", marginLeft:"15px", backgroundColor:"black" }}>Volver</button>
-        </div>
-        <div>
-          <button onClick={handleCloseUser} style={{height:"45px", width:"150px", marginLeft:"15px", backgroundColor:"red"}}>Cerrar sesión</button>
-        </div>
-        
       </div>
-      </div>
+      <ConfirmModal
+        show={showModal}
+        onHide={toggleModal}
+        onConfirm={handleDeleteUser}
+        title={"Eliminar usuario"}
+        message={"¿Estás seguro de que deseas eliminar tu usuario?"}
+        confirmText="Sí, eliminar"
+        cancelText="Cancelar"
+      />
     </div>
   );
 };

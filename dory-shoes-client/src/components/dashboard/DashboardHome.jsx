@@ -3,11 +3,11 @@ import { Container, Row, Col, Card } from "react-bootstrap";
 import "./Dashboard.css";
 import ConfirmModal from "../ui/ConfirmModal";
 import ProductsDashboard from "./ProductsDashboard";
-import AdminsDashboard from "./AdminsDashboard";
+import UsersDashboard from "./UsersDashboard";
 import { useAuth } from "../Service/auth/usercontext/UserContext";
 
-const DashboardHome = ({}) => {
-  const {role} = useAuth();
+const DashboardHome = () => {
+  const { role } = useAuth();
 
   const [totalAmount, setTotalAmount] = useState(0);
   const [sales, setSales] = useState({ cantidad: 0, monto: 0 });
@@ -18,18 +18,21 @@ const DashboardHome = ({}) => {
     onConfirm: null,
   });
 
+  const [activeTab, setActiveTab] = useState("usuarios");
+
   useEffect(() => {
     fetchSales();
   }, []);
 
   const fetchSales = async () => {
-    fetch("http://localhost:3000/sales")
-      .then((res) => res.json())
-      .then((data) => {
-        setSales(data.sales);
-        setTotalAmount(data.totalAmount);
-      })
-      .catch((err) => console.log(err));
+    try {
+      const res = await fetch("http://localhost:3000/sales");
+      const data = await res.json();
+      setSales(data.sales);
+      setTotalAmount(data.totalAmount);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const openConfirmModal = ({ title, message, onConfirm }) => {
@@ -58,11 +61,38 @@ const DashboardHome = ({}) => {
           </Card>
         </Col>
       </Row>
+
       {role === "superAdmin" && (
-        <AdminsDashboard openConfirmModal={openConfirmModal} />
+        <Row className="mb-4">
+          <Col>
+            <div className="tab-selector">
+              <div
+                className={`tab-option ${activeTab === "usuarios" ? "active" : ""}`}
+                onClick={() => setActiveTab("usuarios")}
+              >
+                Usuarios
+              </div>
+              <div
+                className={`tab-option ${activeTab === "productos" ? "active" : ""}`}
+                onClick={() => setActiveTab("productos")}
+              >
+                Productos
+              </div>
+            </div>
+          </Col>
+        </Row>
       )}
 
-      <ProductsDashboard openConfirmModal={openConfirmModal} />
+      {role === "superAdmin" ? (
+        activeTab === "usuarios" ? (
+          <UsersDashboard openConfirmModal={openConfirmModal} />
+        ) : (
+          <ProductsDashboard openConfirmModal={openConfirmModal} />
+        )
+      ) : (
+        <ProductsDashboard openConfirmModal={openConfirmModal} />
+      )}
+
       <ConfirmModal
         show={showModal}
         onHide={closeModal}

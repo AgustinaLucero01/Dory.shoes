@@ -2,24 +2,28 @@
     border: solid 1px rgb(157, 157, 157);
     text-align: center;
     background-color: #fff;
-    /* modificar el margin para que aplique a toda la app */
-    /* margin-top: 30vh !important; */
     margin-bottom: 5vh;
-    padding: 15px;
+    padding: 30px;
+    border-radius: 10px;
 }
 
 .Registro-box form{
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 18px;
     margin-top: 50px;
 }
 
-.Registro-box input{
-    height: 60px;
+.Registro-box input, select{
+    height: 55px;
     width: 470px;
     cursor: pointer;
+}
+
+.Registro-box select {
+    border-radius: 8px;
+    border: 0.5px solid black;
 }
 
 .Registro-box Button{

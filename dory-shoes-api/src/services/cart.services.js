@@ -2,9 +2,11 @@ import { Cart } from "../models/Cart.js";
 import { CartProduct } from "../models/CartProduct.js";
 import { Product } from "../models/Product.js";
 import { ProductSize } from "../models/ProductSize.js";
+import { Op } from "sequelize";
 
 //GET -> Mostrar los productos relacionados con un carrito
 export const showAllProductsFromCart = async (req, res) => {
+  //Trae el carrito correspondiente al usuario que está ingresado (aparece en el token)
   const cart = await getCartByUser(req.user.id);
 
   if (!cart) {
@@ -13,6 +15,7 @@ export const showAllProductsFromCart = async (req, res) => {
       .json({ message: "No se encontró un carrito para este usuario." });
   }
 
+  //Trae todos los productos de dicho carrito
   const cartProducts = await CartProduct.findAll({
     where: { cartId: cart.id },
   });
@@ -54,6 +57,7 @@ export const addProductToCart = async (req, res) => {
     where: {
       productId: productId,
       size: size,
+      stock: { [Op.gte]: 1 },
     },
   });
 
@@ -83,6 +87,8 @@ export const addProductToCart = async (req, res) => {
     existingCartProduct.quantity += quantity;
     await existingCartProduct.save();
 
+    //Al devolver el nuevo producto del carrito, mandamos dentro todos los datos relevantes del producto
+    //Con un Join de tablas (CartProduct, ProductSize y Product)
     const result = await CartProduct.findByPk(existingCartProduct.id, {
       include: [
         {
@@ -167,7 +173,7 @@ export const modifyQuantity = async (req, res) => {
 };
 
 //GET -> Muestra el carrito que se está usando en base al usuario que inició sesión
-// Incluye todos los productos que están en el carrito
+// Incluye todos los productos que están en el carrito, la llamamos desde el contexto
 export const getCartDetails = async (req, res) => {
   try {
     const cart = await Cart.findOne({
@@ -208,17 +214,21 @@ export const getCartDetails = async (req, res) => {
   }
 };
 
-export const getCartByUser = async (userId) => {
+//Función para encontrar el carrito de acuerdo al usuario.
+//Se reutiliza en varios servicios
+const getCartByUser = async (userId) => {
   const cart = await Cart.findOne({ where: { userId } });
   return cart;
 };
 
+//DELETE -> Borra todos los productos del carrito
 export const dropAllProductsFromCart = async (req, res) => {
-  const { cartId } = req.body;
+  
+  const cart = await getCartByUser(req.user.id);
 
   try {
     await CartProduct.destroy({
-      where: { cartId },
+      where: { cartId: cart.id },
     });
 
     return res.status(200).json({ message: "Carrito vaciado." });

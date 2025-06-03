@@ -1,14 +1,13 @@
 .footer {
-    background-color: #F0DFC8;  /* Color de fondo */
-    width: 100%;                /* Asegura que el footer ocupe todo el ancho */
-    /*position: fixed;         /* Lo coloca en una posición fija respecto a su contenedor */
-   /* bottom: 0;                  /* Lo ancla al final de la página */
-    padding: 0.25,rem 0;            /* Espaciado superior e inferior */
+    min-height: 120px !important; 
+    background-color: #F5EBDE;  /* Color de fondo */
+    width: 100%;                /* Asegura que el footer ocupe todo el ancho */ 
     margin-top: auto;     
     left: 0;     /* Asegura que el footer no se superponga con el contenido */
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
-  
-
   
   .footer .social-links {
     margin-bottom: 0.5rem;      /* Espaciado entre los íconos */
@@ -25,4 +24,3 @@
   .footer div {
     text-align: center;         /* Centra el contenido */
   }
-

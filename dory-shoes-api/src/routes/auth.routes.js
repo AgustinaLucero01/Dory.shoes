@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { loginUser, registerUser, updateUser, getAllAdmins, getUserById, deleteUser, getAllUsers, verifyToken, authorizeRole } from "../services/auth.services.js";
+import { loginUser, registerUser, updateUser, getUserById, deleteUser, getAllUsers, verifyToken, authorizeRole } from "../services/auth.services.js";
 
 const router = Router();
 
@@ -9,13 +9,10 @@ router.post("/login", loginUser);
 
 router.put("/updateUser", verifyToken, updateUser);
 
-router.get("/getAdmins", verifyToken, authorizeRole("admin", "superAdmin"), getAllAdmins);
-
-router.get("/getUser", verifyToken, getUserById);
+router.get("/getUser/:id", verifyToken, getUserById);
 
 router.put("/deleteUser/:id", verifyToken, deleteUser);
 
-//Ruta creada para verificar la creación de usuarios
-router.get("/getAllUsers", getAllUsers)
+router.get("/getAllUsers", verifyToken, authorizeRole("superAdmin"), getAllUsers)
 
 export default router;

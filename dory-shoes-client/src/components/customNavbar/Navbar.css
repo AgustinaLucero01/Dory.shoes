@@ -92,3 +92,24 @@ img {
   z-index: 999; /* Para que quede por encima del contenido */
   width: 250px; 
 }
+
+.count-product{
+    position: absolute;
+    top: 33%;
+    right: 2%;
+
+    background-color: #000;
+    color: #fff;
+    width: 25px;
+    height: 25px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+
+
+#contador-productos{
+    font-size: 12px;
+}

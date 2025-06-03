@@ -64,7 +64,7 @@ export const deleteFavourite = async (req, res) => {
 // GET -> Trae todos los productos favoritos de un usuario
 export const showAllUserFavourites = async (req, res) => {
   try {
-    const { id } = req.params;
+    const id = req.user.id;
 
     if (!id) {
       return res.status(404).send({
@@ -85,6 +85,7 @@ export const showAllUserFavourites = async (req, res) => {
       include: [
         {
           model: Product,
+          //Nos traemos solo estos atributos del modelo Product
           attributes: ["id", "name", "imageUrl"],
         },
       ],

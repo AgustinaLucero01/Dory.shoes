@@ -37,6 +37,7 @@ const CustomNavbar = () => {
   };
 
   const toggleSearch = () => {
+    handleClose()
     setShowSearch(!showSearch);
   };
 
@@ -135,8 +136,10 @@ const CustomNavbar = () => {
             style={{ cursor: "pointer" }}
             onClick={() => {
               if (token) {
-                navigate(`/editProfile`);
+                handleClose()
+                navigate(`/editProfile/${id}`);
               } else {
+                handleClose()
                 navigate("/login");
               }
             }}
