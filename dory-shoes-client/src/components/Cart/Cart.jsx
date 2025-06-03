@@ -4,18 +4,18 @@ import { useNavigate } from "react-router-dom";
 import { CartContext } from "../Service/CartContext/CartContext.jsx";
 import { toast, Bounce } from "react-toastify";
 import { BsFillTrash3Fill } from "react-icons/bs";
-import { useAuth } from "../Service/auth/usercontext/UserContext.jsx";
+import { useAuth } from "../../hooks/useAuth.js";
 import "react-toastify/dist/ReactToastify.css";
 import "./cart.css";
 
 const Cart = ({ isActive, onActive }) => {
-  const { countProduct, products, setProducts, setCountProduct, cartId } =
+  const { fetchCart, products, cartId } =
     useContext(CartContext);
 
   const [total, setTotal] = useState();
 
   const navigate = useNavigate();
-  const { token } = useAuth();
+  const { isAuthenticated, token } = useAuth();
 
   useEffect(() => {
     const totalCalculado = products?.reduce((acc, product) => {
@@ -53,15 +53,12 @@ const Cart = ({ isActive, onActive }) => {
       const updatedProducts = products.filter(
         (product) => product.id !== productId
       );
-      setProducts(updatedProducts);
-      setCountProduct((prevCount) => prevCount - 1);
+      await fetchCart();
     }
   };
 
   const onclickCart = async () => {
-    setProducts([]);
-    setTotal(0);
-    setCountProduct(0);
+    
 
     const response = await fetch(`http://localhost:3000/allCart`, {
       method: "DELETE",
@@ -75,12 +72,13 @@ const Cart = ({ isActive, onActive }) => {
     });
 
     if (response.ok) {
+      await fetchCart();
       console.log("Carrito vaciado");
     }
   };
 
   const handlenav = () => {
-    if (!token) {
+    if (isAuthenticated) {
       toast.error("⚠️ Debes iniciar sesión para finalizar la compra", {
         position: "top-right",
         autoClose: 3000,

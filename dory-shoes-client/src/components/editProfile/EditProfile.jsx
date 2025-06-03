@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Register from "../Register/Register";
-import { useAuth } from "../Service/auth/usercontext/UserContext";
+import { useAuth } from "../../hooks/useAuth.js";
 import { toast, Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ConfirmModal from "../ui/ConfirmModal.jsx";

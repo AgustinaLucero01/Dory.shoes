@@ -5,13 +5,13 @@ import "./Navbar.css";
 import ProductSearch from "../productSearch/ProductSearch";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../Service/CartContext/CartContext.jsx";
-import { useAuth } from "./../Service/auth/usercontext/UserContext.jsx";
+import { useAuth } from "../../hooks/useAuth.js";
 import Cart from "../Cart/Cart.jsx";
 import { Link } from "react-router-dom";
 
 const CustomNavbar = () => {
-  const { id, token, role } = useAuth();
-  const { products, countProduct } = useContext(CartContext);
+  const { id, role, isAuthenticated } = useAuth();
+  const { countProduct } = useContext(CartContext);
   // manejamos el estado de "expanded" para definir si la navbar está abierta o no
   const [expanded, setExpanded] = useState(false);
   const [active, setActive] = useState(false);
@@ -104,7 +104,7 @@ const CustomNavbar = () => {
             <Nav.Link as={Link} to="/contact" onClick={handleClose}>
               Contacto
             </Nav.Link>
-            {token && (role === "admin" || role === "superAdmin") && (
+            {isAuthenticated && (role === "admin" || role === "superAdmin") && (
               <Nav.Link as={Link} to="/dashboard" onClick={handleClose}>
                 Dashboard
               </Nav.Link>
@@ -135,7 +135,7 @@ const CustomNavbar = () => {
             className="icon"
             style={{ cursor: "pointer" }}
             onClick={() => {
-              if (token) {
+              if (isAuthenticated) {
                 handleClose();
                 navigate(`/editProfile/${id}`);
               } else {
@@ -144,13 +144,13 @@ const CustomNavbar = () => {
               }
             }}
           />
-          {token && (
+          {isAuthenticated && (
             <FaShoppingCart
               className="icon"
               onClick={() => setActive(!active)}
             />
           )}
-          {token && (
+          {isAuthenticated && (
             <div className="count-product">
               <span id="count-product">{Number(countProduct) || 0}</span>
             </div>

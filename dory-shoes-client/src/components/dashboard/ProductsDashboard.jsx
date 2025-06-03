@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Table } from "react-bootstrap";
 import { useNavigate} from "react-router-dom";
 import "./Dashboard.css";
-import {toast, ToastContainer, Bounce } from "react-toastify";
+import {toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdEdit } from "react-icons/md";
 import { BsFillTrash3Fill } from "react-icons/bs";
 
 import ProductSearch from "../productSearch/ProductSearch";
-import { useAuth } from "../Service/auth/usercontext/UserContext";
+import { useAuth } from "../../hooks/useAuth.js";
 
 const ProductsDashboard = ({ openConfirmModal }) => {
   const [products, setProducts] = useState([]);
@@ -109,7 +109,7 @@ const ProductsDashboard = ({ openConfirmModal }) => {
                   <img
                     src={product.imageUrl}
                     alt={product.name}
-                    className="w-80"
+                    className="product-img"
                   />
                 </td>
                 <td>{product.name}</td>

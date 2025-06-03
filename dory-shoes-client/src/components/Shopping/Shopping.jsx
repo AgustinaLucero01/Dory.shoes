@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Shopping.css";
 import { CartContext } from "../Service/CartContext/CartContext";
 import PurchaseSuccessModal from "../ui/PurchaseSuccessModal";
-import { useAuth } from "../Service/auth/usercontext/UserContext";
+import { useAuth } from "../../hooks/useAuth.js";
 import { useEffect } from "react";
 
 const Shopping = () => {

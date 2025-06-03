@@ -7,11 +7,10 @@ import ModalProduct from "../ui/ModalProduct";
 import { CartContext } from "../Service/CartContext/CartContext";
 import { toast, Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useAuth } from "../Service/auth/usercontext/UserContext";
+import { useAuth } from "../../hooks/useAuth.js";
 
 function ProductDetail() {
-  const { products, setProducts, countProduct, setCountProduct } =
-    useContext(CartContext);
+  const { fetchCart} = useContext(CartContext);
 
   const { id, token } = useAuth();
 
@@ -86,10 +85,11 @@ function ProductDetail() {
         throw new Error("No se pudo agregar el producto al carrito");
       }
 
-      const data = await response.json();
-      setProducts((prevProducts) => [...prevProducts, data]);
-      setCountProduct((prevCount) => prevCount + 1);
+      const newProduct = await response.json();
 
+      if (newProduct) {
+        await fetchCart();
+      }
       toast.success("✔️ Producto agregado al carrito", {
         position: "top-right",
         autoClose: 5000,

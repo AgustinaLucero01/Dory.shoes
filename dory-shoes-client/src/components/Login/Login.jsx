@@ -4,7 +4,7 @@ import { FaUser } from "react-icons/fa";
 import { CiLock } from "react-icons/ci";
 import { FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router";
-import { useAuth } from "../Service/auth/usercontext/UserContext";
+import { useAuth } from "../../hooks/useAuth.js";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocation } from "react-router-dom";
@@ -113,7 +113,7 @@ const Login = () => {
     <div className="Login-Box">
       <div className="user-login">
         <img
-          src="/images/logoLogin.jpg"
+          src="/images/logo/logoLogin.jpg"
           alt="Logo de login"
           onClick={handleNavigateHome}
         />
@@ -146,7 +146,7 @@ const Login = () => {
           </div>
           {error.password && <p className="error-text">Completa el campo</p>}
           {authenticationError.active && (
-            <p className="error-text">Email y/o contraseña incorrectos</p>
+            <p className="error-text">{authenticationError.message}</p>
           )}
 
           <div className="submit">

@@ -10,8 +10,7 @@ import {
   Alert,
 } from "react-bootstrap";
 import "./ProductForm.css";
-import { useAuth } from "../Service/auth/usercontext/UserContext";
-
+import { useAuth } from "../../hooks/useAuth.js";
 const ProductForm = () => {
   const { token } = useAuth();
   const navigate = useNavigate();

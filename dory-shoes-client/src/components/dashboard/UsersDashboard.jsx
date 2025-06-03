@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import ProductSearch from "../productSearch/ProductSearch";
 import "react-toastify/dist/ReactToastify.css";
-import { useAuth } from "../Service/auth/usercontext/UserContext";
+import { useAuth } from "../../hooks/useAuth.js";
 import { MdEdit } from "react-icons/md";
 import { BsFillTrash3Fill } from "react-icons/bs";
 

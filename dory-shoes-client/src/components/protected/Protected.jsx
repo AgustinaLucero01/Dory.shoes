@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet, Navigate } from 'react-router';
 import { isTokenValid } from '../Service/auth/usercontext/auth.helpers';
-import { useAuth } from "../Service/auth/usercontext/UserContext";
+import { useAuth } from '../../hooks/useAuth';
 
 const Protected = () => {
     const { token } = useAuth()

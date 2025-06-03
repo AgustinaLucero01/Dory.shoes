@@ -4,7 +4,7 @@ import "./Dashboard.css";
 import ConfirmModal from "../ui/ConfirmModal";
 import ProductsDashboard from "./ProductsDashboard";
 import UsersDashboard from "./UsersDashboard";
-import { useAuth } from "../Service/auth/usercontext/UserContext";
+import { useAuth } from "../../hooks/useAuth.js";
 
 const DashboardHome = () => {
   const { role, token } = useAuth();

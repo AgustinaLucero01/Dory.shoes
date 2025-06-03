@@ -4,7 +4,7 @@ import "./Register.css";
 import { validatePassword } from "./validations.js";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
-import { useAuth } from "../Service/auth/usercontext/UserContext.jsx";
+import { useAuth } from "../../hooks/useAuth.js";
 
 const Registro = ({ isEdit }) => {
   const { id, token } = useAuth();
