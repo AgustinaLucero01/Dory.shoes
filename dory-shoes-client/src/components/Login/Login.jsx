@@ -150,7 +150,7 @@ const Login = () => {
             </div>
             {error.password && <p className="error-text">Completa el campo</p>}
             {authenticationError.active && (
-              <p className="error-text">{authenticationError.message}</p>
+              <p className="error-text">Email y/o contraseña inválidos</p>
             )}
 
             <div className="submit">

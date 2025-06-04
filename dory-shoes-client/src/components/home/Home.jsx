@@ -32,7 +32,7 @@ const Home = () => {
       window.history.replaceState({}, document.title);
     }
     if (location.state?.showConfirmEdit) {
-      toast["info"](`Usuario modificado con éxito`, {
+      toast["success"](`Usuario modificado con éxito`, {
         position: "bottom-left",
         autoClose: 5000,
         hideProgressBar: false,

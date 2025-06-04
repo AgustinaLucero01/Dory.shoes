@@ -28,7 +28,7 @@ const DashboardHome = () => {
     }
 
     if (location.state?.UpdatedProduct) {
-      toast.info(`✏️ Producto editado con éxito`, {
+      toast.success(`✏️ Producto editado con éxito`, {
         position: "bottom-left",
         autoClose: 5000,
         hideProgressBar: false,
@@ -43,7 +43,7 @@ const DashboardHome = () => {
     }
 
     if (location.state?.showConfirmEdit) {
-      toast.success(`✅ Los datos del usuario se modificaron con éxito`, {
+      toast.success(`✏️ Usuario editado con éxito`, {
         position: "bottom-left",
         autoClose: 5000,
         hideProgressBar: false,

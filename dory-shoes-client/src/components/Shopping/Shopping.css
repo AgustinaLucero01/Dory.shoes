@@ -81,6 +81,7 @@ input {
     margin-top: 20px;
     padding: 6px;
     max-height: 320px;
+    min-width: 360px;
 }
 
 .purchase-summary h1{
