@@ -8,15 +8,19 @@ import { useAuth } from "../../hooks/useAuth.js";
 import { toast, ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocation } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState({
     email: false,
-    password: false
+    password: false,
   });
-  const [authenticationError, setAuthenticationError] = useState({active: false, message: ""})
+  const [authenticationError, setAuthenticationError] = useState({
+    active: false,
+    message: "",
+  });
 
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
@@ -26,7 +30,7 @@ const Login = () => {
   useEffect(() => {
     if (location.state?.showConfirmRegister) {
       toast(`👢 Usuario registrado con éxito. Inicie sesión para continuar`, {
-        position: "top-right",
+        position: "bottom-left",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: false,
@@ -54,12 +58,12 @@ const Login = () => {
   const handleOnchange = (event) => {
     setEmail(event.target.value);
     setError({ ...error, email: false });
-    setAuthenticationError({active: false})
+    setAuthenticationError({ active: false });
   };
   const handlePasswordOnchange = (event) => {
     setPassword(event.target.value);
     setError({ ...error, password: false });
-    setAuthenticationError({active: false})
+    setAuthenticationError({ active: false });
   };
 
   const handleSubmbit = async (event) => {
@@ -82,8 +86,8 @@ const Login = () => {
     }
     if (hasError) return;
 
-    setError({ email: false, password: false});
-    setAuthenticationError({active:false})
+    setError({ email: false, password: false });
+    setAuthenticationError({ active: false });
 
     try {
       const res = await fetch("http://localhost:3000/login", {
@@ -105,62 +109,63 @@ const Login = () => {
       navigate("/", { state: { showWelcomeToast: true, userName: data.name } });
     } catch (err) {
       console.error(err.message);
-      setAuthenticationError({active: true, message: err.message});
+      setAuthenticationError({ active: true, message: err.message });
     }
   };
 
   return (
-    <div className="Login-Box">
-      <div className="user-login">
-        <img
-          src="/images/logo/logoLogin.jpg"
-          alt="Logo de login"
-          onClick={handleNavigateHome}
-        />
-        <h1>¡Bienvenido!</h1>
-        <h4>Inicia sesión para continuar</h4>
-        <form className="form-user" onSubmit={handleSubmbit}>
-          <div className="input-group">
-            <FaUser className="input-icon" />
-            <input
-              className={error.email ? "border border-danger" : ""}
-              type="email"
-              placeholder="Ingresa tu email"
-              ref={emailRef}
-              value={email}
-              onChange={handleOnchange}
-            />
-          </div>
-          {error.email && <p className="error-text">Completa el campo</p>}
-
-          <div className="input-group">
-            <CiLock className="input-icon" />
-            <input
-              className={error.password ? "border border-danger" : ""}
-              type="password"
-              placeholder="Ingresa tu contraseña"
-              ref={passwordRef}
-              value={password}
-              onChange={handlePasswordOnchange}
-            />
-          </div>
-          {error.password && <p className="error-text">Completa el campo</p>}
-          {authenticationError.active && (
-            <p className="error-text">{authenticationError.message}</p>
-          )}
-
-          <div className="submit">
-            <div>
-              <p onClick={handleRouter}>¿No tienes cuenta? Regístrate</p>
+    <Container
+      className="d-flex justify-content-center align-items-center"
+      style={{ minHeight: "100vh" }}
+    >
+      <div className="Login-Box">
+        <div className="user-login">
+          
+          <h1>¡Bienvenido!</h1>
+          <h4>Inicia sesión para continuar</h4>
+          <form className="form-user" onSubmit={handleSubmbit}>
+            <div className="input-group">
+              <FaUser className="input-icon" />
+              <input
+                className={error.email ? "border border-danger" : ""}
+                type="email"
+                placeholder="Ingresa tu email"
+                ref={emailRef}
+                value={email}
+                onChange={handleOnchange}
+              />
             </div>
-            <button>
-              <FaArrowRight className="arrow-user" />
-            </button>
-          </div>
-        </form>
+            {error.email && <p className="error-text">Completa el campo</p>}
+
+            <div className="input-group">
+              <CiLock className="input-icon" />
+              <input
+                className={error.password ? "border border-danger" : ""}
+                type="password"
+                placeholder="Ingresa tu contraseña"
+                ref={passwordRef}
+                value={password}
+                onChange={handlePasswordOnchange}
+              />
+            </div>
+            {error.password && <p className="error-text">Completa el campo</p>}
+            {authenticationError.active && (
+              <p className="error-text">{authenticationError.message}</p>
+            )}
+
+            <div className="submit">
+              <div>
+                <p onClick={handleRouter}>¿No tienes cuenta? Regístrate</p>
+              </div>
+              <button>
+                <FaArrowRight className="arrow-user" />
+              </button>
+            </div>
+          </form>
+        </div>
+        <ToastContainer />
       </div>
-      <ToastContainer />
-    </div>
+    </Container>
   );
 };
 export default Login;

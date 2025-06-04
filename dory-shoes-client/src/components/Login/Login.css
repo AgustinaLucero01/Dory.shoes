@@ -1,16 +1,7 @@
-body{
-  background-color: #fff;
-  justify-content: center;
-  width: 100%;
-}
 
-.Login-Box{
-  display: flex;
-  margin-top: 12vh !important;
-  margin-bottom: 6vh;
-  
+.Login-Box {
+  margin-top: 21vh !important;
 }
-
 .img-login img{
   width: 100%;
   /* height: 1120px; */
@@ -18,20 +9,15 @@ body{
 
 .user-login img{
   cursor: pointer;
-
 }
 /* formulario */
 .user-login{
   text-align: center;
-  /* height: 800px; */
-  width: 700px;
+  width: 620px;
   border: solid 1px #C8C2C2;
   border-radius: 15px;
   box-shadow: 0 4px #515151;
-  margin-left: 390px;
-  margin-top: 160px;
   color: black;
-  position: relative;
   padding-bottom: 10px;
 }
 

@@ -48,7 +48,7 @@ const UsersDashboard = ({ openConfirmModal }) => {
       });
       fetchUsers();
       toast.success(`👤 Usuario desactivado con éxito`, {
-        position: "top-right",
+        position: "bottom-left",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: false,
@@ -138,6 +138,7 @@ const UsersDashboard = ({ openConfirmModal }) => {
           </Table>
         )}
       </Col>
+     
     </Row>
   );
 };

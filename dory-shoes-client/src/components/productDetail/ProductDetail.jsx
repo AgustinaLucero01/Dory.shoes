@@ -52,7 +52,7 @@ function ProductDetail() {
   const handleAddToCart = async () => {
     if (!token) {
       toast.error("Debe iniciar sesión para comenzar a comprar", {
-        position: "top-right",
+        position: "bottom-left",
         autoClose: 5000,
         theme: "light",
         transition: Bounce,
@@ -61,7 +61,7 @@ function ProductDetail() {
     }
     if (!selectedSize) {
       toast.error("Seleccione un talle para continuar", {
-        position: "top-right",
+        position: "bottom-left",
         autoClose: 5000,
         theme: "light",
         transition: Bounce,
@@ -91,7 +91,7 @@ function ProductDetail() {
         await fetchCart();
       }
       toast.success("✔️ Producto agregado al carrito", {
-        position: "top-right",
+        position: "bottom-left",
         autoClose: 5000,
         theme: "light",
         pauseOnHover: false,
@@ -100,7 +100,7 @@ function ProductDetail() {
     } catch (err) {
       console.error(err.message);
       toast.error("❌ Error al agregar producto al carrito", {
-        position: "top-right",
+        position: "bottom-left",
         autoClose: 5000,
         theme: "light",
         transition: Bounce,
@@ -117,7 +117,7 @@ function ProductDetail() {
       }
     } else {
       toast.error("Debe iniciar sesión para guardar productos en favoritos.", {
-        position: "top-right",
+        position: "bottom-left",
         autoClose: 5000,
         theme: "light",
         transition: Bounce,
@@ -143,7 +143,7 @@ function ProductDetail() {
       const newFavourite = await response.json();
       setFavourite(newFavourite);
       toast.success("❤️ Producto agregado a favoritos", {
-        position: "top-right",
+        position: "bottom-left",
         autoClose: 5000,
         theme: "light",
         transition: Bounce,
@@ -169,7 +169,7 @@ function ProductDetail() {
 
       setFavourite(null);
       toast.error("💔 Producto eliminado de favoritos", {
-        position: "top-right",
+        position: "bottom-left",
         autoClose: 5000,
         theme: "light",
         transition: Bounce,

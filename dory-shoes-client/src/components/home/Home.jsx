@@ -11,7 +11,7 @@ const Home = () => {
   useEffect(() => {
     if (location.state?.message) {
       const type = location.state?.type || "info";
-      toast[type](location.state.message);
+      toast[type](location.state.message, { position: "bottom-left"});
     }
     if (location.state?.showWelcomeToast) {
       toast(
@@ -19,7 +19,7 @@ const Home = () => {
           location.state?.userName || "invitado"
         }`,
         {
-          position: "top-right",
+          position: "bottom-left",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: false,
@@ -33,7 +33,7 @@ const Home = () => {
     }
     if (location.state?.showConfirmEdit) {
       toast["info"](`Usuario modificado con éxito`, {
-        position: "top-right",
+        position: "bottom-left",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: false,

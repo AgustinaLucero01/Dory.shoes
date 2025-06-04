@@ -39,8 +39,8 @@ const Cart = ({ isActive, onActive }) => {
     });
     if (response.ok) {
       toast.error("🗑️ Producto eliminado", {
-        position: "top-right",
-        autoClose: 5000,
+        position: "bottom-left",
+        autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: false,
@@ -78,9 +78,9 @@ const Cart = ({ isActive, onActive }) => {
   };
 
   const handlenav = () => {
-    if (isAuthenticated) {
+    if (!isAuthenticated) {
       toast.error("⚠️ Debes iniciar sesión para finalizar la compra", {
-        position: "top-right",
+        position: "bottom-left",
         autoClose: 3000,
         theme: "light",
         transition: Bounce,

@@ -1,7 +1,6 @@
 const products = [
   {
     name: "Borcego negro caña baja",
-    description: "Descripción del borcego",
     price: 15000,
     imageUrl: "/images/Botas/bota1.jpg",
     category: "botas",
@@ -15,7 +14,7 @@ const products = [
     },
   },
   {
-    name: "Borcego caña media",
+    name: "Bota alta camel",
     description: "Botas",
     price: 180000,
     imageUrl: "/images/Botas/bota2.jpg",
@@ -30,8 +29,7 @@ const products = [
     },
   },
   {
-    name: "Bota alta camel",
-    description: "Botas",
+    name: "Bota alta negra",
     price: 180000,
     imageUrl: "/images/Botas/bota3.jpg",
     category: "botas",
@@ -45,8 +43,7 @@ const products = [
     },
   },
   {
-    name: "Bota alta negra",
-    description: "Botas",
+    name: "Borcego caña media",
     price: 190000,
     imageUrl: "/images/Botas/bota4.jpg",
     category: "botas",
@@ -61,7 +58,6 @@ const products = [
   },
   {
     name: "Zapatilla Gazelle negra",
-    description: "Zapatillas",
     price: 150000,
     imageUrl: "/images/Zapatillas/zapatilla1.jpg",
     category: "zapatillas",
@@ -76,7 +72,6 @@ const products = [
   },
   {
     name: "Zapatilla Gazelle chocolate",
-    description: "Zapatillas",
     price: 150000,
     imageUrl: "/images/Zapatillas/zapatilla2.jpg",
     category: "zapatillas",
@@ -91,7 +86,6 @@ const products = [
   },
   {
     name: "New Balance off white",
-    description: "Zapatillas",
     price: 200000,
     imageUrl: "/images/Zapatillas/zapatilla3.jpg",
     category: "zapatillas",
@@ -106,7 +100,6 @@ const products = [
   },
   {
     name: "New Balance black",
-    description: "Zapatillas",
     price: 200000,
     imageUrl: "/images/Zapatillas/zapatilla4.jpg",
     category: "zapatillas",
@@ -120,8 +113,7 @@ const products = [
     },
   },
   {
-    name: "Pantufla beige",
-    description: "Pantuflas",
+    name: "Pantufla bold black",
     price: 120000,
     imageUrl: "/images/Pantuflas/pantu1.jpg",
     category: "pantuflas",
@@ -135,7 +127,7 @@ const products = [
     },
   },
   {
-    name: "Pantufla bold black",
+    name: "Pantufla beige",
     description: "Pantuflas",
     price: 150000,
     imageUrl: "/images/Pantuflas/pantu2.jpg",
@@ -151,7 +143,6 @@ const products = [
   },
   {
     name: "Pantufla bold camel",
-    description: "Pantuflas",
     price: 150000,
     imageUrl: "/images/Pantuflas/pantu3.jpg",
     category: "pantuflas",
@@ -166,7 +157,6 @@ const products = [
   },
   {
     name: "Pantufla gris",
-    description: "Pantuflas",
     price: 120000,
     imageUrl: "/images/Pantuflas/pantu4.jpg",
     category: "pantuflas",
@@ -180,8 +170,7 @@ const products = [
     },
   },
   {
-    name: "Zapato flat chocolate",
-    description: "Zapatos",
+    name: "Zapato flat leopard",
     price: 150000,
     imageUrl: "/images/Zapatos/zapato1.jpg",
     category: "zapatos",
@@ -195,8 +184,7 @@ const products = [
     },
   },
   {
-    name: "zapato flat negro",
-    description: "Zapatos",
+    name: "Zapato flat negro",
     price: 160000,
     imageUrl: "/images/Zapatos/zapato2.jpg",
     category: "zapatos",
@@ -211,7 +199,6 @@ const products = [
   },
   {
     name: "Zapato cerrado",
-    description: "Zapatos",
     price: 160000,
     imageUrl: "/images/Zapatos/zapato3.jpg",
     category: "zapatos",
@@ -226,7 +213,6 @@ const products = [
   },
   {
     name: "Zapato guillermina",
-    description: "Zapatos",
     price: 16000,
     category: "zapatos",
     imageUrl: "/images/Zapatos/zapato4.jpg",

@@ -52,7 +52,7 @@ const EditProfile = () => {
 
       fetchFavourites();
       toast.error("💔 Producto eliminado de favoritos", {
-        position: "top-right",
+        position: "bottom-left",
         autoClose: 5000,
         theme: "light",
         transition: Bounce,

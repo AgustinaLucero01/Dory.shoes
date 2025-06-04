@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Row, Col, Button, Table } from "react-bootstrap";
 import { useNavigate} from "react-router-dom";
 import "./Dashboard.css";
-import {toast, Bounce } from "react-toastify";
+import {toast, Bounce, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdEdit } from "react-icons/md";
 import { BsFillTrash3Fill } from "react-icons/bs";
@@ -51,7 +51,7 @@ const ProductsDashboard = ({ openConfirmModal }) => {
       if (res.ok) {
         fetchProducts();
         toast.success(`👢 Producto eliminado con exito`, {
-          position: "top-right",
+          position: "bottom-left",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: false,
@@ -79,6 +79,7 @@ const ProductsDashboard = ({ openConfirmModal }) => {
 
   return (
     <Row className="mb-4">
+     
       <Col>
         <h3>Productos disponibles</h3>
         <Button

@@ -11,7 +11,7 @@ const Shopping = () => {
 
   const { id, token } = useAuth();
   //traemos el estado el carrito
-  const { products, setProducts, countProduct, setCountProduct } =
+  const { products, fetchCart } =
     useContext(CartContext);
   const [showModal, setShowModal] = useState(false);
   const [user, setUser] = useState();
@@ -62,8 +62,7 @@ const Shopping = () => {
       }),
     });
     if (response.ok) {
-      setProducts([]);
-      setCountProduct(0);
+      fetchCart();
       setShowModal(true);
       navigate("/");
     }

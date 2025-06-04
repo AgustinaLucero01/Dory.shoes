@@ -5,8 +5,60 @@ import ConfirmModal from "../ui/ConfirmModal";
 import ProductsDashboard from "./ProductsDashboard";
 import UsersDashboard from "./UsersDashboard";
 import { useAuth } from "../../hooks/useAuth.js";
+import { Route, Routes, useLocation } from "react-router-dom";
+import { toast, ToastContainer, Bounce } from "react-toastify";
 
 const DashboardHome = () => {
+  //Manejo de toasts
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state?.AddedProduct) {
+      toast.success(`✅ Producto agregado con éxito`, {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      window.history.replaceState({}, document.title); // Limpia el state
+    }
+
+    if (location.state?.UpdatedProduct) {
+      toast.info(`✏️ Producto editado con éxito`, {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      window.history.replaceState({}, document.title);
+    }
+
+    if (location.state?.showConfirmEdit) {
+      toast.success(`✅ Los datos del usuario se modificaron con éxito`, {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
+      window.history.replaceState({}, document.title); // Limpia el state
+    }
+    
+  }, [location.state]);
+
   const { role, token } = useAuth();
 
   const [totalAmount, setTotalAmount] = useState(0);
@@ -49,6 +101,7 @@ const DashboardHome = () => {
 
   return (
     <Container>
+      <ToastContainer/>
       <Row className="mb-4">
         <Col>
           <Card>
@@ -111,6 +164,7 @@ const DashboardHome = () => {
         confirmText="Sí, estoy segura/o"
         cancelText="Cancelar"
       />
+      
     </Container>
   );
 };
